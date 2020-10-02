@@ -16,9 +16,9 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from tula_net.views import Main, PsList
+from tula_net.views import Main, PsList1
 
 urlpatterns = [
    path('', Main.as_view(), name='main'),
-   path('substations/', PsList.as_view(), name='substations')
+   path('substations/', PsList1.as_view(), name='substations')
 ]
