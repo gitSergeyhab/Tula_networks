@@ -1,0 +1,122 @@
+<div class="card">
+          <div class="card-body px-4 pb-4">
+            <!-- Tab -->
+            <section class="tab-pane fade show active">
+              <h2 class="h4 pt-2 pb-3">Информация о&nbsp;компании</h2>
+<!--                <p class="alert alert-info" role="alert">-->
+<!--                Информация о компании обновлена-->
+<!--                </p>-->
+{% comment %}
+{% load crispy_forms_tags %}
+<form action="" method="post">
+{% crispy form "bootstrap4" %}
+</form>
+{% endcomment %}
+{% comment %}
+<form action="" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-info">Сохранить</button>
+</form>
+{% endcomment %}
+
+            <form action="" method="post">
+
+                {% csrf_token %}
+
+                <div class="row">
+                  <div class="col-12 col-md-6">
+                    <div class="form-group pb-2">
+
+                        <label class="mb-2 text-dark" for="{{ form.name.id_for_label }}">Название компании</label>
+                        <p>{{ form.name }}</p>
+                        <div class="invalid-feedback">
+                        {{ form.name.errors }}
+                        </div>
+
+                    </div>
+                  </div>
+
+                  <div class="col-12 col-md-6">
+                    <div class="form-group">
+
+                      <label class="mb-2 text-dark" for="{{ form.logo.id_for_label }}">Логотип</label>
+                      <div class="row align-items-center">
+                        <div class="col-6" style="position: relative;">
+                          <div class="input-group-prepend" style="position: absolute; top: 0;right: -175px;">
+                              {{ form.logo }}
+                          </div>
+                            <div class="invalid-feedback">
+                            {{ form.logo.errors}}
+                            </div>
+                          <div class="custom-file" style="">
+                            <input type="file" class="custom-file-input" id="inputGroupFile01">
+                          </div>
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-12 col-md-6">
+                    <div class="form-group pb-2">
+
+                        <label class="mb-2 text-dark" for="{{ form.employee_count.id_for_label }}">Количество человек в компании</label>
+                        <p>{{ form.employee_count }}</p>
+                        <div class="invalid-feedback">
+                        {{ form.employee_count.errors}}
+                        </div>
+
+                    </div>
+                  </div>
+                  <div class="col-12 col-md-6">
+                    <div class="form-group pb-2">
+
+                        <label class="mb-2 text-dark" for="{{ form.location.id_for_label }}">География</label>
+                        <p>{{ form.location }}</p>
+                        <div class="invalid-feedback">
+                        {{ form.location.errors}}
+                        </div>
+
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group pb-2">
+                    <label class="mb-2 text-dark" for="{{ form.description.id_for_label }}">Информация о&nbsp;компании</label>
+                    <p>{{ form.description }}</p>
+                    <div class="invalid-feedback">
+                    {{ form.description.errors}}
+                    </div>
+                </div>
+
+                <div class="form-group pb-2">
+
+                {% if request.user == company.owner %}
+
+                    <label class="mb-2 text-dark" for="{{ form.owner.id_for_label }}"></label>
+                    <p>{{ form.owner.as_hidden }}</p>
+
+                {% else %}
+
+                    <label class="mb-2 text-dark" for="{{ form.owner.id_for_label }}">Владелец</label>
+                    <p>{{ form.owner }}</p>
+                    <div class="invalid-feedback">
+                    {{ form.owner.errors}}
+                    </div>
+
+                {% endif %}
+
+                </div>
+
+                <div class="form-group">
+                  <button type="submit" class="btn btn-info">Сохранить</button>
+                </div>
+              </form>
+
+
+            </section>
+            <!-- END Tab -->
+          </div>
+        </div>

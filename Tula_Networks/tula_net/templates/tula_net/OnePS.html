@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+ <div class="row mt-5">
+        <div class="col-12 col-lg-11 offset-lg-2 m-auto">
+          <div class="card mb-4">
+            <div class="card-body px-4">
+              <div class="row">
+
+                    <div class="col-12 col-md-10 col-lg-3 d-flex align-items-center">
+                      <a class="px-3" href="{% url 'company' user.company.pk %}">
+                          <h4>{{  }}</h4>
+                      </a>
+                    </div>
+
+                <div class="col-12">
+                <div>
+                    <div class="col-12">
+                    <h2 class="h2 p-2 text-center bg-success">Пользователь: {{  }} </h2>
+                    <h2 class="h2 pb-2 text-center">Имя: {{  }}      <br>    фамилия: {{  }}</h2>
+                    </div>
+                </div>
+
+                  <h4 class="h4 pb-2 bg-info">Компания: {{  }}</h4><br>
+                 <h5 class="h5 pb-2 ">{{  }} работника(ов) , город {{  }}</h5>
+                  <p><b>О компании:</b> {% %}</p>
+
+                 <div class="btn-toolbar justify-content-between">
+
+                  <a class="btn-group" href="#"><input type="button" class="btn btn-primary btn-sm"  value='#1'></a>
+
+                 <a class=" btn-group" href="#"><input type="button" class="btn btn-primary btn-sm"  value='#2'></a>
+
+                 </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+{% block cards1 %}
+
+{% endblock %}
+
+    number = models.PositiveSmallIntegerField(verbose_name='Номер ПС', unique=True)
+    name = models.CharField(max_length=32, verbose_name='Название ПС', unique=True)
+    voltage_h = models.PositiveSmallIntegerField(verbose_name='напряжение высокое', blank=True, null=True)
+    voltage_m = models.PositiveSmallIntegerField(verbose_name='напряжение среднее', blank=True, null=True)
+    voltage_l = models.PositiveSmallIntegerField(verbose_name='напряжение низкое', blank=True, null=True)
+    subscriber = models.BooleanField(verbose_name='абонентская?')
+    group = models.ForeignKey(Group, related_name='substations', verbose_name='Группа',
+                              on_delete=models.SET_NULL, blank=True, null=True)
+    location = models.TextField(verbose_name='Расположение', blank=True)
+    description = models.TextField(verbose_name='Описение', blank=True)
