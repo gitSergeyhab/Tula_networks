@@ -14,7 +14,7 @@ class Group(models.Model):
     description = models.TextField(verbose_name='Описение', blank=True)
 
     def get_absolute_url(self):
-        return reverse('groups', kwargs={'pk': self.pk})
+        return reverse('group', kwargs={'pk': self.pk})
 
     def __str__(self):
         return self.name
@@ -32,7 +32,7 @@ class Res(models.Model):
     description = models.TextField(verbose_name='Описение', blank=True)
 
     def get_absolute_url(self):
-        return reverse('ress', kwargs={'pk': self.pk})
+        return reverse('res', kwargs={'pk': self.pk})
 
     def __str__(self):
         return self.short_name
@@ -56,7 +56,7 @@ class Substation(models.Model):
     description = models.TextField(verbose_name='Описение', blank=True)
 
     def get_absolute_url(self):
-        return reverse('substations', kwargs={'pk': self.pk})
+        return reverse('one_ps', kwargs={'pk': self.pk})
 
     def __str__(self):
         return self.name
@@ -74,7 +74,7 @@ class Section(models.Model):
     description = models.TextField(verbose_name='Описение', blank=True)
 
     def get_absolute_url(self):
-        return reverse('sections', kwargs={'pk': self.pk})
+        return reverse('section', kwargs={'pk': self.pk})
 
     def __str__(self):
         return ' '.join((str(self.name), str(self.substation)))

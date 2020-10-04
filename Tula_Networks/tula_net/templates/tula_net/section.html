@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block cards1 %}
+
+{% for sec in sections %}
+{% comment %}
+<p> {{ sec }} // {{ sec.get_absolute_url }} // {{sec.feeders.all}}</p>
+<p> {{ sec.substation }} // {{ sec.voltage }} // </p>
+{%  endcomment%}
+ {% for feed in sec.feeders.all %}
+<p>
+{{ feed.subscriber.short_name }}
+</p>
+{% endfor %}
+<br>
+
+
+
+{% endfor %}
+
+{% endblock %}

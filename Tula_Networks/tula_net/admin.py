@@ -5,7 +5,7 @@ from .models import Substation, Section, Feeder, Subscriber, Person, Phone, Grou
 
 
 class SubstationAdmin(admin.ModelAdmin):
-    list_display = ['number', 'name', 'voltage_h', 'voltage_m', 'voltage_l', 'group', 'subscriber']
+    list_display = ['pk', 'number', 'name', 'voltage_h', 'voltage_m', 'voltage_l', 'group', 'subscriber']
     list_display_links = ['number', 'name']
     search_fields = ['number', 'name']
     list_filter = ['voltage_h', 'voltage_m', 'voltage_l', 'group', 'subscriber']
@@ -73,7 +73,7 @@ admin.site.register(Phone, PhoneAdmin)
 
 
 class GroupAdmin(admin.ModelAdmin):
-    list_display = ['name']
+    list_display = ['pk','name']
     list_display_links = ['name']
     search_fields = ['name']
     list_filter = ['name', ]

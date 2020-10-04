@@ -25,30 +25,29 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light ">
 {% include 'incl/_incl_profile.html' %}
 </nav>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand " data-test="logo" href="#">{{ title }}</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+  <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav" data-test="navigation">
+    {% for k, v in context1.items %}
+      <li class="nav-item active">
+      <a class="nav-link" href="#" data-test="navlink"><b>{{ v }}</b></a>
+      </li>
 
-      <a class="navbar-brand " data-test="logo" href="#">{{ title }}</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav" data-test="navigation">
-        {% for k, v in context1.items %}
-          <li class="nav-item active">
-          <a class="nav-link" href="#" data-test="navlink"><b>{{ v }}</b></a>
-          </li>
+      {% comment %}
+      <li class="nav-item active">
+      {% if rp_city == k %}
+      <a class="nav-link" href="{% url 'departure' k %}" data-test="navlink"><b>{{ v }}</b></a>
+      {% else %}
+      <a class="nav-link" href="{% url 'departure' k %}" data-test="navlink">{{ v }}</a>
+      {% endif %}
+      </li>
+      {% endcomment %}
+    {% endfor %}
+    </ul>
 
-{% comment %}
-<li class="nav-item active">
-  {% if rp_city == k %}
-  <a class="nav-link" href="{% url 'departure' k %}" data-test="navlink"><b>{{ v }}</b></a>
-  {% else %}
-  <a class="nav-link" href="{% url 'departure' k %}" data-test="navlink">{{ v }}</a>
-  {% endif %}
-</li>
-{% endcomment %}
-        {% endfor %}
-        </ul>
-
-      </div>
-    </nav>
+  </div>
+</nav>

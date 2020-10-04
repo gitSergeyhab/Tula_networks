@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block cards1 %}
+
+{% for feeder in feeders %}
+<p> {{ feeder.name }} // {{ feeder }} </p>
+
+
+{% endfor %}
+
+{% endblock %}

@@ -1,27 +1,51 @@
 {% extends 'base.html' %}
 
+{% block menu %}
 
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand mr-4 font-weight-bold" href="#">Группы: </a>
+
+  <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
+    <ul class="navbar-nav col-10">
+        {% for group in groups %}
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'group' group.pk %}">{{ group }}</a>
+      </li>
+        {% endfor %}
+
+    </ul>
+  </div>
+</nav>
+
+
+
+{% endblock %}
 
 {% block cards1 %}
     <section class="my-5 py-3">
       <h2 class="h2 font-weight-normal text-center mb-5">ПС</h2>
       <div class="row mb-0">
 
-          {% for ps in substations %}
 
+
+          {% for ps in substations %}
             <div class="col-6 col-md-6 col-lg-2">
                 <div class="card pt-1 text-center p-0 m-0">
                     <div class="card-body p-0 m-0">
-                        <a href="#" class=" btn btn-outline-dark mx-auto d-block">
+                        <a href="{{ ps.get_absolute_url }}" class=" btn btn-outline-dark mx-auto d-block">
                             <p class="card-text">{{ ps.name }}</p>
                             <p class="card-text mb-1">{% include 'incl/_voltage_full.html' %}</p>
                         </a>
                     </div>
+                    {% if flag_group %}
                     <div class="card-body p-0 m-0">
-                        <a href="#" class=" btn btn-outline-secondary mx-auto d-block">
+
+                        <a href="{{ ps.group.get_absolute_url }}" class=" btn btn-outline-secondary mx-auto d-block">
                             <p class="card-text">{{ ps.group }}</p>
                         </a>
                     </div>
+                    {% endif %}
                 </div>
             </div>
 

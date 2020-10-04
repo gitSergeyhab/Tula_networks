@@ -16,9 +16,19 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from tula_net.views import Main, PsList1
+from tula_net.views import Main, PsList, GroupPS, ResPS, OnePS, SectionList, OneSection, OneSubstation, SectionPS
 
 urlpatterns = [
    path('', Main.as_view(), name='main'),
-   path('substations/', PsList1.as_view(), name='substations')
+   path('substations/', PsList.as_view(), name='substations'),
+   path('group/<int:pk>/', GroupPS.as_view(), name='group'),
+   path('res/<int:pk>/', ResPS.as_view(), name='res'),
+   path('substations/<int:pk>/', OnePS.as_view(), name='one_ps'),
+   path('sections/', SectionList.as_view(), name='sections'),
+   path('section/feeders/<int:pk>/', OneSection.as_view(), name='section'),
+   path('substation/feeders/<int:pk>/', OneSubstation.as_view(), name='substation_f'),
+   path('section_ps/<int:pk>/', SectionPS.as_view(), name='section_ps'),
+
+
+
 ]
