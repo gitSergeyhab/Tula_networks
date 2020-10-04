@@ -1,5 +1,26 @@
 {% extends 'base.html' %}
 
+{% block search %}
+    {% if flag_group %}
+        <div class="mb-5">
+        {% include 'incl/_searcher_substations.html' %}
+
+            {% if flag_search %}
+                {% if substations.count > 0 %}
+                    <h3 class="text-center">Вы искали: <span class="text-warning">{{ flag_search }}</span>, и я нашел {{ substations.count }}:</h3>
+                {% else %}
+                    <h3 class="text-center">Вы искали: <span class="text-warning">{{ flag_search }}</span>, но он где-то потерялся :((</h3>
+                {% endif %}
+            {% else %}
+                 <h3 class="text-center">Все подстанции:</h3>
+            {% endif %}
+        </div>
+    {% endif %}
+
+{% endblock %}
+
+
+
 {% block menu %}
 
 
@@ -24,10 +45,7 @@
 
 {% block cards1 %}
     <section class="my-5 py-3">
-      <h2 class="h2 font-weight-normal text-center mb-5">ПС</h2>
       <div class="row mb-0">
-
-
 
           {% for ps in substations %}
             <div class="col-6 col-md-6 col-lg-2">
@@ -38,14 +56,16 @@
                             <p class="card-text mb-1">{% include 'incl/_voltage_full.html' %}</p>
                         </a>
                     </div>
-                    {% if flag_group %}
-                    <div class="card-body p-0 m-0">
 
+                    {% if flag_group %}
+
+                    <div class="card-body p-0 m-0 ">
                         <a href="{{ ps.group.get_absolute_url }}" class=" btn btn-outline-secondary mx-auto d-block">
                             <p class="card-text">{{ ps.group }}</p>
                         </a>
                     </div>
                     {% endif %}
+
                 </div>
             </div>
 

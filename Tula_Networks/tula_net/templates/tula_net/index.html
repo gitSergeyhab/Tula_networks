@@ -8,12 +8,13 @@
 
 <div class="contain p-3">
 
-{% for k, v in context1.items %}
+{% for k, v in context_menu.items %}
 
     <div class="card mx-5">
     <div class="card-header">
-    </div>
-    <a href="{{ k }}/" class="btn btn-outline-info">
+    </div>{{ substations }}
+
+ <a href="{{ k }}/" class="btn btn-outline-info">
     <div class="card-body">
       <blockquote class="blockquote mb-0">
         <h2>{{ v }}</h2>
@@ -30,5 +31,5 @@
 
 {% endblock %}
 
-context1 = {'title': title, 'substations': 'Подсташции', 'subscribers': 'Абоненты', 'feeders': 'Присоединения',
+context_menu = {'title': title, 'substations': 'Подсташции', 'subscribers': 'Абоненты', 'feeders': 'Присоединения',
             'persons': 'Ответственные лица', 'sections': 'Секции', 'phones': 'Телефоны'}

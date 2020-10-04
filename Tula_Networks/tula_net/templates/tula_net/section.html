@@ -1,21 +1,32 @@
 {% extends 'base.html' %}
 
 {% block cards1 %}
+<div class="d-flex justify-content-center mb-2">
+<a class="btn btn-outline-secondary" href="{{ the_substation.get_absolute_url }}">
+<h2 class="text-center">{{ the_substation }}</h2>
+</a>
+</div>
+{% for section in sections %}
 
-{% for sec in sections %}
-{% comment %}
-<p> {{ sec }} // {{ sec.get_absolute_url }} // {{sec.feeders.all}}</p>
-<p> {{ sec.substation }} // {{ sec.voltage }} // </p>
-{%  endcomment%}
- {% for feed in sec.feeders.all %}
-<p>
-{{ feed.subscriber.short_name }}
-</p>
+ <div class="card mb-2">
+  <a class=" btn btn-outline-dark" href="{{ section.get_absolute_url }}">
+   <h5 class="card-header p-1">{{ section }} </h5>
+  </a>
+   <div class="card-body p-1">
+
+     <p class="card-text"><b class="card-title">Фидеры:</b>
+      {% for feeder in section.feeders.all %}
+      <a href="#" class="btn btn-secondary py-1">{{ feeder.name }} </a>
+      {% endfor %}
+     </p>
+   </div>
+ </div>
+
 {% endfor %}
 <br>
 
 
 
-{% endfor %}
+
 
 {% endblock %}

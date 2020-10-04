@@ -25,7 +25,7 @@ admin.site.register(Section, SectionAdmin)
 
 
 class SubscriberAdmin(admin.ModelAdmin):
-    list_display = ['short_name', 'name', 'ours']
+    list_display = ['pk', 'short_name', 'name', 'ours']
     list_display_links = ['short_name', 'name']
     search_fields = ['short_name', 'name']
     list_filter = ['ours']

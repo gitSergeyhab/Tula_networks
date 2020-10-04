@@ -1,0 +1,1 @@
+colors = ["", 'light', 'warning', 'success', 'danger', 'info']

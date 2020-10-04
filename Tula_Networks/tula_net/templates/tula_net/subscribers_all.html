@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+
+{% block search %}
+    <div class="mb-5">
+    {% include 'incl/_searcher_subscribers.html' %}
+
+        {% if flag_search %}
+
+            {% if subscribers.count > 0 %}
+                <h3 class="text-center">Вы искали: <span class="text-warning">{{ flag_search }}</span>, и я нашел {{ subscribers.count }}:</h3>
+            {% else %}
+                <h3 class="text-center">Вы искали: <span class="text-warning">{{ flag_search }}</span>, но он где-то потерялся :((</h3>
+            {% endif %}
+
+        {% else %}
+            <h3 class="text-center">Все абоненты:</h3>
+        {% endif %}
+
+    </div>
+{% endblock %}
+
+
+
+{% block cards1 %}
+
+    {% for subscriber in subscribers.all %}
+         <a href="{{ subscriber.get_absolute_url }}" type="button" class="m-1 btn btn-secondary">{{ subscriber }}</a>
+    {% endfor %}
+
+{% endblock %}

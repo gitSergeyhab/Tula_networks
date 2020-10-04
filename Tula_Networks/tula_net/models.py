@@ -2,7 +2,7 @@ from django.db import models
 from django.urls import reverse
 
 '''
-context1 = {'substations': 'Подстанции', 'subscribers': 'Абоненты', 'feeders': 'Присоединения',
+context_menu = {'substations': 'Подстанции', 'subscribers': 'Абоненты', 'feeders': 'Присоединения',
             'persons': 'Ответственные лица', 'sections': 'Секции', 'phones': 'Телефоны'}
 
 '''
@@ -56,7 +56,7 @@ class Substation(models.Model):
     description = models.TextField(verbose_name='Описение', blank=True)
 
     def get_absolute_url(self):
-        return reverse('one_ps', kwargs={'pk': self.pk})
+        return reverse('substation', kwargs={'pk': self.pk})
 
     def __str__(self):
         return self.name
@@ -77,7 +77,7 @@ class Section(models.Model):
         return reverse('section', kwargs={'pk': self.pk})
 
     def __str__(self):
-        return ' '.join((str(self.name), str(self.substation)))
+        return ' '.join((str(self.name), 'ПС', str(self.substation)))
 
     class Meta:
         verbose_name = "Секция"
@@ -92,7 +92,7 @@ class Subscriber(models.Model):
     description = models.TextField(verbose_name='Описение', blank=True)
 
     def get_absolute_url(self):
-        return reverse('subscribers', kwargs={'pk': self.pk})
+        return reverse('subscriber', kwargs={'pk': self.pk})
 
     def __str__(self):
         return self.name

@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+
  {% block first_section %}
 
 
@@ -11,7 +12,7 @@
                 <div class="col-12 col-md-4 col-lg-3 d-flex align-items-center">
                     <div class="btn-group-vertical">
                         <a href="{% url 'section_ps' ps.pk %}" type="button" class="btn btn-dark">Секции</a>
-                        <a href="#" type="button" class="btn btn-secondary">Абоненты</a>
+                        <a href="{% url 'subscriber_ps' ps.pk %}" type="button" class="btn btn-secondary">Абоненты</a>
                         <a href="#" type="button" class="btn btn-dark">РЭСы</a>
                         <a href="{% url 'substation_f' ps.pk %}" type="button" class="btn btn-secondary">Фидера</a>
                     </div>

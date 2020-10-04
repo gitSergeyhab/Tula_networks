@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block cards1 %}
+<div class="card">
+    <p class="card-header"><span class="px-5"><b>{{ subscriber }}</b></span>
+        {% if subscriber.phones.count > 0 %}
+            Телефоны:
+            {% for phone in subscriber.phones.all %}
+            {{ phone }},
+            {% endfor %}</p>
+        {% endif %}
+  <div class="card-body">
+
+      {% for person in subscriber.persons.all %}
+        <div>
+        <p class="my-0 card-header"><b>{{ person }}</b> | {{person.position}}</p>
+            <p>Телефоны: {% for phone in person.phones.all %} {{ phone }},  {% endfor %}</p>
+        </div>
+      {% endfor %}
+    {% if subscriber.description %}
+        <p class="card-text"> Информация о потребителе: <br> {{ subscriber.description }}</p>
+    {% endif %}
+  </div>
+</div>
+
+
+
+
+{% endblock %}

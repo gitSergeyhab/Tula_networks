@@ -1,34 +1,30 @@
-"""Tula_Networks URL Configuration
 
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/3.1/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
 from django.contrib import admin
 from django.urls import path
 
-from tula_net.views import Main, PsList, GroupPS, ResPS, OnePS, SectionList, OneSection, OneSubstation, SectionPS
+from tula_net.views import Main, PsList, GroupPS, ResPS, OnePS, SectionList, OneSection, OneSubstation, SectionPS, \
+   SubscriberList, OneSubscriber, SubscribersBySection, SubscribersByPS, SubstationsBySubscriber, SearcherSubscribers, SearcherPS
 
 urlpatterns = [
    path('', Main.as_view(), name='main'),
    path('substations/', PsList.as_view(), name='substations'),
    path('group/<int:pk>/', GroupPS.as_view(), name='group'),
-   path('res/<int:pk>/', ResPS.as_view(), name='res'),
-   path('substations/<int:pk>/', OnePS.as_view(), name='one_ps'),
+   # path('res/<int:pk>/', ResPS.as_view(), name='res'),
+   path('substations/<int:pk>/', OnePS.as_view(), name='substation'),
    path('sections/', SectionList.as_view(), name='sections'),
-   path('section/feeders/<int:pk>/', OneSection.as_view(), name='section'),
-   path('substation/feeders/<int:pk>/', OneSubstation.as_view(), name='substation_f'),
    path('section_ps/<int:pk>/', SectionPS.as_view(), name='section_ps'),
 
+   path('feeders/section/<int:pk>/', OneSection.as_view(), name='section'),
+   path('feeders/substation/<int:pk>/', OneSubstation.as_view(), name='substation_f'),
 
+   path('subscribers/', SubscriberList.as_view(), name='subscribers'),
+   path('subscriber/<int:pk>/', OneSubscriber.as_view(), name='subscriber'),
+   path('subscribers/section/<int:pk>/', SubscribersBySection.as_view(), name='subscriber_sec'),
+   path('subscribers/substation/<int:pk>/', SubscribersByPS.as_view(), name='subscriber_ps'),
+
+   path('substations/subscriber/<int:pk>/', SubstationsBySubscriber.as_view(), name='subscriber_ss'),
+
+   path('searcher_subscribers/', SearcherSubscribers.as_view(), name='searcher_subscribers'),
+   path('searcher_substations/', SearcherPS.as_view(), name='searcher_substations'),
 
 ]
