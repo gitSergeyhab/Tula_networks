@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block cards1 %}
+
+<div class="card text-center">
+  <div class="card-header">
+      <h4><b>{{ person }}</b> | {{ person.position }}</h4>
+  </div>
+  <div class="card-body">
+      <h5 class="card-title"><b>Организация:</b>
+          <a class="btn btn-secondary p-1" href="{{ person.subscriber.get_absolute_url }}">
+              {{ person.subscriber }}
+          </a>
+      </h5>
+      {% if person.phones.count %}
+    <h3 class="card-text">
+        {% for phone in person.phones.all %} {{ phone }}, {% endfor %}
+    </h3>
+      {% else %}
+      <p class="card-text"> <b>{{ person }}</b> не предоставил номер своего телефона. <br> Это телефоны организации <b>"{{ person.subscriber }}"</b>:<br>
+          {% for phone in person.subscriber.phones.all %} <b>{{ phone }}</b>, {% endfor %}
+    </b>
+      {% endif %}
+  </div>
+    {% if person.description %}
+    <div class="card-footer">
+        {{ person.description }}
+    </div>
+    {% endif %}
+</div>
+
+{% endblock %}
+e)

@@ -13,7 +13,11 @@
 
       {% for person in subscriber.persons.all %}
         <div>
-        <p class="my-0 card-header"><b>{{ person }}</b> | {{person.position}}</p>
+        <p class="my-0 card-header">
+            <a href="{{ person.get_absolute_url }}" class="btn btn-secondary p-1">
+            <b>{{ person }}</b>
+            </a>
+            | {{person.position}}</p>
             <p>Телефоны: {% for phone in person.phones.all %} {{ phone }},  {% endfor %}</p>
         </div>
       {% endfor %}

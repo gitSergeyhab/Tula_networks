@@ -111,7 +111,7 @@ class Person(models.Model):
     description = models.TextField(verbose_name='Описение', blank=True)
 
     def get_absolute_url(self):
-        return reverse('persons', kwargs={'pk': self.pk})
+        return reverse('person', kwargs={'pk': self.pk})
 
     def __str__(self):
         return self.name

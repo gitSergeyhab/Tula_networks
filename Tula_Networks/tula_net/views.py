@@ -1,3 +1,4 @@
+from django.db.models import Q
 from django.shortcuts import render
 from django.views import View
 
@@ -5,6 +6,7 @@ from django.views import View
 from django.views.generic import ListView, DetailView
 from .models import Substation, Subscriber, Section, Person, Phone, Feeder, Group, Res
 from .data import colors
+
 title = 'Тульские Сети'
 context_menu = {'substations': 'Подстанции', 'subscribers': 'Абоненты', }
 
@@ -28,6 +30,7 @@ class PsList(ListView):
     extra_context = title1
     """ context['groups'] - меню в верху страницы с названиями групп ПС 
     ['flag_group'] - для того чтобы не выводить названия групп, если группа уже выбрана и убрать поле поиска """
+
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         context['context_menu'] = context_menu
@@ -58,7 +61,9 @@ class SubstationsBySubscriber(ListView):
 
     def get_queryset(self):
         return Substation.objects.filter(feeders__subscriber__pk=self.kwargs['pk'])
+
     """ context['the_subscriber'] - тот абонент для которого выводятся ПС и фидера """
+
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         context['the_subscriber'] = Subscriber.objects.get(pk=self.kwargs['pk'])
@@ -199,12 +204,32 @@ class SubscribersByPS(ListView):
         return context
 
 
+# _________________ люди __________________
+class PersonList(ListView):
+    model = Person
+    template_name = 'tula_net/persons.html'
+    context_object_name = 'persons'
+
+
+class OnePerson(DetailView):
+    model = Person
+    template_name = 'tula_net/one_person.html'
+    context_object_name = 'person'
+    #
+    # def get_queryset(self):
+    #     return Person.objects.get(pk=self.kwargs['pk'])
+
+
+# __________________ Поиски ____________________
 class SearcherSubscribers(ListView):
+    """ Поиск по абонентам """
     context_object_name = 'subscribers'
     template_name = 'tula_net/subscribers_all.html'
 
     def get_queryset(self):
-        return Subscriber.objects.filter(name__icontains=self.request.GET.get('s'))
+        return Subscriber.objects.filter(
+            Q(name__icontains=self.request.GET.get('s')) | Q(short_name__icontains=self.request.GET.get('s'))
+        )
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -213,6 +238,7 @@ class SearcherSubscribers(ListView):
 
 
 class SearcherPS(ListView):
+    """ Поиск по подстанциям """
     context_object_name = 'substations'
     template_name = 'tula_net/listPS.html'
 
@@ -227,3 +253,16 @@ class SearcherPS(ListView):
         context['flag_group'] = 1
         return context
 
+
+class SearcherPersons(ListView):
+    """ Поиск по людям """
+    context_object_name = 'persons'
+    template_name = 'tula_net/persons.html'
+
+    def get_queryset(self):
+        return Person.objects.filter(name__icontains=self.request.GET.get('s'))
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['flag_search'] = self.request.GET.get('s')
+        return context
