@@ -49,7 +49,7 @@ class Substation(models.Model):
     voltage_h = models.PositiveSmallIntegerField(verbose_name='напряжение высокое', blank=True, null=True)
     voltage_m = models.PositiveSmallIntegerField(verbose_name='напряжение среднее', blank=True, null=True)
     voltage_l = models.PositiveSmallIntegerField(verbose_name='напряжение низкое', blank=True, null=True)
-    subscriber = models.BooleanField(verbose_name='абонентская?')
+    alien = models.BooleanField(verbose_name='абонентская?')
     group = models.ForeignKey(Group, related_name='substations', verbose_name='Группа',
                               on_delete=models.SET_NULL, blank=True, null=True)
     location = models.TextField(verbose_name='Расположение', blank=True)
@@ -128,9 +128,10 @@ class Feeder(models.Model):
     section = models.ForeignKey(Section, related_name='feeders', on_delete=models.CASCADE, verbose_name='СкШ')
     subscriber = models.ForeignKey(Subscriber, related_name='feeders', on_delete=models.SET_NULL,
                                    verbose_name='абонент', blank=True, null=True)
-    length = models.PositiveSmallIntegerField(blank=True, verbose_name='протяженность', null=True)
-    population = models.PositiveSmallIntegerField(blank=True, verbose_name='население', null=True)
-    social = models.PositiveSmallIntegerField(blank=True, verbose_name='социалка', null=True)
+    length = models.PositiveSmallIntegerField(blank=True, verbose_name='Протяженность', null=True)
+    number_tp = models.PositiveSmallIntegerField(blank=True, verbose_name='Количество ТП', null=True)
+    population = models.PositiveSmallIntegerField(blank=True, verbose_name='Население', null=True)
+    social = models.PositiveSmallIntegerField(blank=True, verbose_name='Социалка', null=True)
     res = models.ForeignKey(Res, related_name='feeders', verbose_name='РЭС или еще кто',
                             on_delete=models.SET_NULL, blank=True, null=True)
     attention = models.BooleanField(verbose_name='!!!')
@@ -138,7 +139,7 @@ class Feeder(models.Model):
     description = models.TextField(verbose_name='Описение', blank=True)
 
     def get_absolute_url(self):
-        return reverse('feeders', kwargs={'pk': self.pk})
+        return reverse('feeder', kwargs={'pk': self.pk})
 
     def __str__(self):
         return ' '.join(('фид', str(self.name), str(self.substation)))

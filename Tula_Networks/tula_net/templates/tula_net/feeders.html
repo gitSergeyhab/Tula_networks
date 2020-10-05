@@ -3,9 +3,81 @@
 {% block cards1 %}
 
 {% for feeder in feeders %}
-<p> {{ feeder.name }} // {{ feeder }} </p>
+      <div class="row mt-1">
+        <div class="col-12 col-lg-10 offset-lg-2 m-auto">
+          <div class="card mb-4">
+            <div class="card-body px-4">
+              <div class="row">
+                <div class="col-12 col-md-3 col-lg-2 d-flex align-items-center">
+                    <div class="btn-group-vertical ">
+                        <a href="{{ feeder.get_absolute_url }}" type="button" class="btn btn-dark">{{ feeder.name }}</a>
+                        <a href="{{ feeder.subscriber.get_absolute_url }}" type="button" class="btn btn-secondary">
+                            {% if feeder.subscriber.short_name %}
+                            {{ feeder.subscriber.short_name }}
+                            {% else %}
+                            {{ feeder.subscriber.name }}
+                            {% endif %}
+                        </a>
+                        <a href="{{ feeder.get_absolute_url }}" type="button" class="btn btn-dark">
+                            {% if feeder.attention %}
+                            <span class="badge badge-danger">см. описание!!!</span>
+                            {% endif %}
+                        </a>
+
+                    </div>
+
+                </div>
+                <div class="col-12 col-md-9 col-lg-9">
+
+                <a href="{{ feeder.get_absolute_url }}" class="btn btn-outline-dark mx-auto  p-1">
+                    <b>Фидер {{ feeder.name }}</b>
+                </a>
+                <a href="{{ feeder.section.get_absolute_url }}" class="btn btn-outline-dark mx-2  p-1">
+                    <b>{{ feeder.section.name }}</b>
+                </a>
+                <a href="{{ feeder.substation.get_absolute_url }}" class="btn btn-outline-dark mx-auto p-1">
+                    <b>ПС {{ feeder.substation.name }}</b>
+                </a>
+                    <h6 class="bg-light px-1">
+                        {% for phone in feeder.subscriber.phones.all %}
+                        {{ phone }},
+                        {% endfor %}
+                     </h6>
+
+                    {% for person in feeder.subscriber.persons.all %}
+                        <h6 class="px-0 mx-0">
+                            <p class="my-0 card-header p-1"><b>{{ person }}</b> | {{person.position}} |
+                            {% for phone in person.phones.all %} {{ phone }},  {% endfor %}</p>
+                        </h6>
+                    {% endfor %}
+
+
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
 
 
 {% endfor %}
 
 {% endblock %}
+
+    name = models.CharField(max_length=32, verbose_name='Название фидера')
+    substation = models.ForeignKey(Substation, related_name='feeders', on_delete=models.CASCADE, verbose_name='ПС')
+    section = models.ForeignKey(Section, related_name='feeders', on_delete=models.CASCADE, verbose_name='СкШ')
+    subscriber = models.ForeignKey(Subscriber, related_name='feeders', on_delete=models.SET_NULL,
+                                   verbose_name='абонент', blank=True, null=True)
+    length = models.PositiveSmallIntegerField(blank=True, verbose_name='Протяженность', null=True)
+    number_tp = models.PositiveSmallIntegerField(blank=True, verbose_name='Количество ТП', null=True)
+    population = models.PositiveSmallIntegerField(blank=True, verbose_name='Население', null=True)
+    social = models.PositiveSmallIntegerField(blank=True, verbose_name='Социалка', null=True)
+    res = models.ForeignKey(Res, related_name='feeders', verbose_name='РЭС или еще кто',
+                            on_delete=models.SET_NULL, blank=True, null=True)
+    attention = models.BooleanField(verbose_name='!!!')
+    reliability_category = models.PositiveSmallIntegerField(blank=True, verbose_name='категория надежности', null=True)
+    description = models.TextField(verbose_name='Описение', blank=True)

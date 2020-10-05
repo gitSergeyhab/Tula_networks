@@ -16,7 +16,7 @@
 
      <p class="card-text"><b class="card-title">Фидеры:</b>
       {% for feeder in section.feeders.all %}
-      <a href="#" class="btn btn-secondary py-1">{{ feeder.name }} </a>
+      <a href="{{ feeder.get_absolute_url }}" class="btn btn-secondary py-1">{{ feeder.name }} </a>
       {% endfor %}
      </p>
    </div>

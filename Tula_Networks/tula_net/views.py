@@ -21,11 +21,13 @@ class Main(View):
 
 
 class PsList(ListView):
+    """ все ПС """
     model = Substation
     context_object_name = 'substations'
     template_name = 'tula_net/listPS.html'
     extra_context = title1
-
+    """ context['groups'] - меню в верху страницы с названиями групп ПС 
+    ['flag_group'] - для того чтобы не выводить названия групп, если группа уже выбрана и убрать поле поиска """
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         context['context_menu'] = context_menu
@@ -35,6 +37,7 @@ class PsList(ListView):
 
 
 class GroupPS(ListView):
+    """ ПС по группам """
     context_object_name = 'substations'
     template_name = 'tula_net/listPS.html'
 
@@ -48,12 +51,14 @@ class GroupPS(ListView):
 
 
 class SubstationsBySubscriber(ListView):
+    """ ПС по по абонентам со списком фидеров """
+
     context_object_name = 'substations'
     template_name = 'tula_net/substations_by_ss.html'
 
     def get_queryset(self):
         return Substation.objects.filter(feeders__subscriber__pk=self.kwargs['pk'])
-
+    """ context['the_subscriber'] - тот абонент для которого выводятся ПС и фидера """
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         context['the_subscriber'] = Subscriber.objects.get(pk=self.kwargs['pk'])
@@ -66,6 +71,7 @@ class ResPS(ListView):
 
 
 class OnePS(DetailView):
+    """ карточка одной пс """
     model = Substation
     template_name = 'tula_net/onePS.html'
     context_object_name = 'ps'
@@ -77,6 +83,7 @@ class OnePS(DetailView):
 
 
 class SectionList(ListView):
+    """ все секции с фидерами - бесполезная) """
     model = Section
     template_name = 'tula_net/section.html'
     context_object_name = 'sections'
@@ -85,6 +92,12 @@ class SectionList(ListView):
         context = super().get_context_data(**kwargs)
         context['context_menu'] = context_menu
         return context
+
+
+class OneFeeders(DetailView):
+    model = Feeder
+    template_name = 'tula_net/feeder.html'
+    context_object_name = 'feeder'
 
 
 class AllFeeders(ListView):

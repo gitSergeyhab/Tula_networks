@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block cards1 %}
+
+<div class="card">
+  <h5 class="card-header">Фидер {{ feeder.name }}
+      <a href="{{ feeder.substation.get_absolute_url }}" class="btn btn-outline-dark mx-auto  p-1"> <b>ПС {{ feeder.substation }}</b> </a>
+  </h5>
+    {% if feeder.attention %}
+    <span class="badge badge-danger">Есть косяк, смотреть описание!!!</span>
+    {% endif %}
+  <div class="card-body">
+      <a href="{{ feeder.section.get_absolute_url }}" class="btn btn-secondary p-1">
+          <h6 class="card-title">{{ feeder.section }}</h6>
+      </a>
+      <a href="{{ feeder.subscriber.get_absolute_url }}" class="btn btn-secondary p-1">
+          <h6 class="card-title">Абонент: {{ feeder.subscriber }}</h6>
+      </a>
+    <div class="my-3 card-footer">
+        {% if feeder.subscriber.ours %}
+            <h6 class="card-text">ТП: {{ feeder.number_tp }}</h6>
+            <h6 class="card-text">Протяженность: {{ feeder.length }} </h6>
+            <h6 class="card-text">Население: {{ feeder.population }}</h6>
+            <h6 class="card-text">Социалка: {{ feeder.social }}</h6>
+        {% endif %}
+    </div>
+        {% if feeder.reliability_category %}
+            <p class="card-text">категория надежности: {{ feeder.reliability_category }}</p>
+        {% endif %}
+        {% if feeder.description %}
+            <p class="card-text">Описение: {{ feeder.description }}</p>
+        {% endif %}
+
+  </div>
+</div>
+
+{% endblock %}

@@ -5,10 +5,10 @@ from .models import Substation, Section, Feeder, Subscriber, Person, Phone, Grou
 
 
 class SubstationAdmin(admin.ModelAdmin):
-    list_display = ['pk', 'number', 'name', 'voltage_h', 'voltage_m', 'voltage_l', 'group', 'subscriber']
+    list_display = ['pk', 'number', 'name', 'voltage_h', 'voltage_m', 'voltage_l', 'group', 'alien']
     list_display_links = ['number', 'name']
     search_fields = ['number', 'name']
-    list_filter = ['voltage_h', 'voltage_m', 'voltage_l', 'group', 'subscriber']
+    list_filter = ['voltage_h', 'voltage_m', 'voltage_l', 'group', 'alien']
 
 
 admin.site.register(Substation, SubstationAdmin)
@@ -53,7 +53,7 @@ admin.site.register(Person, PersonAdnin)
 
 
 class FeederAdmin(admin.ModelAdmin):
-    list_display = ['name', 'substation', 'section', 'subscriber', 'res', 'attention']
+    list_display = ['name', 'substation', 'section', 'subscriber', 'res', 'attention', 'number_tp']
     list_display_links = ['name']
     search_fields = ['name']
     list_filter = ['substation', 'res', 'attention']

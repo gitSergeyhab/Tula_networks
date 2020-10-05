@@ -13,12 +13,12 @@
 
   </div>
   <div class="card-body">
-    <h5 class="card-title">Фидеры</h5>
-    <p class="card-text">
+
+      <p class="card-text"><b>Фидеры</b>
         {% for feeder in ps.feeders.all %}
 
         {% if feeder.subscriber == the_subscriber %}
-        <a href="#" class="btn btn-secondary">{{ feeder.name }}</a> ,
+        <a href="{{ feeder.get_absolute_url }}" class="btn btn-secondary">{{ feeder.name }}</a> ,
         {% endif %}
 
         {% endfor %}

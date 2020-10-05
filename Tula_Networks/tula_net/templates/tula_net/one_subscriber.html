@@ -20,6 +20,12 @@
     {% if subscriber.description %}
         <p class="card-text"> Информация о потребителе: <br> {{ subscriber.description }}</p>
     {% endif %}
+    <div class="card-footer">
+        <a href="{% url 'subscriber_ss' subscriber.pk %}" class="btn btn-outline-dark mx-auto d-block pt-3 pb-1">
+             <h4 class="card-title">Подстанции с фидерами потребителя </h4>
+        </a>
+
+    </div>
   </div>
 </div>
 
