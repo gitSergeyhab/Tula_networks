@@ -1,14 +1,16 @@
 from django.db.models import Q
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views import View
 
 # Create your views here.
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, CreateView
+
+from .forms import FeederForm
 from .models import Substation, Subscriber, Section, Person, Phone, Feeder, Group, Res
-from .data import colors
+from dal import autocomplete
 
 title = 'Тульские Сети'
-context_menu = {'substations': 'Подстанции', 'subscribers': 'Абоненты', }
+context_menu = {'substations': 'Подстанции', 'subscribers': 'Абоненты', 'persons': 'Ответственные лица', }
 
 # context_menu = {'substations': 'Подстанции', 'subscribers': 'Абоненты', 'feeders': 'Присоединения',
 #             'persons': 'Ответственные лица', 'sections': 'Секции', 'phones': 'Телефоны'}
@@ -228,7 +230,10 @@ class SearcherSubscribers(ListView):
 
     def get_queryset(self):
         return Subscriber.objects.filter(
-            Q(name__icontains=self.request.GET.get('s')) | Q(short_name__icontains=self.request.GET.get('s'))
+            Q(name__icontains=self.request.GET.get('s')) |
+            Q(short_name__icontains=self.request.GET.get('s')) |
+            Q(name__icontains=self.request.GET.get('s').title()) |
+            Q(short_name__icontains=self.request.GET.get('s').title().upper())
         )
 
     def get_context_data(self, *, object_list=None, **kwargs):
@@ -243,7 +248,11 @@ class SearcherPS(ListView):
     template_name = 'tula_net/listPS.html'
 
     def get_queryset(self):
-        return Substation.objects.filter(name__icontains=self.request.GET.get('s'))
+        return Substation.objects.filter(
+            Q(name__icontains=self.request.GET.get('s')) |
+            Q(name__icontains=self.request.GET.get('s').title()) |
+            Q(name__icontains=self.request.GET.get('s').lower())
+        )
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -260,9 +269,65 @@ class SearcherPersons(ListView):
     template_name = 'tula_net/persons.html'
 
     def get_queryset(self):
-        return Person.objects.filter(name__icontains=self.request.GET.get('s'))
+        return Person.objects.filter(
+            Q(name__icontains=self.request.GET.get('s')) |
+            Q(name__icontains=self.request.GET.get('s').title()) |
+            Q(name__icontains=self.request.GET.get('s').lower())
+        )
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         context['flag_search'] = self.request.GET.get('s')
         return context
+
+
+class AddFeeder(CreateView):
+    model = Feeder
+    template_name = 'tula_net/add_feeder.html'
+    # form_class = UpdVacForm
+    fields = '__all__'
+
+    def superfilter(self, **kwargs):
+        return Substation.objects.filter(pk=self.kwargs['pk'])
+
+
+# class UpdFeeder(View):
+#     def get(self, request, pk):
+#         feeder = Feeder.objects.get(pk=pk)
+#         bound_form = FeederForm(instance=feeder)
+#         return render(request, 'tula_net/add_feeder.html', context={'form': bound_form, 'feeder': feeder})
+
+
+class UpdFeeder(View):
+
+    def get(self, request, pk):
+        feeder = Feeder.objects.get(pk=self.kwargs['pk'])
+        bound_form = FeederForm(instance=feeder)
+        return render(request, 'tula_net/add_feeder.html', context={'form': bound_form, 'feeder': feeder})
+
+    def post(self, request, pk):
+        feeder = Feeder.objects.get(pk=pk)
+        bound_form = FeederForm(request.POST, instance=feeder)
+        if bound_form.is_valid():
+            new_feeder = bound_form.save()
+            return redirect(new_feeder)
+        return render(request, 'tula_net/add_feeder.html', context={'form': bound_form, 'feeder': feeder})
+
+
+class SubscriberAutocomplete(autocomplete.Select2QuerySetView):
+    def get_queryset(self):
+        if not self.request.user.is_authenticated():
+            return Subscriber.objects.none()
+        qs = Subscriber.objects.all()
+        if self.q:
+            qs = qs.filter(name__istartswith=self.q)
+        return qs
+
+class SubstationAutocomplete(autocomplete.Select2QuerySetView):
+    def get_queryset(self):
+        if not self.request.user.is_authenticated():
+            return Substation.objects.none()
+        qs = Substation.objects.all()
+        if self.q:
+            qs = qs.filter(name__istartswith=self.q)
+        return qs

@@ -4,6 +4,14 @@ from django.contrib import admin
 from .models import Substation, Section, Feeder, Subscriber, Person, Phone, Group, Res
 
 
+from dal import autocomplete
+from django import forms
+from .forms import FeederForm
+
+
+
+
+
 class SubstationAdmin(admin.ModelAdmin):
     list_display = ['pk', 'number', 'name', 'voltage_h', 'voltage_m', 'voltage_l', 'group', 'alien']
     list_display_links = ['number', 'name']
@@ -31,6 +39,7 @@ class SubscriberAdmin(admin.ModelAdmin):
     list_filter = ['ours']
 
 
+
 admin.site.register(Subscriber, SubscriberAdmin)
 
 '''
@@ -43,20 +52,24 @@ class Person(models.Model):
 
 
 class PersonAdnin(admin.ModelAdmin):
+    # form =
     list_display = ['priority', 'name', 'subscriber', 'position']
     list_display_links = ['name']
     search_fields = ['name']
     list_filter = ['subscriber']
 
 
+
+
 admin.site.register(Person, PersonAdnin)
 
 
 class FeederAdmin(admin.ModelAdmin):
-    list_display = ['name', 'substation', 'section', 'subscriber', 'res', 'attention', 'number_tp']
-    list_display_links = ['name']
-    search_fields = ['name']
-    list_filter = ['substation', 'res', 'attention']
+    form = FeederForm
+    # list_display = ['name', 'substation', 'section', 'subscriber', 'res', 'attention', 'number_tp']
+    # list_display_links = ['name']
+    # search_fields = ['name']
+    # list_filter = ['substation', 'res', 'attention']
 
 
 admin.site.register(Feeder, FeederAdmin)

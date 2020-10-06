@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+ {% block first_section %}
+<form action="{% url 'upd_feeder' pk=feeder.pk %}" method="post">
+{% csrf_token %}
+{{ form.as_p }}
+<button type="submit" class="btn btn-info">Сохранить</button>
+</form>
+
+{% endblock %}

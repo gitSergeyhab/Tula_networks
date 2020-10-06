@@ -147,7 +147,7 @@ class Feeder(models.Model):
     class Meta:
         verbose_name = "фидер"
         verbose_name_plural = "фидера"
-        ordering = ['substation', 'name', ]
+        ordering = ['section', 'name', ]
 
 
 class Phone(models.Model):

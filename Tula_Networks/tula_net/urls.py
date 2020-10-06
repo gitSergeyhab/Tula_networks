@@ -3,7 +3,8 @@ from django.urls import path
 
 from tula_net.views import Main, PsList, GroupPS, ResPS, OnePS, SectionList, OneSection, OneSubstation, SectionPS, \
     SubscriberList, OneSubscriber, SubscribersBySection, SubscribersByPS, SubstationsBySubscriber, SearcherSubscribers, \
-    SearcherPS, SearcherPersons, AllFeeders, OneFeeders, OnePerson, PersonList
+    SearcherPS, SearcherPersons, AllFeeders, OneFeeders, OnePerson, PersonList, AddFeeder, UpdFeeder, \
+    SubscriberAutocomplete, SubstationAutocomplete
 
 urlpatterns = [
     path('', Main.as_view(), name='main'),
@@ -37,5 +38,19 @@ urlpatterns = [
     path('searcher_subscribers/', SearcherSubscribers.as_view(), name='searcher_subscribers'),
     path('searcher_substations/', SearcherPS.as_view(), name='searcher_substations'),
     path('searcher_persons/', SearcherPersons.as_view(), name='searcher_persons'),
+
+    # формы 1-2.ПС, 3-4.Фид, 5-6.Абонент
+    # path('add_PS/', AddPS.as_view(), name='add_PS'),
+    # path('upd_PS/', UpdPS.as_view(), name='upd_PS'),
+    path('add_feeder/<int:pk>/', AddFeeder.as_view(), name='add_feeder'),
+
+    path('upd_feeder/<int:pk>/', UpdFeeder.as_view(), name='upd_feeder'),
+
+    path('subscriber_autocomplete/', SubscriberAutocomplete.as_view(), name='subscriber_autocomplete'),
+    path('substation_autocomplete/', SubstationAutocomplete.as_view(), name='substation_autocomplete'),
+
+
+
+
 
 ]

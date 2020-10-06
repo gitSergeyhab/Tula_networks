@@ -19,14 +19,35 @@
 
                 </div>
                 <div class="col-12 col-md-8 col-lg-9">
-                    <h4 class="bg-light"> ПС № {{ ps.number }} {{ ps }} {% include 'incl/_voltage_full.html' %} кВ</h4>
+                    <h4 class="bg-light">
+                        ПС № {{ ps.number }} {{ ps }} {% include 'incl/_voltage_full.html' %} кВ
+                    </h4>
                     <a href="{% url 'group' ps.group.pk %}" class="btn btn-dark"><h4> <b>Группа:</b> {{ ps.group }}</h4></a>
                     {% if ps.location %}
                     <h4> <b>Расположение:</b> {{ ps.location }}</h4>
                     {% endif %}
+
+          <div class="card-footer text-right">
+                <div class="btn-group dropup">
+                  <button type="button" class="btn btn-secondary">
+                    добавить/изменить
+                  </button>
+                  <button type="button" class="btn btn-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span class="sr-only">Toggle Dropdown</span>
+                  </button>
+                  <div class="dropdown-menu">
+                    <a class="dropdown-item" href="#">добавить фидер или ВЛ</a>
+                    <a class="dropdown-item" href="#">добавить секцию</a>
+                    <a class="dropdown-item" href="#">Редактировать ПС</a>
+                  </div>
+                </div>
+          </div>
+
+
                     {% if ps.description %}
                     <h4><b>О подстанции:</b> {{ ps.description }} </h4>
                     {% endif %}
+
 
                 </div>
               </div>
@@ -35,5 +56,18 @@
         </div>
       </div>
 
+        <div class="card">
+          <div class="card-header">
+            <b>Список фидеров:</b>
+          </div>
+          <div class="card-body">
+            {% for feeder in ps.feeders.all %}
+              {% if feeder.section.voltage < 35 %}
+            <a href="{{ feeder.get_absolute_url }}" type="button" class="btn btn-secondary p-0 m-1 ">{{ feeder.name }}</a>,
+              {% endif %}
+            {% endfor %}
+
+          </div>
+        </div>
 
 {% endblock %}

@@ -5,13 +5,13 @@
     {% include 'incl/_searcher_persons.html' %}
 
 <h3 class="text-center">Ответственные лица</h3>
-
+{% if flag_search %}
             {% if persons.count %}
                 <h3 class="text-center">Вы искали: <span class="text-warning">{{ flag_search }}</span>, и я нашел {{ persons.count }}:</h3>
             {% else %}
                 <h3 class="text-center">Вы искали: <span class="text-warning">{{ flag_search }}</span>, но он где-то потерялся :((</h3>
             {% endif %}
-
+{% endif %}
 
     </div>
 {% endblock %}
