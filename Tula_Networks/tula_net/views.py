@@ -10,6 +10,8 @@ from .forms import FeederFormAdd, FeederFormUpd, PhoneSubscriberFormAdd, PhonePe
 from .models import Substation, Subscriber, Section, Person, Phone, Feeder, Group, Res
 from dal import autocomplete
 
+from .utils import AddPhoneViewMixin
+
 title = 'Тульские Сети'
 context_menu = {'substations': 'Подстанции', 'subscribers': 'Абоненты', 'persons': 'Ответственные лица', }
 
@@ -364,54 +366,23 @@ class UpdFeeder(UpdateView):
 
 ## __________________ телефоны ____________________
 
-class AddSubscriberPhone(View):
+
+class AddSubscriberPhone(AddPhoneViewMixin, View):
     """ добавление телефона организации"""
-
-    def get(self, request, *args, **kwargs):
-        form = PhoneSubscriberFormAdd()
-        form.fields["subscriber"].queryset = Subscriber.objects.filter(pk=self.kwargs['pk'])
-        return render(request, 'tula_net/form_add_phone.html', context={'form': form})
-
-    def post(self, request, *args, **kwargs):
-        bound_form = PhoneSubscriberFormAdd(request.POST)
-        if bound_form.is_valid():
-            new_phone = bound_form.save()
-            return redirect(new_phone)
-        return render(request, 'tula_net/form_add_phone.html', context={'form': bound_form})
+    model = Subscriber
+    form_x = PhoneSubscriberFormAdd
 
 
-class AddPersonPhone(View):
+class AddPersonPhone(AddPhoneViewMixin, View):
     """ добавление телефона лица"""
-
-    def get(self, request, *args, **kwargs):
-        form = PhonePersonFormAdd()
-        # form.fields["subscriber"].queryset = Subscriber.objects.filter(pk=self.kwargs['pk'])
-        form.fields["person"].queryset = Person.objects.filter(pk=self.kwargs['pk'])
-        return render(request, 'tula_net/form_add_phone.html', context={'form': form})
-
-    def post(self, request, *args, **kwargs):
-        bound_form = PhonePersonFormAdd(request.POST)
-        if bound_form.is_valid():
-            new_phone = bound_form.save()
-            return redirect(new_phone)
-        return render(request, 'tula_net/form_add_phone.html', context={'form': bound_form})
+    model = Person
+    form_x = PhonePersonFormAdd
 
 
-class AddPSPhone(View):
-    """ добавление телефона лица"""
-
-    def get(self, request, *args, **kwargs):
-        form = PhonePSFormAdd()
-
-        form.fields["substation"].queryset = Substation.objects.filter(pk=self.kwargs['pk'])
-        return render(request, 'tula_net/form_add_phone.html', context={'form': form})
-
-    def post(self, request, *args, **kwargs):
-        bound_form = PhonePSFormAdd(request.POST)
-        if bound_form.is_valid():
-            new_phone = bound_form.save()
-            return redirect(new_phone)
-        return render(request, 'tula_net/form_add_phone.html', context={'form': bound_form})
+class AddPSPhone(AddPhoneViewMixin, View):
+    """ добавление телефона ПС"""
+    model = Substation
+    form_x = PhonePSFormAdd
 
 
 class UpdPhone(UpdateView):

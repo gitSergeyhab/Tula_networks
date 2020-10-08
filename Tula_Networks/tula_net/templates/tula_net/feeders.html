@@ -60,14 +60,16 @@
                         </a>
                         <h6 class="bg-light px-1">
                             {% for phone in feeder.subscriber.phones.all %}
-                            {{ phone }},
+                                <a class="btn btn-light p-0" href="{{ phone.get_absolute_url }}"><b>{{ phone }}</b></a>,
                             {% endfor %}
                         </h6>
 
                         {% for person in feeder.subscriber.persons.all %}
                             <h6 class="px-0 mx-0">
                                 <p class="my-0 card-header p-1"><b>{{ person }}</b> | {{person.position}} |
-                                {% for phone in person.phones.all %} {{ phone }},  {% endfor %}</p>
+                                {% for phone in person.phones.all %}
+                                   <a class="btn btn-light p-0" href="{{ phone.get_absolute_url }}"><b>{{ phone }}</b></a>,
+                                {% endfor %}</p>
                             </h6>
                         {% endfor %}
                     </div>
