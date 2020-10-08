@@ -39,7 +39,7 @@
                   </button>
                   <div class="dropdown-menu">
                     <a class="dropdown-item" href="{% url 'add_feeder' ps.pk %}">добавить фидер или ВЛ на ПС</a>
-<!--                    <a class="dropdown-item" href="#">добавить секцию на ПС</a>-->
+                    <a class="dropdown-item" href="{% url 'add_phone_ps' ps.pk %}">добавить телефон на ПС</a>
                     <a class="dropdown-item" href="#">редактировать ПС</a>
                   </div>
                 </div>
@@ -54,9 +54,22 @@
                 </div>
               </div>
             </div>
+        {% if ps.phones.count %}
+            <h5 class="text-center p-0 m-0"> телефоны:
+                {% for phone in ps.phones.all %}
+                <a class="btn btn-light p-0" href="{{ phone.get_absolute_url }}"><b>{{ phone }}</b></a>,
+                 {% endfor %}
+            </h5>
+        {% endif %}
           </div>
+
         </div>
       </div>
+
+
+
+
+
 
         <div class="card">
           <div class="card-header">
@@ -65,7 +78,7 @@
           <div class="card-body">
             {% for feeder in ps.feeders.all %}
               {% if feeder.section.voltage < 35 %}
-            <a href="{{ feeder.get_absolute_url }}" type="button" class="btn btn-secondary px-3 py-0 m-1 ">{{ feeder.name }}</a>,
+                <a href="{{ feeder.get_absolute_url }}" type="button" class="btn btn-secondary px-3 py-0 m-1 ">{{ feeder.name }}</a>,
               {% endif %}
             {% endfor %}
 

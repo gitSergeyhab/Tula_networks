@@ -3,8 +3,9 @@ from django.urls import path
 
 from tula_net.views import Main, PsList, GroupPS, VoltPS, OnePS, SectionList, OneSection, OneSubstation, SectionPS, \
     SubscriberList, OneSubscriber, SubscribersBySection, SubscribersByPS, SubstationsBySubscriber, SearcherSubscribers, \
-    SearcherPS, SearcherPersons, AllFeeders, OneFeeders, OnePerson, PersonList, AddFeeder, UpdFeeder, \
-    SubscriberAutocomplete, SubstationAutocomplete
+    SearcherPS, SearcherPersons, AllFeeders, OneFeeders, OnePerson, PersonList, OnePhone, PhoneList, AddFeeder, \
+    UpdFeeder, UpdPhone, SubscriberAutocomplete, SubstationAutocomplete, AddPPhone, SearcherPhones, AddSPhone, \
+    AddPSPhone
 
 urlpatterns = [
     path('', Main.as_view(), name='main'),
@@ -35,6 +36,10 @@ urlpatterns = [
     path('persons/', PersonList.as_view(), name='persons'),
     path('person/<int:pk>/', OnePerson.as_view(), name='person'),
 
+    # 1 лист всех телефонов, 2 карточка 1-го телефона
+    path('phones/', PhoneList.as_view(), name='phones'),
+    path('phone/<int:pk>/', OnePhone.as_view(), name='phone'),
+
     # один абонент со списком ПС со списком фидеров
     path('substations/subscriber/<int:pk>/', SubstationsBySubscriber.as_view(), name='subscriber_ss'),
 
@@ -42,12 +47,18 @@ urlpatterns = [
     path('searcher_subscribers/', SearcherSubscribers.as_view(), name='searcher_subscribers'),
     path('searcher_substations/', SearcherPS.as_view(), name='searcher_substations'),
     path('searcher_persons/', SearcherPersons.as_view(), name='searcher_persons'),
+    path('searcher_phones/', SearcherPhones.as_view(), name='searcher_phones'),
 
     # формы 1-2.ПС, 3-4.Фид, 5-6.Абонент
     # path('add_PS/', AddPS.as_view(), name='add_PS'),
     # path('upd_PS/', UpdPS.as_view(), name='upd_PS'),
     path('add_feeder/from_ps_pk/<int:pk>/', AddFeeder.as_view(), name='add_feeder'),
     path('upd_feeder/<int:pk>/', UpdFeeder.as_view(), name='upd_feeder'),
+
+    path('add_phone/from_person_pk/<int:pk>/', AddPPhone.as_view(), name='add_phone_p'),
+    path('add_phone/from_subscriber_pk/<int:pk>/', AddSPhone.as_view(), name='add_phone'),
+    path('add_phone/from_substation_pk/<int:pk>/', AddPSPhone.as_view(), name='add_phone_ps'),
+    path('upd_phone/<int:pk>/', UpdPhone.as_view(), name='upd_phone'),
 
 
 

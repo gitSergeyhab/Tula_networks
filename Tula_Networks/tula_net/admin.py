@@ -51,7 +51,7 @@ admin.site.register(Person, PersonAdnin)
 
 class FeederAdmin(admin.ModelAdmin):
     # form = FeederForm # автокомплит не работает
-    list_display = ['pk','name', 'substation', 'section', 'subscriber', 'res', 'attention', 'number_tp', 'in_reserve']
+    list_display = ['pk', 'name', 'substation', 'section', 'subscriber', 'res', 'attention', 'number_tp', 'in_reserve']
     list_display_links = ['name']
     search_fields = ['name']
     list_filter = ['substation', 'res', 'attention']
@@ -61,7 +61,7 @@ admin.site.register(Feeder, FeederAdmin)
 
 
 class PhoneAdmin(admin.ModelAdmin):
-    list_display = ['subscriber', 'person', 'number', 'mail', 'priority']
+    list_display = ['pk', 'number', 'search_number', 'subscriber', 'person', 'mail', 'priority']
     list_display_links = ['number']
     search_fields = ['number']
     list_filter = ['priority', 'subscriber', ]
@@ -86,5 +86,3 @@ class ResAdmin(admin.ModelAdmin):
 
 admin.site.register(Group, GroupAdmin)
 admin.site.register(Res, ResAdmin)
-
-

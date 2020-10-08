@@ -1,6 +1,6 @@
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <a class="navbar-brand " data-test="logo" href="{% url 'main' %}">{{ title }}</a>
+  <a class="navbar-brand " data-test="logo" href="{% url 'main' %}"><b class="text-monospace px-4">Тульские Сети</b></a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
   <span class="navbar-toggler-icon"></span>
   </button>
@@ -15,6 +15,9 @@
       </li>
       <li class="nav-item active">
           <a class="nav-link" href="{% url 'persons' %}" data-test="navlink"><b> Ответственные лица </b></a>
+      </li>
+      <li class="nav-item active">
+          <a class="nav-link" href="{% url 'phones' %}" data-test="navlink"><b> Телефоны </b></a>
       </li>
 
     </ul>

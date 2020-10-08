@@ -5,7 +5,7 @@ from django.views import View
 # Create your views here.
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
 
-from .forms import FeederFormAdd, FeederFormUpd
+from .forms import FeederFormAdd, FeederFormUpd, PhoneSFormAdd, PhonePFormAdd, PhoneFormUpd, PhonePSFormAdd
 from .models import Substation, Subscriber, Section, Person, Phone, Feeder, Group, Res
 from dal import autocomplete
 
@@ -241,10 +241,22 @@ class OnePerson(DetailView):
     model = Person
     template_name = 'tula_net/one_person.html'
     context_object_name = 'person'
-    #
-    # def get_queryset(self):
-    #     return Person.objects.get(pk=self.kwargs['pk'])
 
+
+
+
+#____________ телефоны _______________
+class PhoneList(ListView):
+    model = Phone
+    template_name = 'tula_net/phones.html'
+    context_object_name = 'phones'
+
+
+class OnePhone(DetailView):
+    """ один телефон """
+    model = Phone
+    template_name = 'tula_net/one_phone.html'
+    context_object_name = 'phone'
 
 # __________________ Поиски ____________________
 class SearcherSubscribers(ListView):
@@ -304,6 +316,27 @@ class SearcherPersons(ListView):
         context['flag_search'] = self.request.GET.get('s')
         return context
 
+
+
+class SearcherPhones(ListView):
+    """ Поиск по телефонам """
+    context_object_name = 'phones'
+    template_name = 'tula_net/phones.html'
+
+    def get_queryset(self):
+        return Phone.objects.filter(
+            Q(number__contains=self.request.GET.get('s')) |
+            Q(search_number__contains=self.request.GET.get('s')) |
+            Q(mail__icontains=self.request.GET.get('s'))
+        )
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['flag_search'] = self.request.GET.get('s')
+        return context
+
+
+
 # ___________________ ФОРМЫ ____________________
 ## __________________ фидеры ____________________
 class AddFeeder(View):
@@ -329,34 +362,73 @@ class UpdFeeder(UpdateView):
     template_name = 'tula_net/form_add_feeder.html'
 
 
+## __________________ телефоны ____________________
+
+class AddSPhone(View):
+    """ добавление телефона организации"""
+    def get(self, request, *args, **kwargs):
+        form = PhoneSFormAdd()
+        form.fields["subscriber"].queryset = Subscriber.objects.filter(pk=self.kwargs['pk'])
+        # form.fields["person"].queryset = Person.objects.filter(pk=self.kwargs['pk'])
+        return render(request, 'tula_net/form_add_phone.html', context={'form': form})
+
+    def post(self, request, *args, **kwargs):
+        bound_form = PhoneSFormAdd(request.POST)
+        if bound_form.is_valid():
+            new_phone = bound_form.save()
+            return redirect(new_phone)
+        return render(request, 'tula_net/form_add_phone.html', context={'form': bound_form})
+
+
+class AddPPhone(View):
+    """ добавление телефона лица"""
+    def get(self, request, *args, **kwargs):
+        form = PhonePFormAdd()
+        # form.fields["subscriber"].queryset = Subscriber.objects.filter(pk=self.kwargs['pk'])
+        form.fields["person"].queryset = Person.objects.filter(pk=self.kwargs['pk'])
+        return render(request, 'tula_net/form_add_phone.html', context={'form': form})
+
+    def post(self, request, *args, **kwargs):
+        bound_form = PhonePFormAdd(request.POST)
+        if bound_form.is_valid():
+            new_phone = bound_form.save()
+            return redirect(new_phone)
+        return render(request, 'tula_net/form_add_phone.html', context={'form': bound_form})
+
+class AddPSPhone(View):
+    """ добавление телефона лица"""
+    def get(self, request, *args, **kwargs):
+        form = PhonePSFormAdd()
+
+        form.fields["substation"].queryset = Substation.objects.filter(pk=self.kwargs['pk'])
+        return render(request, 'tula_net/form_add_phone.html', context={'form': form})
+
+    def post(self, request, *args, **kwargs):
+        bound_form = PhonePSFormAdd(request.POST)
+        if bound_form.is_valid():
+            new_phone = bound_form.save()
+            return redirect(new_phone)
+        return render(request, 'tula_net/form_add_phone.html', context={'form': bound_form})
 
 
 
+class UpdPhone(UpdateView):
+    """ изменение телефона"""
+    form_class = PhoneFormUpd
+    model = Phone
+    template_name = 'tula_net/form_add_phone.html'
 
 
 
+"""
+    number = models.CharField(max_length=16, verbose_name='номер')
+    mail = models.EmailField(max_length=32, verbose_name='электронка', blank=True)
+    subscriber = models.ForeignKey(Subscriber, related_name='phones', on_delete=models.CASCADE, blank=True, null=True)
+    person = models.ForeignKey(Person, related_name='phones', on_delete=models.CASCADE, blank=True, null=True)
+    priority = models.PositiveSmallIntegerField(blank=True, verbose_name='приоритет', null=True)
+    description = models.TextField(verbose_name='Описение', blank=True)
+"""
 
-# class UpdFeeder(View):
-#     def get(self, request, pk):
-#         feeder = Feeder.objects.get(pk=pk)
-#         bound_form = FeederForm(instance=feeder)
-#         return render(request, 'tula_net/form_add_feeder.html', context={'form': bound_form, 'feeder': feeder})
-
-
-# class UpdFeeder(View):
-#
-#     def get(self, request, pk):
-#         feeder = Feeder.objects.get(pk=self.kwargs['pk'])
-#         bound_form = FeederForm(instance=feeder)
-#         return render(request, 'tula_net/form_add_feeder.html', context={'form': bound_form, 'feeder': feeder})
-#
-#     def post(self, request, pk):
-#         feeder = Feeder.objects.get(pk=pk)
-#         bound_form = FeederForm(request.POST, instance=feeder)
-#         if bound_form.is_valid():
-#             new_feeder = bound_form.save()
-#             return redirect(new_feeder)
-#         return render(request, 'tula_net/form_add_feeder.html', context={'form': bound_form, 'feeder': feeder})
 
 
 #___________________

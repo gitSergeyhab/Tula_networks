@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+
+{% block search %}
+    <div class="mb-5">
+
+    {% include 'incl/_searcher_phones.html' %}
+
+
+<h3 class="text-center">Телефоны</h3>
+{% if flag_search %}
+            {% if phones.count %}
+                <h3 class="text-center">Вы искали: <span class="text-warning">{{ flag_search }}</span>, и я нашел {{ phones.count }}:</h3>
+            {% else %}
+                <h3 class="text-center">Вы хотели: <span class="text-warning">{{ flag_search }}</span>, но у меня нету :((</h3>
+            {% endif %}
+{% endif %}
+
+    </div>
+{% endblock %}
+
+
+
+{% block cards1 %}
+
+    {% for phone in phones %}
+         <a href="{{ phone.get_absolute_url }}" type="button" class="m-1 btn btn-secondary">{{ phone }}</a>
+    {% endfor %}
+
+{% endblock %}

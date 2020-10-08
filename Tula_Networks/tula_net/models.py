@@ -159,16 +159,21 @@ class Feeder(models.Model):
 
 class Phone(models.Model):
     number = models.CharField(max_length=16, verbose_name='номер')
+    search_number = models.CharField(max_length=16, verbose_name='НЕ ЗАПОЛНЯТЬ', blank=True, null=True)
     mail = models.EmailField(max_length=32, verbose_name='электронка', blank=True)
-    subscriber = models.ForeignKey(Subscriber, related_name='phones', on_delete=models.CASCADE, blank=True, null=True)
-    person = models.ForeignKey(Person, related_name='phones', on_delete=models.CASCADE, blank=True, null=True)
+    subscriber = models.ForeignKey(Subscriber, related_name='phones', on_delete=models.CASCADE,
+                                   blank=True, null=True, verbose_name='организация')
+    person = models.ForeignKey(Person, related_name='phones', on_delete=models.CASCADE,
+                               blank=True, null=True, verbose_name='лицо')
+    substation = models.ForeignKey(Substation, related_name='phones', on_delete=models.CASCADE,
+                                   blank=True, null=True, verbose_name='ПС')
     priority = models.PositiveSmallIntegerField(blank=True, verbose_name='приоритет', null=True)
-    description = models.TextField(verbose_name='Описение', blank=True)
+    description = models.TextField(verbose_name='описение', blank=True)
 
     # only_digit = to_digit(number)
 
     def get_absolute_url(self):
-        return reverse('phones', kwargs={'pk': self.pk})
+        return reverse('phone', kwargs={'pk': self.pk})
 
     def __str__(self):
         return self.number

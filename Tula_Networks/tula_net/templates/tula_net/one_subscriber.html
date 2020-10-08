@@ -4,9 +4,9 @@
 <div class="card">
     <p class="card-header"><span class="px-5"><b>{{ subscriber }}</b></span>
         {% if subscriber.phones.count > 0 %}
-            Телефоны:
+        <b>Телефоны:</b>
             {% for phone in subscriber.phones.all %}
-            {{ phone }},
+        <a class="btn btn-light p-0" href="{{ phone.get_absolute_url }}"><b>{{ phone }}</b></a>,
             {% endfor %}</p>
         {% endif %}
   <div class="card-body">
@@ -21,13 +21,27 @@
             <p>Телефоны: {% for phone in person.phones.all %} {{ phone }},  {% endfor %}</p>
         </div>
       {% endfor %}
-
+<div>
       {% if subscriber.year_update %}
         <p class="card-footer p-0 m-0 text-right"> Список от {{ subscriber.year_update }} года</p>
       {% else %}
         <p class="card-footer p-0 m-0 text-center bg-danger"> Списков НЕТ</p>
       {% endif %}
 
+      <div class="card-footer text-right mx-5 my-0 py-0 pr-5">
+            <div class="btn-group dropup">
+              <button type="button" class="btn btn-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                править БД<span class="sr-only">Toggle Dropdown</span>
+              </button>
+              <div class="dropdown-menu">
+                <a class="dropdown-item" href="#">править организацию</a>
+                <a class="dropdown-item" href="#">добавить ответствнное лицо</a>
+                <a class="dropdown-item" href="{% url 'add_phone' subscriber.pk %}">добавить телефон организации</a>
+              </div>
+            </div>
+      </div>
+
+</div>
 
         {% if subscriber.description %}
             <p class="card-text"> Информация о потребителе: <br> {{ subscriber.description }}</p>
