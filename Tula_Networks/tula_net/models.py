@@ -1,13 +1,8 @@
 from django.db import models
 from django.urls import reverse
 
-from tula_net.utils import to_digit
 
-'''
-context_menu = {'substations': 'Подстанции', 'subscribers': 'Абоненты', 'feeders': 'Присоединения',
-            'persons': 'Ответственные лица', 'sections': 'Секции', 'phones': 'Телефоны'}
 
-'''
 
 
 class Group(models.Model):
@@ -158,7 +153,7 @@ class Feeder(models.Model):
 
 
 class Phone(models.Model):
-    number = models.CharField(max_length=16, verbose_name='номер')
+    number = models.CharField(max_length=20, verbose_name='номер')
     search_number = models.CharField(max_length=16, verbose_name='НЕ ЗАПОЛНЯТЬ', blank=True, null=True)
     mail = models.EmailField(max_length=32, verbose_name='электронка', blank=True)
     subscriber = models.ForeignKey(Subscriber, related_name='phones', on_delete=models.CASCADE,

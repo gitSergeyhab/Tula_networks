@@ -5,7 +5,8 @@ from django.views import View
 # Create your views here.
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
 
-from .forms import FeederFormAdd, FeederFormUpd, PhoneSFormAdd, PhonePFormAdd, PhoneFormUpd, PhonePSFormAdd
+from .forms import FeederFormAdd, FeederFormUpd, PhoneSubscriberFormAdd, PhonePersonFormAdd, PhoneFormUpd, \
+    PhonePSFormAdd
 from .models import Substation, Subscriber, Section, Person, Phone, Feeder, Group, Res
 from dal import autocomplete
 
@@ -55,6 +56,7 @@ class GroupPS(ListView):
         context['groups'] = Group.objects.all()
         context['voltages'] = [35, 110, 220]
         return context
+
 
 class VoltPS(ListView):
     """ ПС по группам """
@@ -243,9 +245,7 @@ class OnePerson(DetailView):
     context_object_name = 'person'
 
 
-
-
-#____________ телефоны _______________
+# ____________ телефоны _______________
 class PhoneList(ListView):
     model = Phone
     template_name = 'tula_net/phones.html'
@@ -257,6 +257,7 @@ class OnePhone(DetailView):
     model = Phone
     template_name = 'tula_net/one_phone.html'
     context_object_name = 'phone'
+
 
 # __________________ Поиски ____________________
 class SearcherSubscribers(ListView):
@@ -317,7 +318,6 @@ class SearcherPersons(ListView):
         return context
 
 
-
 class SearcherPhones(ListView):
     """ Поиск по телефонам """
     context_object_name = 'phones'
@@ -336,11 +336,11 @@ class SearcherPhones(ListView):
         return context
 
 
-
 # ___________________ ФОРМЫ ____________________
 ## __________________ фидеры ____________________
 class AddFeeder(View):
     """ добавление фидера!!! и оно работает !!!"""
+
     def get(self, request, *args, **kwargs):
         form = FeederFormAdd()
         form.fields["substation"].queryset = Substation.objects.filter(pk=self.kwargs['pk'])
@@ -364,39 +364,42 @@ class UpdFeeder(UpdateView):
 
 ## __________________ телефоны ____________________
 
-class AddSPhone(View):
+class AddSubscriberPhone(View):
     """ добавление телефона организации"""
+
     def get(self, request, *args, **kwargs):
-        form = PhoneSFormAdd()
+        form = PhoneSubscriberFormAdd()
         form.fields["subscriber"].queryset = Subscriber.objects.filter(pk=self.kwargs['pk'])
-        # form.fields["person"].queryset = Person.objects.filter(pk=self.kwargs['pk'])
         return render(request, 'tula_net/form_add_phone.html', context={'form': form})
 
     def post(self, request, *args, **kwargs):
-        bound_form = PhoneSFormAdd(request.POST)
+        bound_form = PhoneSubscriberFormAdd(request.POST)
         if bound_form.is_valid():
             new_phone = bound_form.save()
             return redirect(new_phone)
         return render(request, 'tula_net/form_add_phone.html', context={'form': bound_form})
 
 
-class AddPPhone(View):
+class AddPersonPhone(View):
     """ добавление телефона лица"""
+
     def get(self, request, *args, **kwargs):
-        form = PhonePFormAdd()
+        form = PhonePersonFormAdd()
         # form.fields["subscriber"].queryset = Subscriber.objects.filter(pk=self.kwargs['pk'])
         form.fields["person"].queryset = Person.objects.filter(pk=self.kwargs['pk'])
         return render(request, 'tula_net/form_add_phone.html', context={'form': form})
 
     def post(self, request, *args, **kwargs):
-        bound_form = PhonePFormAdd(request.POST)
+        bound_form = PhonePersonFormAdd(request.POST)
         if bound_form.is_valid():
             new_phone = bound_form.save()
             return redirect(new_phone)
         return render(request, 'tula_net/form_add_phone.html', context={'form': bound_form})
 
+
 class AddPSPhone(View):
     """ добавление телефона лица"""
+
     def get(self, request, *args, **kwargs):
         form = PhonePSFormAdd()
 
@@ -411,7 +414,6 @@ class AddPSPhone(View):
         return render(request, 'tula_net/form_add_phone.html', context={'form': bound_form})
 
 
-
 class UpdPhone(UpdateView):
     """ изменение телефона"""
     form_class = PhoneFormUpd
@@ -419,19 +421,7 @@ class UpdPhone(UpdateView):
     template_name = 'tula_net/form_add_phone.html'
 
 
-
-"""
-    number = models.CharField(max_length=16, verbose_name='номер')
-    mail = models.EmailField(max_length=32, verbose_name='электронка', blank=True)
-    subscriber = models.ForeignKey(Subscriber, related_name='phones', on_delete=models.CASCADE, blank=True, null=True)
-    person = models.ForeignKey(Person, related_name='phones', on_delete=models.CASCADE, blank=True, null=True)
-    priority = models.PositiveSmallIntegerField(blank=True, verbose_name='приоритет', null=True)
-    description = models.TextField(verbose_name='Описение', blank=True)
-"""
-
-
-
-#___________________
+# ___________________
 class SubscriberAutocomplete(autocomplete.Select2QuerySetView):
     def get_queryset(self):
         if not self.request.user.is_authenticated():
@@ -441,6 +431,7 @@ class SubscriberAutocomplete(autocomplete.Select2QuerySetView):
             qs = qs.filter(name__istartswith=self.q)
         return qs
 
+
 class SubstationAutocomplete(autocomplete.Select2QuerySetView):
     def get_queryset(self):
         if not self.request.user.is_authenticated():
@@ -449,4 +440,4 @@ class SubstationAutocomplete(autocomplete.Select2QuerySetView):
         if self.q:
             qs = qs.filter(name__istartswith=self.q)
         return qs
-#________________________
+# ________________________

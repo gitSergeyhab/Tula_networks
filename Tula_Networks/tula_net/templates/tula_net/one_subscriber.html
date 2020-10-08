@@ -18,7 +18,10 @@
             <b>{{ person }}</b>
             </a>
             | {{person.position}}</p>
-            <p>Телефоны: {% for phone in person.phones.all %} {{ phone }},  {% endfor %}</p>
+            <p>Телефоны: {% for phone in person.phones.all %}
+                <a class="btn btn-light p-0" href="{{ phone.get_absolute_url }}"><b>{{ phone }}</b></a>,
+
+                {% endfor %}</p>
         </div>
       {% endfor %}
 <div>

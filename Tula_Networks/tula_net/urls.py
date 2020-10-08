@@ -4,8 +4,8 @@ from django.urls import path
 from tula_net.views import Main, PsList, GroupPS, VoltPS, OnePS, SectionList, OneSection, OneSubstation, SectionPS, \
     SubscriberList, OneSubscriber, SubscribersBySection, SubscribersByPS, SubstationsBySubscriber, SearcherSubscribers, \
     SearcherPS, SearcherPersons, AllFeeders, OneFeeders, OnePerson, PersonList, OnePhone, PhoneList, AddFeeder, \
-    UpdFeeder, UpdPhone, SubscriberAutocomplete, SubstationAutocomplete, AddPPhone, SearcherPhones, AddSPhone, \
-    AddPSPhone
+    UpdFeeder, UpdPhone, SubscriberAutocomplete, SubstationAutocomplete, AddPersonPhone, SearcherPhones, AddPSPhone, \
+    AddSubscriberPhone
 
 urlpatterns = [
     path('', Main.as_view(), name='main'),
@@ -55,8 +55,8 @@ urlpatterns = [
     path('add_feeder/from_ps_pk/<int:pk>/', AddFeeder.as_view(), name='add_feeder'),
     path('upd_feeder/<int:pk>/', UpdFeeder.as_view(), name='upd_feeder'),
 
-    path('add_phone/from_person_pk/<int:pk>/', AddPPhone.as_view(), name='add_phone_p'),
-    path('add_phone/from_subscriber_pk/<int:pk>/', AddSPhone.as_view(), name='add_phone'),
+    path('add_phone/from_person_pk/<int:pk>/', AddPersonPhone.as_view(), name='add_phone_p'),
+    path('add_phone/from_subscriber_pk/<int:pk>/', AddSubscriberPhone.as_view(), name='add_phone'),
     path('add_phone/from_substation_pk/<int:pk>/', AddPSPhone.as_view(), name='add_phone_ps'),
     path('upd_phone/<int:pk>/', UpdPhone.as_view(), name='upd_phone'),
 

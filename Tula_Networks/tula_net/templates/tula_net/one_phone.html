@@ -22,6 +22,14 @@
       </h5>
       {% endif %}
 
+        {% if phone.substation %}
+      <h5><b>Подстанции:</b>
+          <a class="btn btn-secondary p-1" href="{{ phone.substation.get_absolute_url }}">
+              {{ phone.substation }}
+          </a>
+      </h5>
+      {% endif %}
+
   </div>
     {% if phone.description %}
     <div class="card-footer">
