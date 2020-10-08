@@ -16,6 +16,7 @@ urlpatterns = [
 
     path('substations/<int:pk>/', OnePS.as_view(), name='substation'),
     path('sections/', SectionList.as_view(), name='sections'),
+    # одна ПС со списком секций - секция со списком фидеров:
     path('section_ps/<int:pk>/', SectionPS.as_view(), name='section_ps'),
 
     # 1 лист всех фидеров, 2 карточка 1-го фидера, 3-4 все фидера по секции-подстаннции

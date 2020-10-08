@@ -21,15 +21,23 @@
             <p>Телефоны: {% for phone in person.phones.all %} {{ phone }},  {% endfor %}</p>
         </div>
       {% endfor %}
-    {% if subscriber.description %}
-        <p class="card-text"> Информация о потребителе: <br> {{ subscriber.description }}</p>
-    {% endif %}
-    <div class="card-footer">
-        <a href="{% url 'subscriber_ss' subscriber.pk %}" class="btn btn-outline-dark mx-auto d-block pt-3 pb-1">
-             <h4 class="card-title">Подстанции с фидерами потребителя </h4>
-        </a>
 
-    </div>
+      {% if subscriber.year_update %}
+        <p class="card-footer p-0 m-0 text-right"> Список от {{ subscriber.year_update }} года</p>
+      {% else %}
+        <p class="card-footer p-0 m-0 text-center bg-danger"> Списков НЕТ</p>
+      {% endif %}
+
+
+        {% if subscriber.description %}
+            <p class="card-text"> Информация о потребителе: <br> {{ subscriber.description }}</p>
+        {% endif %}
+        <div class="card-footer">
+            <a href="{% url 'subscriber_ss' subscriber.pk %}" class="btn btn-outline-dark mx-auto d-block pt-3 pb-1">
+                 <h4 class="card-title">Подстанции с фидерами потребителя </h4>
+            </a>
+
+        </div>
   </div>
 </div>
 

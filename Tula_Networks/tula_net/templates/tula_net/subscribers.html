@@ -4,34 +4,40 @@
 
 {% block cards1 %}
 
-{% if the_substation %}
-<h3>Все абоненты <a href="{{ the_substation.get_absolute_url }}">ПС {{ the_substation }}</a>:</h3>
-{% elif the_section %}
-<h3>Все абоненты {{ the_section }}:</h3>
-{% else %}
-<h3>Все абоненты</h3>
-{% endif %}
+    <div class="card">
+        <h5 class="card-header text-center"><span class="px-5"><b>
+            {% if the_section %}
+            Все абоненты {{ the_section.name }} <a class="btn btn-light p-0 py-0 m-0" href="{{ the_section.substation.get_absolute_url }}"><h5><b> {{ the_section.substation }}</b></h5></a>
+            {% elif the_substation %}
+            Все абоненты <a class="btn btn-light p-0 py-0 m-0" href="{{ the_substation.get_absolute_url }}"><h5><b>ПС {{ the_substation }}</b></h5></a>
+            {% endif %}
+            | все фидеры :
+        </b></span></h5>
+
+        <div class="text-right">
+            {% if the_substation %}
+                <h3><a class="btn btn-outline-dark px-5 py-0 m-1" href="{% url 'substation_f' the_substation.pk %}">Подробно </a></h3>
+            {% elif the_section %}
+                <h3><a class="btn btn-outline-dark px-5 py-0 m-1" href="{% url 'section' the_section.pk %}">Подробно </a></h3>
+            {% endif %}
+        </div>
 
 
-{% for subscriber in subscribers.distinct %}
-
- <div class="card mb-2">
-    <a href="{{ subscriber.get_absolute_url }}" class="btn btn-outline-secondary p-1 m-1" >
-        <p class="m-1">{{ subscriber }}</p>
-    </a>
-   <div class="card-body p-1">
-    {% for feeder in subscriber.feeders.all %}
-        {% if feeder.substation == the_substation or feeder.section == the_section  %}
-
-                  <a href="#" class="btn btn-secondary py-1">{{ feeder.name }} </a>
-
-       {% endif %}
-    {% endfor %}
-   </div>
- </div>
-
-
-{% endfor %}
-
+    <div class="card-body">
+        {% for subscriber in subscribers.distinct %}
+         <div class="card mb-2">
+            <a href="{{ subscriber.get_absolute_url }}" class="btn btn-outline-secondary p-1 m-1" >
+                <p class="m-1">{{ subscriber }}</p>
+            </a>
+           <div class="card-body p-1">
+            {% for feeder in subscriber.feeders.all %}
+                {% if feeder.substation == the_substation or feeder.section == the_section  %}
+                          <a href="#" class="btn btn-secondary py-1">{{ feeder.name }} </a>
+               {% endif %}
+            {% endfor %}
+           </div>
+         </div>
+        {% endfor %}
+    </div>
 
 {% endblock %}

@@ -30,7 +30,7 @@ admin.site.register(Section, SectionAdmin)
 
 
 class SubscriberAdmin(admin.ModelAdmin):
-    list_display = ['pk', 'short_name', 'name', 'ours']
+    list_display = ['pk', 'short_name', 'name', 'ours', 'year_update']
     list_display_links = ['short_name', 'name']
     search_fields = ['short_name', 'name']
     list_filter = ['ours']
@@ -51,7 +51,7 @@ admin.site.register(Person, PersonAdnin)
 
 class FeederAdmin(admin.ModelAdmin):
     # form = FeederForm # автокомплит не работает
-    list_display = ['name', 'substation', 'section', 'subscriber', 'res', 'attention', 'number_tp', 'in_reserve']
+    list_display = ['pk','name', 'substation', 'section', 'subscriber', 'res', 'attention', 'number_tp', 'in_reserve']
     list_display_links = ['name']
     search_fields = ['name']
     list_filter = ['substation', 'res', 'attention']

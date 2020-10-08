@@ -146,6 +146,7 @@ class OneSection(ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['the_section'] = Section.objects.get(pk=self.kwargs['pk'])
         context['context_menu'] = context_menu
         return context
 
@@ -159,6 +160,7 @@ class OneSubstation(ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['the_substation'] = Substation.objects.get(pk=self.kwargs['pk'])
         context['context_menu'] = context_menu
         return context
 
@@ -212,6 +214,8 @@ class SubscribersBySection(ListView):
 
 
 class SubscribersByPS(ListView):
+    """ одна ПС со списком всех абонентов +
+    все абоненты со списком всех фидеров по ЭТОЙ ПС """
     context_object_name = 'subscribers'
     template_name = 'tula_net/subscribers.html'
 
@@ -226,12 +230,14 @@ class SubscribersByPS(ListView):
 
 # _________________ люди __________________
 class PersonList(ListView):
+    """ список всех людей """
     model = Person
     template_name = 'tula_net/persons.html'
     context_object_name = 'persons'
 
 
 class OnePerson(DetailView):
+    """ один человек """
     model = Person
     template_name = 'tula_net/one_person.html'
     context_object_name = 'person'
@@ -298,27 +304,29 @@ class SearcherPersons(ListView):
         context['flag_search'] = self.request.GET.get('s')
         return context
 
-
+# ___________________ ФОРМЫ ____________________
+## __________________ фидеры ____________________
 class AddFeeder(View):
     """ добавление фидера!!! и оно работает !!!"""
     def get(self, request, *args, **kwargs):
         form = FeederFormAdd()
         form.fields["substation"].queryset = Substation.objects.filter(pk=self.kwargs['pk'])
         form.fields["section"].queryset = Section.objects.filter(substation__pk=self.kwargs['pk'])
-        return render(request, 'tula_net/add_feeder.html', context={'form': form})
+        return render(request, 'tula_net/form_add_feeder.html', context={'form': form})
 
     def post(self, request, *args, **kwargs):
         bound_form = FeederFormAdd(request.POST)
         if bound_form.is_valid():
             new_feeder = bound_form.save()
             return redirect(new_feeder)
-        return render(request, 'tula_net/add_feeder.html', context={'form': bound_form})
+        return render(request, 'tula_net/form_add_feeder.html', context={'form': bound_form})
 
 
 class UpdFeeder(UpdateView):
+    """ изменение фидера"""
     form_class = FeederFormUpd
     model = Feeder
-    template_name = 'tula_net/add_feeder.html'
+    template_name = 'tula_net/form_add_feeder.html'
 
 
 
@@ -332,7 +340,7 @@ class UpdFeeder(UpdateView):
 #     def get(self, request, pk):
 #         feeder = Feeder.objects.get(pk=pk)
 #         bound_form = FeederForm(instance=feeder)
-#         return render(request, 'tula_net/add_feeder.html', context={'form': bound_form, 'feeder': feeder})
+#         return render(request, 'tula_net/form_add_feeder.html', context={'form': bound_form, 'feeder': feeder})
 
 
 # class UpdFeeder(View):
@@ -340,7 +348,7 @@ class UpdFeeder(UpdateView):
 #     def get(self, request, pk):
 #         feeder = Feeder.objects.get(pk=self.kwargs['pk'])
 #         bound_form = FeederForm(instance=feeder)
-#         return render(request, 'tula_net/add_feeder.html', context={'form': bound_form, 'feeder': feeder})
+#         return render(request, 'tula_net/form_add_feeder.html', context={'form': bound_form, 'feeder': feeder})
 #
 #     def post(self, request, pk):
 #         feeder = Feeder.objects.get(pk=pk)
@@ -348,7 +356,7 @@ class UpdFeeder(UpdateView):
 #         if bound_form.is_valid():
 #             new_feeder = bound_form.save()
 #             return redirect(new_feeder)
-#         return render(request, 'tula_net/add_feeder.html', context={'form': bound_form, 'feeder': feeder})
+#         return render(request, 'tula_net/form_add_feeder.html', context={'form': bound_form, 'feeder': feeder})
 
 
 #___________________

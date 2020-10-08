@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
 
 {% block cards1 %}
-<div class="d-flex justify-content-center mb-2">
+<div class="d-flex justify-content-center my-3 p-1">
 <a class="btn btn-outline-secondary" href="{{ the_substation.get_absolute_url }}">
-<h2 class="text-center">{{ the_substation }}</h2>
+<h2 class="text-center m-0">{{ the_substation }}</h2>
 </a>
 </div>
 {% for section in sections %}

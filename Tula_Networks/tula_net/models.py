@@ -25,7 +25,7 @@ class Group(models.Model):
     class Meta:
         verbose_name = "Группа"
         verbose_name_plural = "Группы"
-        ordering = ['-ours','name']
+        ordering = ['-ours', 'name']
 
 
 class Res(models.Model):
@@ -94,6 +94,7 @@ class Subscriber(models.Model):
     name = models.CharField(max_length=64, verbose_name='Название организации', unique=True)
     short_name = models.CharField(max_length=16, verbose_name='Назв орган сокращ', blank=True, null=True)
     ours = models.BooleanField(verbose_name='наши')
+    year_update = models.PositiveSmallIntegerField(verbose_name='Списки обновлены', blank=True, null=True)
     description = models.TextField(verbose_name='Описение', blank=True)
 
     def get_absolute_url(self):
@@ -105,7 +106,7 @@ class Subscriber(models.Model):
     class Meta:
         verbose_name = "организация"
         verbose_name_plural = "организации"
-        ordering = ['-ours','name']
+        ordering = ['-ours', 'name']
 
 
 class Person(models.Model):
@@ -153,7 +154,7 @@ class Feeder(models.Model):
     class Meta:
         verbose_name = "фидер"
         verbose_name_plural = "фидера"
-        ordering = ['section', 'name', ]
+        ordering = ['section', 'subscriber', 'name']
 
 
 class Phone(models.Model):
@@ -163,6 +164,7 @@ class Phone(models.Model):
     person = models.ForeignKey(Person, related_name='phones', on_delete=models.CASCADE, blank=True, null=True)
     priority = models.PositiveSmallIntegerField(blank=True, verbose_name='приоритет', null=True)
     description = models.TextField(verbose_name='Описение', blank=True)
+
     # only_digit = to_digit(number)
 
     def get_absolute_url(self):
