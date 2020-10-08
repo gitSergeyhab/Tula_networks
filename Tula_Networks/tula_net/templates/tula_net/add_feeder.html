@@ -1,10 +1,37 @@
 {% extends 'base.html' %}
 
  {% block first_section %}
-<form action="{% url 'upd_feeder' pk=feeder.pk %}" method="post">
+
+<div class="container col-6">
+
+ {% load crispy_forms_tags %}
+ {% crispy form "bootstrap4" %}
+
+</div>
+
+{% comment %}
+1.
+<form action="" method="post">
 {% csrf_token %}
 {{ form.as_p }}
 <button type="submit" class="btn btn-info">Сохранить</button>
 </form>
+
+2.
+<form action="" method="post">
+
+ {% csrf_token %}
+ {% for field in form %}
+ <p>{{ field.label }}
+  {{ field }}</p>
+ <div class="alert alert-danger">
+  {{ field.errors }}
+ </div>
+
+ {% endfor %}
+
+ <button type="submit" class="btn btn-dark">Save</button>
+</form>
+{% endcomment %}
 
 {% endblock %}

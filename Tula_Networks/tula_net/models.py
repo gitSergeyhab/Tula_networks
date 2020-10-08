@@ -1,6 +1,8 @@
 from django.db import models
 from django.urls import reverse
 
+from tula_net.utils import to_digit
+
 '''
 context_menu = {'substations': 'Подстанции', 'subscribers': 'Абоненты', 'feeders': 'Присоединения',
             'persons': 'Ответственные лица', 'sections': 'Секции', 'phones': 'Телефоны'}
@@ -12,6 +14,7 @@ class Group(models.Model):
     name = models.CharField(max_length=64, verbose_name='Группа', unique=True)
     location = models.TextField(verbose_name='Расположение', blank=True)
     description = models.TextField(verbose_name='Описение', blank=True)
+    ours = models.BooleanField(verbose_name='наши', blank=True, null=True)
 
     def get_absolute_url(self):
         return reverse('group', kwargs={'pk': self.pk})
@@ -22,7 +25,7 @@ class Group(models.Model):
     class Meta:
         verbose_name = "Группа"
         verbose_name_plural = "Группы"
-        ordering = ['name']
+        ordering = ['-ours','name']
 
 
 class Res(models.Model):
@@ -50,6 +53,8 @@ class Substation(models.Model):
     voltage_m = models.PositiveSmallIntegerField(verbose_name='напряжение среднее', blank=True, null=True)
     voltage_l = models.PositiveSmallIntegerField(verbose_name='напряжение низкое', blank=True, null=True)
     alien = models.BooleanField(verbose_name='абонентская?')
+    owner = models.ForeignKey('Subscriber', related_name='substations', verbose_name='Владелец',
+                              on_delete=models.SET_NULL, blank=True, null=True)
     group = models.ForeignKey(Group, related_name='substations', verbose_name='Группа',
                               on_delete=models.SET_NULL, blank=True, null=True)
     location = models.TextField(verbose_name='Расположение', blank=True)
@@ -100,7 +105,7 @@ class Subscriber(models.Model):
     class Meta:
         verbose_name = "организация"
         verbose_name_plural = "организации"
-        ordering = ['name']
+        ordering = ['-ours','name']
 
 
 class Person(models.Model):
@@ -136,7 +141,8 @@ class Feeder(models.Model):
                             on_delete=models.SET_NULL, blank=True, null=True)
     attention = models.BooleanField(verbose_name='!!!')
     reliability_category = models.PositiveSmallIntegerField(blank=True, verbose_name='категория надежности', null=True)
-    description = models.TextField(verbose_name='Описение', blank=True)
+    in_reserve = models.BooleanField(default=False, verbose_name='Резервный')
+    description = models.TextField(verbose_name='Описение', blank=True, null=True)
 
     def get_absolute_url(self):
         return reverse('feeder', kwargs={'pk': self.pk})
@@ -157,6 +163,7 @@ class Phone(models.Model):
     person = models.ForeignKey(Person, related_name='phones', on_delete=models.CASCADE, blank=True, null=True)
     priority = models.PositiveSmallIntegerField(blank=True, verbose_name='приоритет', null=True)
     description = models.TextField(verbose_name='Описение', blank=True)
+    # only_digit = to_digit(number)
 
     def get_absolute_url(self):
         return reverse('phones', kwargs={'pk': self.pk})

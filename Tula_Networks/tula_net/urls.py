@@ -1,16 +1,19 @@
 from django.contrib import admin
 from django.urls import path
 
-from tula_net.views import Main, PsList, GroupPS, ResPS, OnePS, SectionList, OneSection, OneSubstation, SectionPS, \
+from tula_net.views import Main, PsList, GroupPS, VoltPS, OnePS, SectionList, OneSection, OneSubstation, SectionPS, \
     SubscriberList, OneSubscriber, SubscribersBySection, SubscribersByPS, SubstationsBySubscriber, SearcherSubscribers, \
     SearcherPS, SearcherPersons, AllFeeders, OneFeeders, OnePerson, PersonList, AddFeeder, UpdFeeder, \
     SubscriberAutocomplete, SubstationAutocomplete
 
 urlpatterns = [
     path('', Main.as_view(), name='main'),
+
     path('substations/', PsList.as_view(), name='substations'),
+
     path('group/<int:pk>/', GroupPS.as_view(), name='group'),
-    # path('res/<int:pk>/', ResPS.as_view(), name='res'),
+    path('voltage/<int:pk>/', VoltPS.as_view(), name='voltage'),
+
     path('substations/<int:pk>/', OnePS.as_view(), name='substation'),
     path('sections/', SectionList.as_view(), name='sections'),
     path('section_ps/<int:pk>/', SectionPS.as_view(), name='section_ps'),
@@ -42,9 +45,10 @@ urlpatterns = [
     # формы 1-2.ПС, 3-4.Фид, 5-6.Абонент
     # path('add_PS/', AddPS.as_view(), name='add_PS'),
     # path('upd_PS/', UpdPS.as_view(), name='upd_PS'),
-    path('add_feeder/<int:pk>/', AddFeeder.as_view(), name='add_feeder'),
-
+    path('add_feeder/from_ps_pk/<int:pk>/', AddFeeder.as_view(), name='add_feeder'),
     path('upd_feeder/<int:pk>/', UpdFeeder.as_view(), name='upd_feeder'),
+
+
 
     path('subscriber_autocomplete/', SubscriberAutocomplete.as_view(), name='subscriber_autocomplete'),
     path('substation_autocomplete/', SubstationAutocomplete.as_view(), name='substation_autocomplete'),

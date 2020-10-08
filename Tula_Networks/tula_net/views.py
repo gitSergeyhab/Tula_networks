@@ -3,9 +3,9 @@ from django.shortcuts import render, redirect
 from django.views import View
 
 # Create your views here.
-from django.views.generic import ListView, DetailView, CreateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView
 
-from .forms import FeederForm
+from .forms import FeederFormAdd, FeederFormUpd
 from .models import Substation, Subscriber, Section, Person, Phone, Feeder, Group, Res
 from dal import autocomplete
 
@@ -37,6 +37,7 @@ class PsList(ListView):
         context = super().get_context_data(**kwargs)
         context['context_menu'] = context_menu
         context['groups'] = Group.objects.all()
+        context['voltages'] = [35, 110, 220]
         context['flag_group'] = 1
         return context
 
@@ -52,6 +53,23 @@ class GroupPS(ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         context['groups'] = Group.objects.all()
+        context['voltages'] = [35, 110, 220]
+        return context
+
+class VoltPS(ListView):
+    """ ПС по группам """
+    context_object_name = 'substations'
+    template_name = 'tula_net/listPS.html'
+
+    def get_queryset(self):
+        return Substation.objects.filter(voltage_h=self.kwargs['pk'])
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['voltages'] = [35, 110, 220]
+        context['groups'] = Group.objects.all()
+        context['flag_group'] = 1
+        context['flag_voltages'] = 1
         return context
 
 
@@ -281,14 +299,33 @@ class SearcherPersons(ListView):
         return context
 
 
-class AddFeeder(CreateView):
+class AddFeeder(View):
+    """ добавление фидера!!! и оно работает !!!"""
+    def get(self, request, *args, **kwargs):
+        form = FeederFormAdd()
+        form.fields["substation"].queryset = Substation.objects.filter(pk=self.kwargs['pk'])
+        form.fields["section"].queryset = Section.objects.filter(substation__pk=self.kwargs['pk'])
+        return render(request, 'tula_net/add_feeder.html', context={'form': form})
+
+    def post(self, request, *args, **kwargs):
+        bound_form = FeederFormAdd(request.POST)
+        if bound_form.is_valid():
+            new_feeder = bound_form.save()
+            return redirect(new_feeder)
+        return render(request, 'tula_net/add_feeder.html', context={'form': bound_form})
+
+
+class UpdFeeder(UpdateView):
+    form_class = FeederFormUpd
     model = Feeder
     template_name = 'tula_net/add_feeder.html'
-    # form_class = UpdVacForm
-    fields = '__all__'
 
-    def superfilter(self, **kwargs):
-        return Substation.objects.filter(pk=self.kwargs['pk'])
+
+
+
+
+
+
 
 
 # class UpdFeeder(View):
@@ -298,22 +335,23 @@ class AddFeeder(CreateView):
 #         return render(request, 'tula_net/add_feeder.html', context={'form': bound_form, 'feeder': feeder})
 
 
-class UpdFeeder(View):
+# class UpdFeeder(View):
+#
+#     def get(self, request, pk):
+#         feeder = Feeder.objects.get(pk=self.kwargs['pk'])
+#         bound_form = FeederForm(instance=feeder)
+#         return render(request, 'tula_net/add_feeder.html', context={'form': bound_form, 'feeder': feeder})
+#
+#     def post(self, request, pk):
+#         feeder = Feeder.objects.get(pk=pk)
+#         bound_form = FeederForm(request.POST, instance=feeder)
+#         if bound_form.is_valid():
+#             new_feeder = bound_form.save()
+#             return redirect(new_feeder)
+#         return render(request, 'tula_net/add_feeder.html', context={'form': bound_form, 'feeder': feeder})
 
-    def get(self, request, pk):
-        feeder = Feeder.objects.get(pk=self.kwargs['pk'])
-        bound_form = FeederForm(instance=feeder)
-        return render(request, 'tula_net/add_feeder.html', context={'form': bound_form, 'feeder': feeder})
 
-    def post(self, request, pk):
-        feeder = Feeder.objects.get(pk=pk)
-        bound_form = FeederForm(request.POST, instance=feeder)
-        if bound_form.is_valid():
-            new_feeder = bound_form.save()
-            return redirect(new_feeder)
-        return render(request, 'tula_net/add_feeder.html', context={'form': bound_form, 'feeder': feeder})
-
-
+#___________________
 class SubscriberAutocomplete(autocomplete.Select2QuerySetView):
     def get_queryset(self):
         if not self.request.user.is_authenticated():
@@ -331,3 +369,4 @@ class SubstationAutocomplete(autocomplete.Select2QuerySetView):
         if self.q:
             qs = qs.filter(name__istartswith=self.q)
         return qs
+#________________________

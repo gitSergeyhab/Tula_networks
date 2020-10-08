@@ -3,13 +3,10 @@ from django.contrib import admin
 # Register your models here.
 from .models import Substation, Section, Feeder, Subscriber, Person, Phone, Group, Res
 
-
+# автокомплит не работает:
 from dal import autocomplete
 from django import forms
-from .forms import FeederForm
-
-
-
+from .forms import FeederFormAdd
 
 
 class SubstationAdmin(admin.ModelAdmin):
@@ -39,37 +36,25 @@ class SubscriberAdmin(admin.ModelAdmin):
     list_filter = ['ours']
 
 
-
 admin.site.register(Subscriber, SubscriberAdmin)
-
-'''
-class Person(models.Model):
-    name = models.CharField(max_length=64, verbose_name='ФИО')
-    priority = models.PositiveSmallIntegerField(blank=True, verbose_name='приоритет')
-    description = models.TextField(verbose_name='Описение', blank=True)
-
-'''
 
 
 class PersonAdnin(admin.ModelAdmin):
-    # form =
     list_display = ['priority', 'name', 'subscriber', 'position']
     list_display_links = ['name']
     search_fields = ['name']
     list_filter = ['subscriber']
 
 
-
-
 admin.site.register(Person, PersonAdnin)
 
 
 class FeederAdmin(admin.ModelAdmin):
-    form = FeederForm
-    # list_display = ['name', 'substation', 'section', 'subscriber', 'res', 'attention', 'number_tp']
-    # list_display_links = ['name']
-    # search_fields = ['name']
-    # list_filter = ['substation', 'res', 'attention']
+    # form = FeederForm # автокомплит не работает
+    list_display = ['name', 'substation', 'section', 'subscriber', 'res', 'attention', 'number_tp', 'in_reserve']
+    list_display_links = ['name']
+    search_fields = ['name']
+    list_filter = ['substation', 'res', 'attention']
 
 
 admin.site.register(Feeder, FeederAdmin)
@@ -86,7 +71,7 @@ admin.site.register(Phone, PhoneAdmin)
 
 
 class GroupAdmin(admin.ModelAdmin):
-    list_display = ['pk','name']
+    list_display = ['pk', 'name', 'ours']
     list_display_links = ['name']
     search_fields = ['name']
     list_filter = ['name', ]
@@ -98,24 +83,8 @@ class ResAdmin(admin.ModelAdmin):
     search_fields = ['name']
     list_filter = ['name', ]
 
+
 admin.site.register(Group, GroupAdmin)
 admin.site.register(Res, ResAdmin)
 
 
-'''
-class Group(models.Model):
-    name = models.CharField(max_length=32, verbose_name='Группа', unique=True)
-    location = models.TextField(verbose_name='Расположение', blank=True)
-    description = models.TextField(verbose_name='Описение', blank=True)
-
-    def get_absolute_url(self):
-        return reverse('groups', kwargs={'pk': self.pk})
-
-
-class Res(models.Model):
-    name = models.CharField(max_length=32, verbose_name='РЭС', unique=True)
-    location = models.TextField(verbose_name='Расположение', blank=True)
-    description = models.TextField(verbose_name='Описение', blank=True))
-
-
-'''
