@@ -35,8 +35,7 @@
                   </button>
                   <div class="dropdown-menu">
                     <a class="dropdown-item" href="{% url 'upd_feeder' feeder.pk %}">изменить</a>
-<!--                    <a class="dropdown-item" href="#">добавить секцию на ПС</a>-->
-                    <a class="dropdown-item" href="#">удалить</a>
+                    <a class="dropdown-item" href="{% url 'del_feeder' feeder.pk %}">удалить</a>
                   </div>
                 </div>
             </div>

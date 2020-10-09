@@ -1,16 +1,17 @@
 from django.db.models import Q
 from django.shortcuts import render, redirect
+from django.urls import reverse
 from django.views import View
 
 # Create your views here.
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
 
 from .forms import FeederFormAdd, FeederFormUpd, PhoneSubscriberFormAdd, PhonePersonFormAdd, PhoneFormUpd, \
-    PhonePSFormAdd
+    PhonePSFormAdd, SubscriberAdd
 from .models import Substation, Subscriber, Section, Person, Phone, Feeder, Group, Res
 from dal import autocomplete
 
-from .utils import AddPhoneViewMixin
+from .utils import AddPhoneViewMixin, DeleteObjectMixin
 
 title = 'Тульские Сети'
 context_menu = {'substations': 'Подстанции', 'subscribers': 'Абоненты', 'persons': 'Ответственные лица', }
@@ -390,6 +391,45 @@ class UpdPhone(UpdateView):
     form_class = PhoneFormUpd
     model = Phone
     template_name = 'tula_net/form_add_phone.html'
+
+
+# _______________ удаление телефона _________________
+class PhoneDelete(DeleteObjectMixin, View):
+    model = Phone
+    target_reverse = 'phones'
+
+# _______________ удаление телефона _________________
+class FeederDelete(DeleteObjectMixin, View):
+    model = Feeder
+    target_reverse = 'main'
+
+
+class AddSubscriber(CreateView):
+    model = Subscriber
+    form_class = SubscriberAdd
+    template_name = 'tula_net/form_add_subscriber.html'
+
+
+class UpdSubscriber(UpdateView):
+    model = Subscriber
+    form_class = SubscriberAdd
+    template_name = 'tula_net/form_add_subscriber.html'
+
+class SubscriberDelete(DeleteObjectMixin, View):
+    model = Subscriber
+    target_reverse = 'subscribers'
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 # ___________________

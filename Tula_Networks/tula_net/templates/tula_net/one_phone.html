@@ -38,6 +38,20 @@
     </div>
     {% endif %}
 
+    <div class="card-footer my-0 py-0 pr-5">
+      <div class="text-right my-0 mx-5 py-0 pr-5">
+        <div class="btn-group dropup">
+          <button type="button" class="btn btn-secondary dropdown-toggle dropdown-toggle-split m-0 p-0" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            править БД<span class="sr-only">Toggle Dropdown</span>
+          </button>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" href="{% url 'upd_phone' phone.pk %}">править телефон {{ phone }} </a>
+            <a class="dropdown-item" href="{% url 'del_phone' phone.pk %}">удалить телефон {{ phone }} </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="card-footer m-0 p-0">
         <h5 class="text-center m-0 p-0">Все номера:</h5>
         {% if phone.person %}
@@ -58,19 +72,15 @@
             {% endfor %}
         {% endif %}
 
-      </div>
+        {% if phone.substation %}
+        <p class="text-center m-0 p-0">
+            <a class="btn btn-light p-0" href="{{ phone.substation.get_absolute_url }}"><b> ПС {{ phone.substation }}:</b></a>,
+        </p>
+            {% for phone in phone.substation.phones.all %}
+               <a class="btn btn-light p-0" href="{{ phone.get_absolute_url }}">{{ phone }}</a>,
+            {% endfor %}
+        {% endif %}
 
-
-      <div class="card-footer text-right mx-5 my-0 py-0 pr-5">
-            <div class="btn-group dropup">
-              <button type="button" class="btn btn-secondary dropdown-toggle dropdown-toggle-split m-0 p-0" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                править БД<span class="sr-only">Toggle Dropdown</span>
-              </button>
-              <div class="dropdown-menu">
-                <a class="dropdown-item" href="{% url 'upd_phone' phone.pk %}">править телефон</a>
-                <a class="dropdown-item" href="#">удалить телефон</a>
-              </div>
-            </div>
       </div>
 
 

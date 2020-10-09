@@ -68,3 +68,10 @@ class PhoneFormUpd(PhoneFormAddMixin, forms.ModelForm):
     class Meta:
         model = Phone
         fields = ('number', 'mail', 'person', 'subscriber', 'substation', 'priority', 'description', 'search_number')
+
+
+# ____________________  Организации  ______________________
+class SubscriberAdd(BaseCrispyForms, forms.ModelForm):
+    class Meta:
+        model = Subscriber
+        fields = '__all__'

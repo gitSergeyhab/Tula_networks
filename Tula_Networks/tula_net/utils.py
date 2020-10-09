@@ -1,5 +1,6 @@
 from django import forms
 from django.shortcuts import render, redirect
+from django.urls import reverse
 
 from .models import Feeder, Subscriber, Substation, Section, Phone, Person
 from crispy_forms.helper import FormHelper
@@ -51,3 +52,18 @@ class AddPhoneViewMixin:
             new_phone = bound_form.save()
             return redirect(new_phone)
         return render(request, 'tula_net/form_add_phone.html', context={'form': bound_form})
+
+
+# _______________ удаление _________________
+class DeleteObjectMixin:
+    model = None
+    target_reverse = None
+
+    def get(self, request, *args, **kwargs):
+        obj = self.model.objects.get(pk=self.kwargs['pk'])
+        return render(request, 'tula_net/form_delete_object.html', context={'obj': obj})
+
+    def post(self, request, *args, **kwargs):
+        obj = self.model.objects.get(pk=self.kwargs['pk'])
+        obj.delete()
+        return redirect(reverse(self.target_reverse))
