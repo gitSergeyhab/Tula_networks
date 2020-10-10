@@ -4,9 +4,9 @@ from django.contrib import admin
 from .models import Substation, Section, Feeder, Subscriber, Person, Phone, Group, Res
 
 # автокомплит не работает:
-from dal import autocomplete
-from django import forms
-from .forms import FeederFormAdd
+# from dal import autocomplete
+# from django import forms
+# from .forms import FeederFormAdd
 
 
 class SubstationAdmin(admin.ModelAdmin):

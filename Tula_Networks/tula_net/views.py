@@ -11,10 +11,16 @@ from .forms import FeederFormAdd, FeederFormUpd, PhoneSubscriberFormAdd, PhonePe
 from .models import Substation, Subscriber, Section, Person, Phone, Feeder, Group, Res
 from dal import autocomplete
 
-from .utils import AddPhoneViewMixin, DeleteObjectMixin
+from .utils import AddPhoneViewMixin, DeleteObjectMixin, SubstationsMixin
 
 title = 'Тульские Сети'
-context_menu = {'substations': 'Подстанции', 'subscribers': 'Абоненты', 'persons': 'Ответственные лица', }
+
+context_menu = {
+    'substations': 'Подстанции',
+    'subscribers': 'Организации',
+    'persons': 'Ответственные лица',
+    'phones': 'Телефоны',
+}
 
 # context_menu = {'substations': 'Подстанции', 'subscribers': 'Абоненты', 'feeders': 'Присоединения',
 #             'persons': 'Ответственные лица', 'sections': 'Секции', 'phones': 'Телефоны'}
@@ -24,25 +30,31 @@ context2 = {'context_menu': context_menu, 'title': title}
 
 
 class Main(View):
+    """ главная """
     def get(self, request, *args, **kwargs):
         return render(request, 'tula_net/index.html', context=context2)
 
 
-class PsList(ListView):
-    """ все ПС """
-    model = Substation
-    context_object_name = 'substations'
-    template_name = 'tula_net/listPS.html'
-    extra_context = title1
-    """ context['groups'] - меню в верху страницы с названиями групп ПС 
-    ['flag_group'] - для того чтобы не выводить названия групп, если группа уже выбрана и убрать поле поиска """
 
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['context_menu'] = context_menu
-        context['groups'] = Group.objects.all()
-        context['voltages'] = [35, 110, 220]
-        return context
+class PsList (SubstationsMixin, ListView):
+    extra_context = title1
+    menu = context_menu
+
+# class PsList(ListView):
+#     """ все ПС """
+#     model = Substation
+#     context_object_name = 'substations'
+#     template_name = 'tula_net/listPS.html'
+#     extra_context = title1
+#     """ context['groups'] - меню в верху страницы с названиями групп ПС
+#     ['flag_group'] - для того чтобы не выводить названия групп, если группа уже выбрана и убрать поле поиска """
+#
+#     def get_context_data(self, *, object_list=None, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         context['context_menu'] = context_menu
+#         context['groups'] = Group.objects.all()
+#         context['voltages'] = [35, 110, 220]
+#         return context
 
 
 class GroupPS(ListView):
@@ -298,8 +310,7 @@ class SearcherPS(ListView):
         context = super().get_context_data(**kwargs)
         context['flag_search'] = self.request.GET.get('s')
         context['groups'] = Group.objects.all()
-
-        context['flag_group'] = 1
+        context['voltages'] = [35, 110, 220]
         return context
 
 

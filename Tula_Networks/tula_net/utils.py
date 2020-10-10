@@ -2,13 +2,16 @@ from django import forms
 from django.shortcuts import render, redirect
 from django.urls import reverse
 
-from .models import Feeder, Subscriber, Substation, Section, Phone, Person
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 import re
 
 
 # ____ шаблон для форм ___
+from tula_net.models import Substation, Group
+
+
+
 class BaseCrispyForms:
 
     def __init__(self, *args, **kwargs):
@@ -68,3 +71,18 @@ class DeleteObjectMixin:
         obj = self.model.objects.get(pk=self.kwargs['pk'])
         obj.delete()
         return redirect(reverse(self.target_reverse))
+
+
+class SubstationsMixin:
+    """ шаблон для ПС """
+    model = Substation
+    context_object_name = 'substations'
+    template_name = 'tula_net/listPS.html'
+    menu = None
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['context_menu'] = self.menu
+        context['groups'] = Group.objects.all()
+        context['voltages'] = [35, 110, 220]
+        return context
