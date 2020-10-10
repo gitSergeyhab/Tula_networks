@@ -42,7 +42,6 @@ class PsList(ListView):
         context['context_menu'] = context_menu
         context['groups'] = Group.objects.all()
         context['voltages'] = [35, 110, 220]
-        context['flag_group'] = 1
         return context
 
 
@@ -58,6 +57,8 @@ class GroupPS(ListView):
         context = super().get_context_data(**kwargs)
         context['groups'] = Group.objects.all()
         context['voltages'] = [35, 110, 220]
+        context['flag_group'] = 1
+
         return context
 
 
@@ -73,7 +74,6 @@ class VoltPS(ListView):
         context = super().get_context_data(**kwargs)
         context['voltages'] = [35, 110, 220]
         context['groups'] = Group.objects.all()
-        context['flag_group'] = 1
         context['flag_voltages'] = 1
         return context
 

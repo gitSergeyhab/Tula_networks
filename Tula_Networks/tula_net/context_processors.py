@@ -14,6 +14,10 @@ def add_titles(request):
 
 def logik(request):
     return {
+        'logik_kostyl': '/35',
+        'logik_volt2': request.path[-3:-1],
+        'logik_volt': request.path[-4:-1],
+        'logik_group': request.path[-2:-1],
         'logik_metod': request.path[1:5],
         'logik_obj': request.path[4:10],
         'logik_add': 'add_',
