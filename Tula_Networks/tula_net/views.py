@@ -7,7 +7,7 @@ from django.views import View
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
 
 from .forms import FeederFormAdd, FeederFormUpd, PhoneSubscriberFormAdd, PhonePersonFormAdd, PhoneFormUpd, \
-    PhonePSFormAdd, SubscriberAdd
+    PhonePSFormAdd, SubscriberFormAdd, PersonFormAdd, SubstationFormUpd
 from .models import Substation, Subscriber, Section, Person, Phone, Feeder, Group, Res
 from dal import autocomplete
 
@@ -393,35 +393,72 @@ class UpdPhone(UpdateView):
     template_name = 'tula_net/form_add_phone.html'
 
 
-# _______________ удаление телефона _________________
 class PhoneDelete(DeleteObjectMixin, View):
+    """ удаление телефона"""
     model = Phone
     target_reverse = 'phones'
 
-# _______________ удаление телефона _________________
+
 class FeederDelete(DeleteObjectMixin, View):
+    """ удаление фидера"""
     model = Feeder
     target_reverse = 'main'
 
 
+# _______________ Формы Организации _____________
 class AddSubscriber(CreateView):
+    """ добавление организации"""
     model = Subscriber
-    form_class = SubscriberAdd
+    form_class = SubscriberFormAdd
     template_name = 'tula_net/form_add_subscriber.html'
 
 
 class UpdSubscriber(UpdateView):
+    """ изменение организации"""
     model = Subscriber
-    form_class = SubscriberAdd
+    form_class = SubscriberFormAdd
     template_name = 'tula_net/form_add_subscriber.html'
 
+
 class SubscriberDelete(DeleteObjectMixin, View):
+    """ удаление организации"""
     model = Subscriber
     target_reverse = 'subscribers'
 
 
+# _______________ Формы Организации _____________
+class AddPerson(View):
+
+    def get(self, request, *args, **kwargs):
+        form = PersonFormAdd()
+        form.fields["subscriber"].queryset = Subscriber.objects.filter(pk=self.kwargs['pk'])
+        return render(request, 'tula_net/form_add_person.html', context={'form': form})
+
+    def post(self, request, *args, **kwargs):
+        bound_form = PersonFormAdd(request.POST)
+        if bound_form.is_valid():
+            new_person = bound_form.save()
+            return redirect(new_person)
+        return render(request, 'tula_net/form_add_person.html', context={'form': bound_form})
 
 
+class UpdPerson(UpdateView):
+    model = Person
+    form_class = PersonFormAdd
+    template_name = 'tula_net/form_add_person.html'
+
+
+class DelPerson(DeleteObjectMixin, View):
+    model = Person
+    target_reverse = 'persons'
+
+
+# _______________ Формы Подстанции _____________
+
+class UpdSubstation(UpdateView):
+    model = Substation
+    form_class = SubstationFormUpd
+    template_name = 'tula_net/form_add_person.html'
 
 
 

@@ -9,7 +9,7 @@
           <div class="card mb-4">
             <div class="card-body px-4">
               <div class="row">
-                <div class="col-12 col-md-4 col-lg-3 d-flex align-items-center">
+                <div class="col-12 col-md-3 col-lg-2 d-flex align-items-center">
                     <div class="btn-group-vertical">
                         <a href="{% url 'section_ps' ps.pk %}" type="button" class="btn btn-dark">Секции</a>
                         <a href="{% url 'subscriber_ps' ps.pk %}" type="button" class="btn btn-secondary">Абоненты</a>
@@ -18,8 +18,8 @@
                     </div>
 
                 </div>
-                <div class="col-12 col-md-8 col-lg-9">
-                    <h4 class="bg-light">
+                <div class="col-12 col-md-9 col-lg-10">
+                    <h4 class="bg-light text-center">
                         ПС № {{ ps.number }} {{ ps }} {% include 'incl/_voltage_full.html' %} кВ
 
 
@@ -29,7 +29,7 @@
                     <a href="{% url 'subscriber' ps.owner.pk %}" class="btn btn-dark"><h6>{{ ps.owner }}</h6></a>
                      {% endif %}
                     {% if ps.location %}
-                    <h4> <b>Расположение:</b> {{ ps.location }}</h4>
+                    <h5> <b>Расположение:</b> {{ ps.location }}</h5>
                     {% endif %}
 
           <div class="card-footer text-right">
@@ -40,14 +40,14 @@
                   <div class="dropdown-menu">
                     <a class="dropdown-item" href="{% url 'add_feeder' ps.pk %}">добавить фидер или ВЛ на ПС</a>
                     <a class="dropdown-item" href="{% url 'add_phone_ps' ps.pk %}">добавить телефон на ПС</a>
-                    <a class="dropdown-item" href="#">редактировать ПС</a>
+                    <a class="dropdown-item" href="{% url 'upd_substation' ps.pk %}">редактировать ПС</a>
                   </div>
                 </div>
           </div>
 
 
                     {% if ps.description %}
-                    <h4><b>О подстанции:</b> {{ ps.description }} </h4>
+                    <h5><b>О подстанции:</b> {{ ps.description }} </h5>
                     {% endif %}
 
 

@@ -1,15 +1,25 @@
 {% extends 'base.html' %}
 
- {% block first_section %}
+{% block title %}
+ {{ block.super }} | {% include 'incl/_logik_titles_form.html' %}
+{% endblock %}
+
+{% block title2 %}
+<div class="contain text-center my-4">
+ <h2>
+  {% include 'incl/_logik_titles_form.html' %}
+ </h2>
+</div>
+{% endblock %}
 
 
+
+
+{% block first_section %}
 <div class="container col-7 mt-4">
 
  {% load crispy_forms_tags %}
  {% crispy form "bootstrap4" %}
 
 </div>
-
-
-
 {% endblock %}

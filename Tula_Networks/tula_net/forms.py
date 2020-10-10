@@ -18,8 +18,10 @@ from .utils import PhoneFormAddMixin, BaseCrispyForms
 ## ____________________ добавление Фидера  ______________________
 class FeederFormAdd(BaseCrispyForms, forms.ModelForm):
     """ для того чтобы прописать empty_label=None """
-    substation = forms.ModelChoiceField(empty_label=None, queryset=Substation.objects.all())
-    section = forms.ModelChoiceField(empty_label=None, queryset=Section.objects.all())
+    substation = forms.ModelChoiceField(label='ПС',empty_label=None, queryset=Substation.objects.all())
+    section = forms.ModelChoiceField(label='Секция',empty_label=None, queryset=Section.objects.all())
+    """ для того чтобы уменьшить поле описания """
+    description = forms.CharField(label='Примечание',required=False, widget=forms.Textarea(attrs={"rows": 3, }))
 
     class Meta:
         model = Feeder
@@ -28,17 +30,20 @@ class FeederFormAdd(BaseCrispyForms, forms.ModelForm):
 
 ## ____________________ изменение Фидера  ______________________
 class FeederFormUpd(BaseCrispyForms, forms.ModelForm):
+    description = forms.CharField(label='Примечание',required=False, widget=forms.Textarea(attrs={"rows": 3, }))
+
     class Meta:
         model = Feeder
         fields = ['name', 'section', 'subscriber', 'number_tp', 'population', 'social', 'length',
                   'attention', 'res', 'reliability_category', 'in_reserve', 'description']
 
 
-
 # __________________ форма добавления телефона для организации _______________________
 class PhoneSubscriberFormAdd(PhoneFormAddMixin, forms.ModelForm):
     """ для того чтобы прописать empty_label=None """
-    subscriber = forms.ModelChoiceField(empty_label=None, queryset=Subscriber.objects.all())
+    subscriber = forms.ModelChoiceField(label='Организация',empty_label=None, queryset=Subscriber.objects.all())
+
+    description = forms.CharField(label='Примечание',required=False, widget=forms.Textarea(attrs={"rows": 3, }))
 
     class Meta:
         model = Phone
@@ -47,7 +52,8 @@ class PhoneSubscriberFormAdd(PhoneFormAddMixin, forms.ModelForm):
 
 # __________________ форма добавления телефона для человека _______________________
 class PhonePersonFormAdd(PhoneFormAddMixin, forms.ModelForm):
-    person = forms.ModelChoiceField(empty_label=None, queryset=Person.objects.all())
+    person = forms.ModelChoiceField(label='Кто',empty_label=None, queryset=Person.objects.all())
+    description = forms.CharField(label='Примечание',required=False, widget=forms.Textarea(attrs={"rows": 3, }))
 
     class Meta:
         model = Phone
@@ -56,7 +62,8 @@ class PhonePersonFormAdd(PhoneFormAddMixin, forms.ModelForm):
 
 # __________________ форма добавления телефона для ПС _______________________
 class PhonePSFormAdd(PhoneFormAddMixin, forms.ModelForm):
-    substation = forms.ModelChoiceField(empty_label=None, queryset=Substation.objects.all())
+    substation = forms.ModelChoiceField(label='ПС', empty_label=None, queryset=Substation.objects.all())
+    description = forms.CharField(label='Примечание', required=False, widget=forms.Textarea(attrs={"rows": 3, }))
 
     class Meta:
         model = Phone
@@ -65,13 +72,35 @@ class PhonePSFormAdd(PhoneFormAddMixin, forms.ModelForm):
 
 # __________________ редактирование телефона  _______________________
 class PhoneFormUpd(PhoneFormAddMixin, forms.ModelForm):
+    description = forms.CharField(label='Примечание', required=False, widget=forms.Textarea(attrs={"rows": 3, }))
+
     class Meta:
         model = Phone
         fields = ('number', 'mail', 'person', 'subscriber', 'substation', 'priority', 'description', 'search_number')
 
 
 # ____________________  Организации  ______________________
-class SubscriberAdd(BaseCrispyForms, forms.ModelForm):
+class SubscriberFormAdd(BaseCrispyForms, forms.ModelForm):
+    description = forms.CharField(label='Описание',required=False, widget=forms.Textarea(attrs={"rows": 3, }))
+
     class Meta:
         model = Subscriber
+        fields = '__all__'
+
+
+class PersonFormAdd(BaseCrispyForms, forms.ModelForm):
+    subscriber = forms.ModelChoiceField(label='Организация', empty_label=None, queryset=Subscriber.objects.all())
+    description = forms.CharField(label='Примечание', required=False, widget=forms.Textarea(attrs={"rows": 3, }))
+
+    class Meta:
+        model = Person
+        fields = '__all__'
+
+
+class SubstationFormUpd(BaseCrispyForms, forms.ModelForm):
+    description = forms.CharField(label='Описание', required=False, widget=forms.Textarea(attrs={"rows": 3, }))
+    location = forms.CharField(label='Расположение', required=False, widget=forms.Textarea(attrs={"rows": 3, }))
+
+    class Meta:
+        model = Substation
         fields = '__all__'

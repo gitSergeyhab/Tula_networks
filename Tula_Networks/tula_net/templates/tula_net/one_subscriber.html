@@ -17,7 +17,7 @@
             <a href="{{ person.get_absolute_url }}" class="btn btn-secondary p-1">
             <b>{{ person }}</b>
             </a>
-            | {{person.position}}</p>
+            {% if person.position %} | {{ person.position }} {% endif %} </p>
             <p>Телефоны: {% for phone in person.phones.all %}
                 <a class="btn btn-light p-0" href="{{ phone.get_absolute_url }}"><b>{{ phone }}</b></a>,
 
@@ -38,7 +38,7 @@
                 править БД<span class="sr-only">Toggle Dropdown</span>
               </button>
               <div class="dropdown-menu">
-                <a class="dropdown-item" href="#">добавить ответствнное лицо</a>
+                <a class="dropdown-item" href="{% url 'add_person' subscriber.pk %}">добавить ответствнное лицо</a>
                 <a class="dropdown-item" href="{% url 'add_phone' subscriber.pk %}">добавить телефон организации</a>
                 <a class="dropdown-item" href="{% url 'upd_subscriber' subscriber.pk %}">править организацию</a>
                 <a class="dropdown-item" href="{% url 'del_subscriber' subscriber.pk %}">удалить организацию</a>

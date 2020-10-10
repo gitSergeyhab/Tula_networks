@@ -5,7 +5,8 @@ from tula_net.views import Main, PsList, GroupPS, VoltPS, OnePS, SectionList, On
     SubscriberList, OneSubscriber, SubscribersBySection, SubscribersByPS, SubstationsBySubscriber, SearcherSubscribers, \
     SearcherPS, SearcherPersons, AllFeeders, OneFeeders, OnePerson, PersonList, OnePhone, PhoneList, AddFeeder, \
     UpdFeeder, UpdPhone, SubscriberAutocomplete, SubstationAutocomplete, AddPersonPhone, SearcherPhones, AddPSPhone, \
-    AddSubscriberPhone, PhoneDelete, FeederDelete, AddSubscriber, UpdSubscriber, SubscriberDelete
+    AddSubscriberPhone, PhoneDelete, FeederDelete, AddSubscriber, UpdSubscriber, SubscriberDelete, AddPerson, UpdPerson, \
+    DelPerson, UpdSubstation
 
 urlpatterns = [
     path('', Main.as_view(), name='main'),
@@ -49,15 +50,15 @@ urlpatterns = [
     path('searcher_persons/', SearcherPersons.as_view(), name='searcher_persons'),
     path('searcher_phones/', SearcherPhones.as_view(), name='searcher_phones'),
 
-    # формы 1-2.ПС, 3-4.Фид, 5-6.Абонент
-    # path('add_PS/', AddPS.as_view(), name='add_PS'),
-    # path('upd_PS/', UpdPS.as_view(), name='upd_PS'),
+
     path('add_feeder/from_ps_pk/<int:pk>/', AddFeeder.as_view(), name='add_feeder'),
     path('upd_feeder/<int:pk>/', UpdFeeder.as_view(), name='upd_feeder'),
     path('add_subscriber/', AddSubscriber.as_view(), name='add_subscriber'),
     path('upd_subscriber/<int:pk>/', UpdSubscriber.as_view(), name='upd_subscriber'),
 
-
+    path('add_person/from_ss_pk/<int:pk>/', AddPerson.as_view(), name='add_person'),
+    path('upd_person/<int:pk>/', UpdPerson.as_view(), name='upd_person'),
+    path('del_person/<int:pk>/', DelPerson.as_view(), name='del_person'),
 
     path('add_phone/from_person_pk/<int:pk>/', AddPersonPhone.as_view(), name='add_phone_p'),
     path('add_phone/from_subscriber_pk/<int:pk>/', AddSubscriberPhone.as_view(), name='add_phone'),
@@ -68,13 +69,9 @@ urlpatterns = [
     path('del_feeder/<int:pk>/', FeederDelete.as_view(), name='del_feeder'),
     path('del_subscriber/<int:pk>', SubscriberDelete.as_view(), name='del_subscriber'),
 
-
+    path('upd_substation/<int:pk>', UpdSubstation.as_view(), name='upd_substation'),
 
     path('subscriber_autocomplete/', SubscriberAutocomplete.as_view(), name='subscriber_autocomplete'),
     path('substation_autocomplete/', SubstationAutocomplete.as_view(), name='substation_autocomplete'),
-
-
-
-
 
 ]

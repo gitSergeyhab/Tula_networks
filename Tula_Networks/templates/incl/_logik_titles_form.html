@@ -1,0 +1,20 @@
+
+{% if logik_metod == logik_add %}
+ {{ title_add }}
+{% elif logik_metod == logik_upd %}
+ {{ title_upd }}
+{% elif logik_metod == logik_del %}
+ {{ title_del }}
+{% endif %}
+
+{% if logik_obj == logik_feeder %}
+ {{ title_feeder }}
+{% elif logik_obj == logik_substation %}
+ {{ title_substation }}
+{% elif logik_obj == logik_subscriber %}
+ {{ title_subscriber }}
+{% elif logik_obj == logik_phone %}
+ {{ title_phone }}
+{% elif logik_obj == logik_person %}
+ {{ title_person }}
+{% endif %}

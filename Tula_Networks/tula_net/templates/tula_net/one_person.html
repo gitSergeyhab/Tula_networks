@@ -4,7 +4,7 @@
 
 <div class="card text-center">
   <div class="card-header">
-      <h4><b>{{ person }}</b> | {{ person.position }}</h4>
+      <h4><b>{{ person }}</b>  {% if person.position %} | {{ person.position }} {% endif %}</h4>
   </div>
   <div class="card-body">
       <h5 class="card-title"><b>Организация:</b>
@@ -38,9 +38,10 @@
                 править БД<span class="sr-only">Toggle Dropdown</span>
               </button>
               <div class="dropdown-menu">
-
-                <a class="dropdown-item" href="#">править лицо</a>
                 <a class="dropdown-item" href="{% url 'add_phone_p' person.pk %}">добавить телефон</a>
+                <a class="dropdown-item" href="{% url 'upd_person' person.pk %}">править лицо</a>
+                <a class="dropdown-item" href="{% url 'del_person' person.pk %}">удалить лицо</a>
+
               </div>
             </div>
       </div>

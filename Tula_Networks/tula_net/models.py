@@ -144,7 +144,7 @@ class Feeder(models.Model):
         return reverse('feeder', kwargs={'pk': self.pk})
 
     def __str__(self):
-        return ' '.join(('фид', str(self.name), str(self.substation)))
+        return ' '.join(('фид', str(self.name), 'ПС', str(self.substation)))
 
     class Meta:
         verbose_name = "фидер"
