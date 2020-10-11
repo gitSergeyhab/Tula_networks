@@ -1,1 +1,8 @@
-colors = ["", 'light', 'warning', 'success', 'danger', 'info']
+
+context_menu = {
+    'substations': 'Подстанции',
+    'subscribers': 'Организации',
+    'persons': 'Ответственные лица',
+    'phones': 'Телефоны',
+}
+

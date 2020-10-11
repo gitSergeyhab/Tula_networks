@@ -40,6 +40,7 @@
               <div class="dropdown-menu">
                 <a class="dropdown-item" href="{% url 'add_person' subscriber.pk %}">добавить ответствнное лицо</a>
                 <a class="dropdown-item" href="{% url 'add_phone' subscriber.pk %}">добавить телефон организации</a>
+                <a class="dropdown-item" href="{% url 'add_feeder_from_ss' subscriber.pk %}">добавить фидер организации</a>
                 <a class="dropdown-item" href="{% url 'upd_subscriber' subscriber.pk %}">править организацию</a>
                 <a class="dropdown-item" href="{% url 'del_subscriber' subscriber.pk %}">удалить организацию</a>
               </div>

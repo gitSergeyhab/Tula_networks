@@ -16,6 +16,25 @@
       <a href="{{ feeder.subscriber.get_absolute_url }}" class="btn btn-secondary p-1">
           <h6 class="card-title">Абонент: {{ feeder.subscriber }}</h6>
       </a>
+
+        <h6 class="bg-light px-1">
+            {% for phone in feeder.subscriber.phones.all %}
+                <a class="btn btn-light p-0" href="{{ phone.get_absolute_url }}"><b>{{ phone }}</b></a>,
+            {% endfor %}
+        </h6 >
+
+        <hr class="p-0 m-0"  color="#00008B" >
+        <hr class="p-0 m-0"  color="#00008B" >
+
+        {% for person in feeder.subscriber.persons.all %}
+            <h6 class="px-0 mx-0">
+                <p class="my-0 card-header p-1"><b>{{ person }}</b> | {{person.position}} |
+                {% for phone in person.phones.all %}
+                   <a class="btn btn-light p-0" href="{{ phone.get_absolute_url }}"><b>{{ phone }}</b></a>,
+                {% endfor %}</p>
+            </h6>
+        {% endfor %}
+
     <div class="my-3 card-footer">
         {% if feeder.subscriber.ours %}
             <h6 class="card-text">ТП: {{ feeder.number_tp }}</h6>
