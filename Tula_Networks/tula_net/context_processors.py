@@ -9,6 +9,7 @@ def add_titles(request):
         'title_subscriber': 'организацию',
         'title_phone': 'телефон',
         'title_person': 'лицо',
+        'title_section': 'секцию',
     }
 
 
@@ -28,6 +29,7 @@ def logik(request):
         'logik_subscriber': '_subsc',
         'logik_phone': '_phone',
         'logik_person': '_perso',
+        'logik_section': '_secti',
 
 
 

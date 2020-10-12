@@ -38,6 +38,7 @@
                     править БД<span class="sr-only">Toggle Dropdown</span>
                   </button>
                   <div class="dropdown-menu">
+                    <a class="dropdown-item" href="{% url 'add_section' ps.pk %}">добавить секцию на ПС</a>
                     <a class="dropdown-item" href="{% url 'add_feeder_from_ps' ps.pk %}">добавить фидер или ВЛ на ПС</a>
                     <a class="dropdown-item" href="{% url 'add_phone_ps' ps.pk %}">добавить телефон на ПС</a>
                     <a class="dropdown-item" href="{% url 'upd_substation' ps.pk %}">редактировать ПС</a>

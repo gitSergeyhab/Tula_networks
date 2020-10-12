@@ -2,9 +2,6 @@ from django.db import models
 from django.urls import reverse
 
 
-
-
-
 class Group(models.Model):
     name = models.CharField(max_length=64, verbose_name='Группа', unique=True)
     location = models.TextField(verbose_name='Расположение', blank=True)
@@ -49,10 +46,11 @@ class Substation(models.Model):
     voltage_l = models.PositiveSmallIntegerField(verbose_name='напряжение низкое', blank=True, null=True)
     alien = models.BooleanField(verbose_name='абонентская?')
     owner = models.ForeignKey('Subscriber', related_name='substations', verbose_name='Владелец',
-                              on_delete=models.SET_NULL, blank=True, null=True)
+                              on_delete=models.CASCADE)
     group = models.ForeignKey(Group, related_name='substations', verbose_name='Группа',
-                              on_delete=models.SET_NULL, blank=True, null=True)
+                              on_delete=models.CASCADE)
     location = models.TextField(verbose_name='Расположение', blank=True)
+    region = models.CharField(blank=True, max_length=32, verbose_name='Участок', null=True)
     description = models.TextField(verbose_name='Описение', blank=True)
 
     def get_absolute_url(self):
@@ -71,6 +69,7 @@ class Section(models.Model):
     substation = models.ForeignKey(Substation, related_name='sections', on_delete=models.CASCADE)
     name = models.CharField(max_length=32, verbose_name='Название секции')
     voltage = models.PositiveSmallIntegerField(verbose_name='напряжение')
+    from_T = models.PositiveSmallIntegerField(verbose_name='питается от Т №', blank=True, null=True)
     description = models.TextField(verbose_name='Описение', blank=True)
 
     def get_absolute_url(self):
@@ -126,19 +125,19 @@ class Person(models.Model):
 class Feeder(models.Model):
     name = models.CharField(max_length=32, verbose_name='Название фидера')
     substation = models.ForeignKey(Substation, related_name='feeders', on_delete=models.CASCADE, verbose_name='ПС')
-    section = models.ForeignKey(Section, related_name='feeders', on_delete=models.CASCADE, verbose_name='СкШ')
+    section = models.ForeignKey(Section, related_name='feeders', on_delete=models.CASCADE, verbose_name='СкШ', blank=True, null=True)
     subscriber = models.ForeignKey(Subscriber, related_name='feeders', on_delete=models.SET_NULL,
                                    verbose_name='абонент', blank=True, null=True)
     length = models.PositiveSmallIntegerField(blank=True, verbose_name='Протяженность', null=True)
     number_tp = models.PositiveSmallIntegerField(blank=True, verbose_name='Количество ТП', null=True)
     population = models.PositiveSmallIntegerField(blank=True, verbose_name='Население', null=True)
     social = models.PositiveSmallIntegerField(blank=True, verbose_name='Социалка', null=True)
-    res = models.ForeignKey(Res, related_name='feeders', verbose_name='РЭС или еще кто',
-                            on_delete=models.SET_NULL, blank=True, null=True)
-    attention = models.BooleanField(verbose_name='!!!')
+    attention = models.BooleanField(verbose_name='!!!', default=False)
     reliability_category = models.PositiveSmallIntegerField(blank=True, verbose_name='категория надежности', null=True)
     in_reserve = models.BooleanField(default=False, verbose_name='Резервный')
+    region = models.CharField(blank=True, max_length=32, verbose_name='Участок', null=True)
     description = models.TextField(verbose_name='Описение', blank=True, null=True)
+    res = models.CharField(blank=True, max_length=32, verbose_name='РЭС', null=True)
 
     def get_absolute_url(self):
         return reverse('feeder', kwargs={'pk': self.pk})
@@ -177,3 +176,17 @@ class Phone(models.Model):
         verbose_name = "Телефон"
         verbose_name_plural = "Телефоны"
         ordering = ['priority']
+
+
+
+import pandas as pd
+from .data_script import only_pst, adder_ps, adder_subsriber, only_subsribers, only_sec, adder_sec, feeds, adder_feed
+
+# adder_subsriber(only_subsribers)
+# adder_ps(only_pst)
+# adder_sec(only_sec)
+# adder_feed(feeds)
+
+
+
+

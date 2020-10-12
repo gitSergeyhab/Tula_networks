@@ -51,10 +51,10 @@ admin.site.register(Person, PersonAdnin)
 
 class FeederAdmin(admin.ModelAdmin):
     # form = FeederForm # автокомплит не работает
-    list_display = ['pk', 'name', 'substation', 'section', 'subscriber', 'res', 'attention', 'number_tp', 'in_reserve']
+    list_display = ['pk', 'name', 'substation', 'section', 'subscriber',  'attention', 'number_tp', 'in_reserve']
     list_display_links = ['name']
     search_fields = ['name']
-    list_filter = ['substation', 'res', 'attention']
+    list_filter = ['substation', 'attention']
 
 
 admin.site.register(Feeder, FeederAdmin)

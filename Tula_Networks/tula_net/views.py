@@ -6,7 +6,7 @@ from django.views import View
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
 
 from .forms import FeederAddFromPSForm, FeederFormUpd, PhoneSubscriberFormAdd, PhonePersonFormAdd, PhoneFormUpd, \
-    PhonePSFormAdd, SubscriberFormAdd, PersonFormAdd, SubstationFormUpd, FeederAddFromSubscriberForm
+    PhonePSFormAdd, SubscriberFormAdd, PersonFormAdd, SubstationFormUpd, FeederAddFromSubscriberForm, SectionAddForm
 
 from .models import Substation, Subscriber, Section, Person, Phone, Feeder, Group, Res
 from dal import autocomplete
@@ -303,7 +303,7 @@ class AddFeederFromSubscriberView(AddFeederMixin, View):
     first_model = Subscriber
     first_field = 'subscriber'
 
-
+# ПЕРЕДЕЛАТЬ
 class UpdFeederView(UpdateView):
     """ изменение фидера"""
     form_class = FeederFormUpd
@@ -405,6 +405,32 @@ class UpdSubstationView(UpdateView):
     model = Substation
     form_class = SubstationFormUpd
     template_name = 'tula_net/form_add_person.html'
+
+
+
+
+
+
+
+class AddSectionFromPSView(View):
+    """ добавление фидера c ПС !!! и оно работает !!!"""
+
+    def get(self, request, pk):
+        form = SectionAddForm()
+        form.fields["substation"].queryset = Substation.objects.filter(pk=pk)
+        return render(request, 'tula_net/form_add_feeder.html', context={'form': form})
+
+    def post(self, request, *args, **kwargs):
+        bound_form = SectionAddForm(request.POST)
+        if bound_form.is_valid():
+            new_feeder = bound_form.save()
+            return redirect(new_feeder)
+        return render(request, 'tula_net/form_add_feeder.html', context={'form': bound_form})
+
+
+
+
+
 
 
 

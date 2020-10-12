@@ -18,7 +18,7 @@
         {% for feeder in ps.feeders.all %}
 
         {% if feeder.subscriber == the_subscriber %}
-        <a href="{{ feeder.get_absolute_url }}" class="btn btn-secondary">{{ feeder.name }}</a> ,
+        <a href="{{ feeder.get_absolute_url }}" class="btn btn-secondary py-0">{{ feeder.name }}</a> ,
         {% endif %}
 
         {% endfor %}

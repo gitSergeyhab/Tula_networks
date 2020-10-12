@@ -113,3 +113,12 @@ class SubstationFormUpd(BaseCrispyForms, forms.ModelForm):
     class Meta:
         model = Substation
         fields = '__all__'
+
+
+class SectionAddForm(BaseCrispyForms, forms.ModelForm):
+    substation = forms.ModelChoiceField(label='ПС', empty_label=None, queryset=Substation.objects.all())
+    description = forms.CharField(label='Описание',required=False, widget=forms.Textarea(attrs={"rows": 3, }))
+
+    class Meta:
+        model = Section
+        fields = '__all__'
