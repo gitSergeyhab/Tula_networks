@@ -6,19 +6,23 @@
         <h5 class="card-header text-center"><span class="px-5"><b>
             {% if the_section %}
             {{ the_section.name }}
-            <a class="btn btn-light p-0 py-0 m-0" href="{{ the_section.get_absolute_url }}"><h5><b>{{ the_section.substation }}</b></h5></a>
+            <a class="btn btn-light p-0 py-0 m-0" href="{{ the_section.substation.get_absolute_url }}"><h5><b>{{ the_section.substation }}</b></h5></a>
             {% elif the_substation %}
             <a class="btn btn-light p-0 py-0 m-0" href="{{ the_substation.get_absolute_url }}"><h5><b>ПС {{ the_substation }}</b></h5></a>
             {% endif %}
             | все фидеры :
         </b></span></h5>
 
+
+
         <div class="text-right">
             {% if the_substation %}
-                <h3><a class="btn btn-outline-dark px-5 py-0 m-1" href="{% url 'subscriber_ps' the_substation.pk %}">Разбить по абонентам </a></h3>
+                <h3 class="m-0"><a class="btn btn-outline-dark px-5 py-0 m-0" href="{% url 'subscriber_ps' the_substation.pk %}">Разбить по абонентам </a></h3>
             {% elif the_section %}
-                <h3><a class="btn btn-outline-dark px-5 py-0 m-1" href="{% url 'subscriber_sec' the_section.pk %}">Разбить по абонентам </a></h3>
+                <h3 class="m-0"><a class="btn btn-outline-dark px-5 py-0 m-0" href="{% url 'subscriber_sec' the_section.pk %}">Разбить по абонентам </a></h3>
+                <h3 class="m-0"><a class="btn btn-outline-secondary px-5 py-0 m-0" href="{% url 'upd_section' the_section.pk %}">Править секцию</a></h3>
             {% endif %}
+
         </div>
 
 
@@ -36,7 +40,7 @@
                                 {% if feeder.subscriber.short_name %}
                                 {{ feeder.subscriber.short_name }}
                                 {% else %}
-                                {{ feeder.subscriber.name|truncatechars:20 }}
+                                {{ feeder.subscriber.name|truncatechars:15 }}
                                 {% endif %}
                             </a>
                             <a href="{{ feeder.get_absolute_url }}" type="button" class="btn btn-dark">

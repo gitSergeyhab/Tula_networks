@@ -26,13 +26,14 @@
     <div class="card-body">
         {% for subscriber in subscribers.distinct %}
          <div class="card mb-2">
-            <a href="{{ subscriber.get_absolute_url }}" class="btn btn-outline-secondary p-1 m-1" >
+            <a href="{{ subscriber.get_absolute_url }}" class="btn btn-outline-dark p-1 m-1" >
                 <p class="m-1">{{ subscriber }}</p>
             </a>
            <div class="card-body p-1">
             {% for feeder in subscriber.feeders.all %}
-                {% if feeder.substation == the_substation or feeder.section == the_section  %}
-                          <a href="#" class="btn btn-secondary py-1">{{ feeder.name }} </a>
+
+                {% if feeder.substation == the_substation or feeder.section == the_section and feeder.section %}
+                          <a href="{{ feeder.get_absolute_url }}" class="btn btn-outline-secondary py-0">{{ feeder.name }} </a>
                {% endif %}
             {% endfor %}
            </div>

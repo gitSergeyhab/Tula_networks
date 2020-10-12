@@ -429,10 +429,11 @@ class AddSectionFromPSView(View):
 
 
 
+class UpdSectionView(UpdateView):
 
-
-
-
+    model = Section
+    form_class = SectionAddForm
+    template_name = 'tula_net/form_add_feeder.html'
 
 
 
