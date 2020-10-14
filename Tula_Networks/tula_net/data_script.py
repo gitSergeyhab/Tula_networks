@@ -2,7 +2,7 @@ import pandas as pd
 
 from .models import Subscriber, Substation, Group, Section, Feeder
 
-pstula = pd.read_csv('C:\\data\\for_subscribers.csv')
+pstula = pd.read_csv('tula_net/data_lists/for_subscribers.csv')
 only_subsribers = pstula.subscriber.unique()
 
 
