@@ -24,7 +24,7 @@ class MainView(View):
 
 class PsListView (SubstationsViewMixin, ListView):
     """ вьюха для всех ПС """
-    flag = None
+    paginate_by = 24
 
 
 class GroupPSView(SubstationsViewMixin, ListView):
@@ -35,12 +35,21 @@ class GroupPSView(SubstationsViewMixin, ListView):
         return Substation.objects.filter(group__pk=self.kwargs['pk'])
 
 
-class VoltPSView(SubstationsViewMixin, ListView):
+class VoltPSView1(SubstationsViewMixin, ListView):
     """ вьюха для ПС с разбивкой по напряжению """
     flag = 'flag_voltages'
 
     def get_queryset(self):
         return Substation.objects.filter(voltage_h=self.kwargs['pk'])
+
+
+class VoltPSView(SubstationsViewMixin, ListView):
+    """ вьюха для ПС с разбивкой по напряжению """
+    flag = 'flag_voltages'
+
+    def get_queryset(self):
+        return Substation.objects.filter(voltage_h__class_voltage=self.kwargs['pk'])
+
 
 
 class SubstationsBySubscriberView(ListView):
@@ -100,6 +109,13 @@ class AllFeedersView(FeedersViewMixin, ListView):
     model = Feeder
 
 
+class SectionView(DetailView):
+    model = Section
+    context_object_name = 'section'
+    template_name = 'tula_net/one_section.html'
+
+
+
 class OneSectionView(FeedersViewMixin, ListView):
     """ одна секция - лист фидеров """
     second_model = Section
@@ -148,6 +164,7 @@ class SubscriberListView(ListView):
     model = Subscriber
     context_object_name = 'subscribers'
     template_name = 'tula_net/subscribers_all.html'
+    paginate_by = 40
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -297,18 +314,37 @@ class AddFeederFromPSView(AddFeederMixin, View):
     second_field = 'section'
 
 
+class AddFeederFromSecView(AddFeederMixin, View):
+    """ добавление с СкШ """
+    form_feeder = FeederAddFromPSForm
+    first_model = Section
+    first_field = 'section'
+    second_field = 'substation'
+
+
 class AddFeederFromSubscriberView(AddFeederMixin, View):
     """ добавление от организации """
     form_feeder = FeederAddFromSubscriberForm
     first_model = Subscriber
     first_field = 'subscriber'
 
-# ПЕРЕДЕЛАТЬ
-class UpdFeederView(UpdateView):
+
+class UpdFeederView(View):
     """ изменение фидера"""
-    form_class = FeederFormUpd
-    model = Feeder
-    template_name = 'tula_net/form_add_feeder.html'
+    def get(self, request, pk):
+        feeder = Feeder.objects.get(pk=pk)
+        form = FeederFormUpd(instance=feeder)
+        form.fields['section'].queryset = Section.objects.filter(substation__feeders__pk=pk)
+        form.fields['substation'].queryset = Substation.objects.filter(feeders__pk=pk)
+        return render(request, 'tula_net/form_add_feeder.html', context={'form': form})
+
+    def post(self,request, pk):
+        feeder = Feeder.objects.get(pk=pk)
+        form = FeederFormUpd(request.POST, instance=feeder)
+        if form.is_valid():
+            feeder = form.save()
+            return redirect(feeder)
+        return render(request, 'tula_net/form_add_feeder.html', context={'form': form})
 
 
 ## __________________ телефоны ____________________
@@ -400,6 +436,11 @@ class DelPersonView(DeleteObjectMixin, View):
 
 
 # _______________ Формы Подстанции _____________
+
+class AddSubstationView(CreateView):
+    model = Substation
+    form_class = SubstationFormUpd
+    template_name = 'tula_net/form_add_person.html'
 
 class UpdSubstationView(UpdateView):
     model = Substation

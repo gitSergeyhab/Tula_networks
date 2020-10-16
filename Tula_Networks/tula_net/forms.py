@@ -43,7 +43,7 @@ class FeederFormUpd(BaseCrispyForms, forms.ModelForm):
 
     class Meta:
         model = Feeder
-        fields = ['name', 'section', 'subscriber', 'number_tp', 'population', 'social', 'length',
+        fields = ['name', 'substation', 'section', 'subscriber', 'number_tp', 'population', 'social', 'length',
                   'attention', 'res', 'reliability_category', 'in_reserve', 'description']
 
 

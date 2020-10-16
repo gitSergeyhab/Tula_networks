@@ -1,7 +1,8 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import Substation, Section, Feeder, Subscriber, Person, Phone, Group, Res
+from .models import Substation, Section, Feeder, Subscriber, Person, Phone, Group, Res, ClassVoltage
+
 
 # автокомплит не работает:
 # from dal import autocomplete
@@ -51,7 +52,7 @@ admin.site.register(Person, PersonAdnin)
 
 class FeederAdmin(admin.ModelAdmin):
     # form = FeederForm # автокомплит не работает
-    list_display = ['pk', 'name', 'substation', 'section', 'subscriber',  'attention', 'number_tp', 'in_reserve']
+    list_display = ['pk', 'name', 'substation', 'section', 'subscriber', 'attention', 'number_tp', 'in_reserve']
     list_display_links = ['name']
     search_fields = ['name']
     list_filter = ['substation', 'attention']
@@ -84,5 +85,11 @@ class ResAdmin(admin.ModelAdmin):
     list_filter = ['name', ]
 
 
+class ClassVoltageAdmin(admin.ModelAdmin):
+    list_display = ['pk', 'class_voltage']
+    list_display_links = ['pk', 'class_voltage']
+
+
 admin.site.register(Group, GroupAdmin)
 admin.site.register(Res, ResAdmin)
+admin.site.register(ClassVoltage, ClassVoltageAdmin)

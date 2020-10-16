@@ -96,17 +96,28 @@
           {% for ps in substations %}
             <div class="col-6 col-md-6 col-lg-2">
                 <div class="card pt-1 text-center p-0 m-0">
-                    <div class="card-body p-0 m-0">
-                        <a href="{{ ps.get_absolute_url }}" class=" btn btn-outline-dark mx-auto d-block">
-                            <p class="card-text">{{ ps.name }}</p>
-                            <p class="card-text mb-1">{% include 'incl/_voltage_full.html' %}</p>
+                    <div class="card-body p-0 m-0 ">
+                        <a href="{{ ps.get_absolute_url }}"
+                           {% if ps.voltage_h.class_voltage == 220 %}
+                           class=" btn btn-outline-dark mx-auto d-block border border-primary"
+                           {% elif ps.voltage_h.class_voltage == 110 %}
+                            class=" btn btn-outline-dark mx-auto d-block border border-warning"
+                           {% elif ps.voltage_h.class_voltage == 35 %}
+                           class=" btn btn-outline-dark mx-auto d-block border border-danger"
+                           {% else %}
+                           class=" btn btn-outline-dark mx-auto d-block"
+                           {% endif %}
+                        >
+
+                            <p class="card-text mb-0">{{ ps.name }}</p>
+                            <p class="card-text my-0 ">{% include 'incl/_voltage_full.html' %}</p>
                         </a>
                     </div>
 
                     {% if not flag_group %}
 
                     <div class="card-body p-0 m-0 ">
-                        <a href="{{ ps.group.get_absolute_url }}" class=" btn btn-outline-secondary mx-auto d-block">
+                        <a href="{{ ps.group.get_absolute_url }}" class=" btn btn-outline-secondary mx-auto d-block py-0">
                             <p class="card-text">{{ ps.group }}</p>
                         </a>
                     </div>
@@ -119,5 +130,9 @@
 
       </div>
     </section>
+{% endblock %}
+
+{% block paginator %}
+{% include 'incl/_block_paginator.html' %}
 {% endblock %}
 

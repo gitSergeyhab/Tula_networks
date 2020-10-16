@@ -1,4 +1,4 @@
 
-{% if ps.voltage_h %}{{ps.voltage_h}}/{% endif %}
-{% if ps.voltage_m %}{{ps.voltage_m}}/{% endif %}
-{% if ps.voltage_l %}{{ps.voltage_l}}{% endif %}
+{% if ps.voltage_h %}{{ps.voltage_h.class_voltage}}/{% endif %}
+{% if ps.voltage_m %}{{ps.voltage_m.class_voltage}}/{% endif %}
+{% if ps.voltage_l %}{{ps.voltage_l.class_voltage}}{% endif %}

@@ -3,18 +3,16 @@
     <div class="col-12 col-md-10 col-lg-9 offset-lg-1 offset-md-1 justify-content-center">
       <form class="form-inline mb-3" action="{% url 'searcher_subscribers' %}" method="get">
 
-
+        <div class="form-group col-3 col-md-2 pl-0">
+          <a class="btn btn-primary w-100" href="{% url 'add_subscriber' %}" type="submit">Добавить</a>
+        </div>
         <div class="form-group col-6 col-md-8 pl-0">
           <input class="form-control w-100" name="s" type="text" placeholder="(поиск с учетом регистра!) кого ищем?" aria-label="й">
         </div>
         <div class="form-group col-3 col-md-2 pl-0">
           <button class="btn btn-primary w-100" type="submit">Найти</button>
-
         </div>
-        <div class="form-group col-3 col-md-2 pl-0">
-          <a class="btn btn-primary w-100" href="{% url 'add_subscriber' %}" type="submit">Добавить</a>
 
-        </div>
       </form>
 
 

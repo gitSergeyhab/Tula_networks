@@ -7,7 +7,6 @@ from crispy_forms.layout import Submit
 import re
 from .data import context_menu
 
-
 # ____ шаблон для форм ___
 from tula_net.models import Substation, Group, Feeder, Section
 
@@ -24,8 +23,6 @@ class BaseCrispyForms:
         self.helper.form_class = 'form-horizontal'
         self.helper.label_class = 'col-lg-4'
         self.helper.field_class = 'col-lg-7'
-
-
 
 
 # ____ шаблон для форм телефонов ___
@@ -79,8 +76,8 @@ class SubstationsViewMixin:
     model = Substation
     context_object_name = 'substations'
     template_name = 'tula_net/listPS.html'
-    menu = None # добавление контехтного меню
-    flag = None # добавление для отображения выборок ПС по группам и напряжению
+    menu = None  # добавление контехтного меню
+    flag = None  # добавление для отображения выборок ПС по группам и напряжению
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -94,8 +91,8 @@ class SubstationsViewMixin:
 class FeedersViewMixin:
     """ шаблон для фидеров """
     model = None
-    second_model = None #  модель в контекст для оторажения конкретной секции ии ПС
-    the_context = None # см. предыд пункт
+    second_model = None  # модель в контекст для оторажения конкретной секции ии ПС
+    the_context = None  # см. предыд пункт
     template_name = 'tula_net/feeders.html'
     context_object_name = 'feeders'
 
@@ -119,6 +116,8 @@ class AddFeederMixin:
         form.fields[self.first_field].queryset = self.first_model.objects.filter(pk=pk)
         if self.second_field and self.second_field == 'section':
             form.fields[self.second_field].queryset = Section.objects.filter(substation__pk=pk)
+        if self.second_field and self.second_field == 'substation':
+            form.fields[self.second_field].queryset = Substation.objects.filter(sections__pk=pk)
         return render(request, 'tula_net/form_add_feeder.html', context={'form': form})
 
     def post(self, request, pk):
@@ -127,4 +126,3 @@ class AddFeederMixin:
             new_feeder = bound_form.save()
             return redirect(new_feeder)
         return render(request, 'tula_net/form_add_feeder.html', context={'form': bound_form})
-

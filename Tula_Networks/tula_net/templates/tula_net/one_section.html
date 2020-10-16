@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+
+{% block cards1 %}
+
+
+
+
+      <div class="row mt-5">
+        <div class="col-12 col-lg-10 offset-lg-2 m-auto">
+          <div class="card mb-4">
+            <div class="card-body px-4">
+              <div class="row">
+
+
+
+                <div class="col-12 col-md-9 col-lg-10">
+
+                        <a href="{{ section.substation.get_absolute_url }}" class="btn btn-dark py-0"><h4>ПС {{ section.substation }}</h4></a>
+
+                    <h4 class="text-center">{{ section.name }}</h4>
+
+
+
+
+        <!--            block menu-->
+                   <div class="card-footer py-0">
+                       <div class="m-0 p-0 col-10 text-right">
+                        <div class="btn-group dropup">
+                          <button type="button" class="btn btn-secondary dropdown-toggle dropdown-toggle-split py-0" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            править БД<span class="sr-only">Toggle Dropdown</span>
+                          </button>
+                          <div class="dropdown-menu">
+                            <a class="dropdown-item" href="{% url 'add_feeder_from_sec' section.pk %}">добавить фидер или ВЛ на СкШ</a>
+                            <a class="dropdown-item" href="{% url 'upd_section' section.pk %}">редактировать СкШ</a>
+                          </div>
+                        </div>
+                       </div>
+                  </div>
+
+
+                    {% if section.description %}
+                    <h5><b>О подстанции:</b> {{ section.description }} </h5>
+                    {% endif %}
+
+
+                </div>
+
+                <div class="col-12 col-md-3 col-lg-2 d-flex align-items-center">
+                    <div class="btn-group-vertical">
+                        <a href="{% url 'section' section.pk %}" type="button" class="btn btn-dark">Фидеры</a>
+                        <a href="{% url 'subscriber_sec' section.pk %}" type="button" class="btn btn-secondary">Абоненты</a>
+
+                    </div>
+
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="row mt-2">
+        <div class="col-12 col-lg-10 offset-lg-2 m-auto">
+                    <div class="text-center">
+
+                        {% if section.feeders.count %}
+                        <div class="card-footer py-0">
+                        <h5>Все фидеры {{ section }}</h5>
+                        </div>
+                        {% for feeder in section.feeders.all %}
+                        <a href="{{ feeder.get_absolute_url }}" class="btn btn-dark py-0 my-1"> {{ feeder.name }}</a> ,
+                        {% endfor %}
+                        {% endif %}
+                    </div>
+        </div>
+      </div>
+
+
+
+
+{% endblock %}

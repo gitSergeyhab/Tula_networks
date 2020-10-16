@@ -8,7 +8,8 @@ from tula_net.views import MainView, PsListView, GroupPSView, VoltPSView, OnePSV
     UpdFeederView, UpdPhoneView, SubscriberAutocompleteView, SubstationAutocompleteView, AddPersonPhoneView, \
     SearcherPhonesView, AddPSPhoneView, AddSubscriberPhoneView, PhoneDeleteView, FeederDeleteView, AddSubscriberView, \
     UpdSubscriberView, SubscriberDeleteView, AddPersonView, UpdPersonView, DelPersonView, UpdSubstationView, \
-    AddFeederFromSubscriberView, AddSectionFromPSView, UpdSectionView
+    AddFeederFromSubscriberView, AddSectionFromPSView, UpdSectionView, SectionView, AddFeederFromSecView, \
+    AddSubstationView
 
 urlpatterns = [
     path('', MainView.as_view(), name='main'),
@@ -22,6 +23,7 @@ urlpatterns = [
     path('section_ps/<int:pk>/', SectionPSView.as_view(), name='section_ps'),
 
     # СкШ
+    path('section/<int:pk>/', SectionView.as_view(), name='one_section'),
     path('sections/', SectionListView.as_view(), name='sections'),
 
     # 1 лист всех фидеров, 2 карточка 1-го фидера, 3-4 все фидера по секции-подстаннции
@@ -30,7 +32,7 @@ urlpatterns = [
     path('feeders/section/<int:pk>/', OneSectionView.as_view(), name='section'),
     path('feeders/substation/<int:pk>/', OneSubstationView.as_view(), name='substation_f'),
 
-    # 1 лист всех абонентов, 2 карточка 1-го абонента, одна СкШ или ПС со списком абонентов со списком фидеров
+    # 1 лист всех абонентов, 2 карточка 1-го абонента, 3-4 одна СкШ или ПС со списком абонентов со списком фидеров
     path('subscribers/', SubscriberListView.as_view(), name='subscribers'),
     path('subscriber/<int:pk>/', OneSubscriberView.as_view(), name='subscriber'),
     path('subscribers/section/<int:pk>/', SubscribersBySectionView.as_view(), name='subscriber_sec'),
@@ -56,6 +58,7 @@ urlpatterns = [
     # фидера 1.добавление с ПС, 2. !... от абонента! 3.обновление, 4. удаление
     path('add_feeder/from_ps_pk/<int:pk>/', AddFeederFromPSView.as_view(), name='add_feeder_from_ps'),
     path('add_feeder/from_ss_pk/<int:pk>/', AddFeederFromSubscriberView.as_view(), name='add_feeder_from_ss'),
+    path('add_feeder/from_sec_pk/<int:pk>/', AddFeederFromSecView.as_view(), name='add_feeder_from_sec'),
     path('upd_feeder/<int:pk>/', UpdFeederView.as_view(), name='upd_feeder'),
     path('del_feeder/<int:pk>/', FeederDeleteView.as_view(), name='del_feeder'),
     # абоненты
@@ -72,11 +75,13 @@ urlpatterns = [
     path('add_phone/from_substation_pk/<int:pk>/', AddPSPhoneView.as_view(), name='add_phone_ps'),
     path('upd_phone/<int:pk>/', UpdPhoneView.as_view(), name='upd_phone'),
     path('del_phone/<int:pk>/', PhoneDeleteView.as_view(), name='del_phone'),
-    # ПС - только изменение
+    # ПС
+    path('add_substation/', AddSubstationView.as_view(), name='add_substation'),
     path('upd_substation/<int:pk>', UpdSubstationView.as_view(), name='upd_substation'),
-
+    # СкШ
     path('add_section/from_ps_pk/<int:pk>/', AddSectionFromPSView.as_view(), name='add_section'),
-    path('udd_section/<int:pk>/', UpdSectionView.as_view(), name='upd_section'),
+    path('upd_section/<int:pk>/', UpdSectionView.as_view(), name='upd_section'),
+
 
     # !не работают!
     path('subscriber_autocomplete/', SubscriberAutocompleteView.as_view(), name='subscriber_autocomplete'),

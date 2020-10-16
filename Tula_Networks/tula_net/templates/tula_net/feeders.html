@@ -20,9 +20,7 @@
                 <h3 class="m-0"><a class="btn btn-outline-dark px-5 py-0 m-0" href="{% url 'subscriber_ps' the_substation.pk %}">Разбить по абонентам </a></h3>
             {% elif the_section %}
                 <h3 class="m-0"><a class="btn btn-outline-dark px-5 py-0 m-0" href="{% url 'subscriber_sec' the_section.pk %}">Разбить по абонентам </a></h3>
-                <h3 class="m-0"><a class="btn btn-outline-secondary px-5 py-0 m-0" href="{% url 'upd_section' the_section.pk %}">Править секцию</a></h3>
             {% endif %}
-
         </div>
 
 

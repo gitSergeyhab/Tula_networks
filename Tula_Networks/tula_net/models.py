@@ -2,6 +2,18 @@ from django.db import models
 from django.urls import reverse
 
 
+class ClassVoltage(models.Model):
+    class_voltage = models.SmallIntegerField(verbose_name='Класс напряжения')
+
+    class Meta:
+        verbose_name = "напряжение"
+        verbose_name_plural = "напряжения"
+        ordering = ['-class_voltage']
+
+    def __str__(self):
+        return ' '.join((str(self.class_voltage), 'кВ'))
+
+
 class Group(models.Model):
     name = models.CharField(max_length=64, verbose_name='Группа', unique=True)
     location = models.TextField(verbose_name='Расположение', blank=True)
@@ -41,9 +53,15 @@ class Res(models.Model):
 class Substation(models.Model):
     number = models.PositiveSmallIntegerField(verbose_name='Номер ПС', unique=True)
     name = models.CharField(max_length=32, verbose_name='Название ПС', unique=True)
-    voltage_h = models.PositiveSmallIntegerField(verbose_name='напряжение высокое', blank=True, null=True)
-    voltage_m = models.PositiveSmallIntegerField(verbose_name='напряжение среднее', blank=True, null=True)
-    voltage_l = models.PositiveSmallIntegerField(verbose_name='напряжение низкое', blank=True, null=True)
+    voltage_h = models.ForeignKey(
+        ClassVoltage, verbose_name='напряжение высокое', related_name='ps_volt_h',
+        blank=True, null=True, on_delete=models.PROTECT)
+    voltage_m = models.ForeignKey(
+        ClassVoltage, verbose_name='напряжение среднее', related_name='ps_volt_m',
+        blank=True, null=True, on_delete=models.PROTECT)
+    voltage_l = models.ForeignKey(
+        ClassVoltage, verbose_name='напряжение низкое', related_name='ps_volt_l',
+        blank=True, null=True, on_delete=models.PROTECT)
     alien = models.BooleanField(verbose_name='абонентская?')
     owner = models.ForeignKey('Subscriber', related_name='substations', verbose_name='Владелец',
                               on_delete=models.CASCADE)
@@ -68,12 +86,12 @@ class Substation(models.Model):
 class Section(models.Model):
     substation = models.ForeignKey(Substation, related_name='sections', on_delete=models.CASCADE)
     name = models.CharField(max_length=32, verbose_name='Название секции')
-    voltage = models.PositiveSmallIntegerField(verbose_name='напряжение')
+    voltage = models.ForeignKey(ClassVoltage, verbose_name='напряжение', on_delete=models.PROTECT, blank=True, null=True)
     from_T = models.PositiveSmallIntegerField(verbose_name='питается от Т №', blank=True, null=True)
     description = models.TextField(verbose_name='Описение', blank=True)
 
     def get_absolute_url(self):
-        return reverse('section', kwargs={'pk': self.pk})
+        return reverse('one_section', kwargs={'pk': self.pk})
 
     def __str__(self):
         return ' '.join((str(self.name), 'ПС', str(self.substation)))
@@ -85,7 +103,7 @@ class Section(models.Model):
 
 
 class Subscriber(models.Model):
-    name = models.CharField(max_length=64, verbose_name='Название организации', unique=True)
+    name = models.CharField(max_length=128, verbose_name='Название организации', unique=True)
     short_name = models.CharField(max_length=16, verbose_name='Назв орган сокращ', blank=True, null=True)
     ours = models.BooleanField(verbose_name='наши')
     year_update = models.PositiveSmallIntegerField(verbose_name='Списки обновлены', blank=True, null=True)
@@ -125,7 +143,8 @@ class Person(models.Model):
 class Feeder(models.Model):
     name = models.CharField(max_length=32, verbose_name='Название фидера')
     substation = models.ForeignKey(Substation, related_name='feeders', on_delete=models.CASCADE, verbose_name='ПС')
-    section = models.ForeignKey(Section, related_name='feeders', on_delete=models.CASCADE, verbose_name='СкШ', blank=True, null=True)
+    section = models.ForeignKey(Section, related_name='feeders', on_delete=models.CASCADE, verbose_name='СкШ',
+                                blank=True, null=True)
     subscriber = models.ForeignKey(Subscriber, related_name='feeders', on_delete=models.SET_NULL,
                                    verbose_name='абонент', blank=True, null=True)
     length = models.PositiveSmallIntegerField(blank=True, verbose_name='Протяженность', null=True)
@@ -148,7 +167,7 @@ class Feeder(models.Model):
     class Meta:
         verbose_name = "фидер"
         verbose_name_plural = "фидера"
-        ordering = ['section', 'subscriber', 'name']
+        ordering = ['section', '-subscriber', 'name']
 
 
 class Phone(models.Model):
@@ -164,7 +183,6 @@ class Phone(models.Model):
     priority = models.PositiveSmallIntegerField(blank=True, verbose_name='приоритет', null=True)
     description = models.TextField(verbose_name='описение', blank=True)
 
-    # only_digit = to_digit(number)
 
     def get_absolute_url(self):
         return reverse('phone', kwargs={'pk': self.pk})
@@ -178,7 +196,6 @@ class Phone(models.Model):
         ordering = ['priority']
 
 
-
 import pandas as pd
 from .data_script import only_pst, adder_ps, adder_subsriber, only_subsribers, only_sec, adder_sec, feeds, adder_feed
 
@@ -186,7 +203,3 @@ from .data_script import only_pst, adder_ps, adder_subsriber, only_subsribers, o
 # adder_ps(only_pst)
 # adder_sec(only_sec)
 # adder_feed(feeds)
-
-
-
-
