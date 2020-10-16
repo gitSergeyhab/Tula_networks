@@ -24,7 +24,7 @@ class MainView(View):
 
 class PsListView (SubstationsViewMixin, ListView):
     """ вьюха для всех ПС """
-    paginate_by = 24
+    paginate_by = 20
 
 
 class GroupPSView(SubstationsViewMixin, ListView):
@@ -46,6 +46,7 @@ class VoltPSView1(SubstationsViewMixin, ListView):
 class VoltPSView(SubstationsViewMixin, ListView):
     """ вьюха для ПС с разбивкой по напряжению """
     flag = 'flag_voltages'
+    paginate_by = 20
 
     def get_queryset(self):
         return Substation.objects.filter(voltage_h__class_voltage=self.kwargs['pk'])
@@ -107,6 +108,7 @@ class OneFeedersView(DetailView):
 class AllFeedersView(FeedersViewMixin, ListView):
     """ все фидера вообще и сразу """
     model = Feeder
+    paginate_by = 10
 
 
 class SectionView(DetailView):
@@ -205,6 +207,7 @@ class PersonListView(ListView):
     model = Person
     template_name = 'tula_net/persons.html'
     context_object_name = 'persons'
+    paginate_by = 24
 
 
 class OnePersonView(DetailView):
@@ -219,6 +222,7 @@ class PhoneListView(ListView):
     model = Phone
     template_name = 'tula_net/phones.html'
     context_object_name = 'phones'
+    paginate_by = 32
 
 
 class OnePhoneView(DetailView):

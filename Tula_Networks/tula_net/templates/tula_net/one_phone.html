@@ -18,7 +18,11 @@
       <h5><b>Ответственное лицо:</b>
           <a class="btn btn-secondary p-1" href="{{ phone.person.get_absolute_url }}">
               {{ phone.person }}
+          </a> |
+            <a class="btn btn-secondary p-1" href="{{ phone.person.subscriber.get_absolute_url }}">
+              {{ phone.person.subscriber }}
           </a>
+
       </h5>
       {% endif %}
 

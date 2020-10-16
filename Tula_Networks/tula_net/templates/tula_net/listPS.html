@@ -94,9 +94,12 @@
       <div class="row mb-0">
 
           {% for ps in substations %}
-            <div class="col-6 col-md-6 col-lg-2">
-                <div class="card pt-1 text-center p-0 m-0">
+            <div class="col-6 col-md-6 col-lg-3">
+
+
+                <div class="card pt-0 text-center p-0 mt-0 mb-3">
                     <div class="card-body p-0 m-0 ">
+
                         <a href="{{ ps.get_absolute_url }}"
                            {% if ps.voltage_h.class_voltage == 220 %}
                            class=" btn btn-outline-dark mx-auto d-block border border-primary"
@@ -109,7 +112,9 @@
                            {% endif %}
                         >
 
-                            <p class="card-text mb-0">{{ ps.name }}</p>
+                            <p class="card-text m-0 py-1">
+
+                                <b>{{ ps.number }}  {{ ps.name }}</b></p>
                             <p class="card-text my-0 ">{% include 'incl/_voltage_full.html' %}</p>
                         </a>
                     </div>
@@ -135,4 +140,3 @@
 {% block paginator %}
 {% include 'incl/_block_paginator.html' %}
 {% endblock %}
-

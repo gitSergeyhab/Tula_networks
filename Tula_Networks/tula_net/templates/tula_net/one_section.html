@@ -70,7 +70,7 @@
                         <h5>Все фидеры {{ section }}</h5>
                         </div>
                         {% for feeder in section.feeders.all %}
-                        <a href="{{ feeder.get_absolute_url }}" class="btn btn-dark py-0 my-1"> {{ feeder.name }}</a> ,
+                        <a href="{{ feeder.get_absolute_url }}" class="btn btn-dark py-0 px-4 my-1"> {{ feeder.name }}</a> ,
                         {% endfor %}
                         {% endif %}
                     </div>

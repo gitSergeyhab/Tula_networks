@@ -9,7 +9,19 @@
 {% for section in sections %}
 
  <div class="card mb-2">
-  <a class=" btn btn-outline-dark" href="{{ section.get_absolute_url }}">
+  <a
+          {% if section.voltage.class_voltage == 6 %}
+                    class="btn btn-outline-dark text-success"
+          {% elif section.voltage.class_voltage == 10 %}
+                    class="btn btn-outline-dark text-primary"
+          {% elif section.voltage.class_voltage == 35 %}
+                    class="btn btn-outline-dark text-danger"
+          {% elif section.voltage.class_voltage == 110 %}
+                    class="btn btn-outline-dark text-warning"
+          {% endif %}
+
+
+          href="{{ section.get_absolute_url }}">
    <h5 class="card-header p-1">{{ section }} </h5>
   </a>
    <div class="card-body p-1">

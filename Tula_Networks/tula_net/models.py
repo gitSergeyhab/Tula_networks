@@ -99,7 +99,7 @@ class Section(models.Model):
     class Meta:
         verbose_name = "Секция"
         verbose_name_plural = "Секции"
-        ordering = ['name']
+        ordering = ['voltage__class_voltage', 'name']
 
 
 class Subscriber(models.Model):
@@ -141,7 +141,7 @@ class Person(models.Model):
 
 
 class Feeder(models.Model):
-    name = models.CharField(max_length=32, verbose_name='Название фидера')
+    name = models.CharField(max_length=128, verbose_name='Название фидера')
     substation = models.ForeignKey(Substation, related_name='feeders', on_delete=models.CASCADE, verbose_name='ПС')
     section = models.ForeignKey(Section, related_name='feeders', on_delete=models.CASCADE, verbose_name='СкШ',
                                 blank=True, null=True)

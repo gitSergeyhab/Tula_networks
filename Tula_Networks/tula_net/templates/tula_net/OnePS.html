@@ -11,9 +11,9 @@
               <div class="row">
                 <div class="col-12 col-md-3 col-lg-2 d-flex align-items-center">
                     <div class="btn-group-vertical">
-                        <a href="{% url 'section_ps' ps.pk %}" type="button" class="btn btn-dark">Секции</a>
-                        <a href="{% url 'subscriber_ps' ps.pk %}" type="button" class="btn btn-secondary">Абоненты</a>
-                        <a href="{% url 'substation_f' ps.pk %}" type="button" class="btn btn-secondary">Фидера</a>
+                        <a href="{% url 'section_ps' ps.pk %}" type="button" class="btn btn-secondary border border-dark">Секции</a>
+                        <a href="{% url 'subscriber_ps' ps.pk %}" type="button" class="btn btn-secondary border border-dark">Абоненты</a>
+                        <a href="{% url 'substation_f' ps.pk %}" type="button" class="btn btn-secondary border border-dark">Фидера</a>
                     </div>
 
                 </div>
@@ -75,31 +75,33 @@
           <div class="card-header">
             <b>Список фидеров:</b>
           </div>
-          <div class="card-body">
+            <b>
+          <div class="card-body pb-0">
             {% for feeder in ps.feeders.all %}
             {% if feeder.section.voltage.class_voltage < 10 %}
-                <a href="{{ feeder.get_absolute_url }}" type="button" class="btn btn-secondary px-3 py-0 m-1 ">{{ feeder.name }}</a>,
+                <a href="{{ feeder.get_absolute_url }}" type="button" class="btn btn-secondary border-success px-3 py-0 m-1 ">{{ feeder.name }}</a>,
             {% endif %}
             {% endfor %}<br>
             {% for feeder in ps.feeders.all %}
             {% if feeder.section.voltage.class_voltage < 35 and feeder.section.voltage.class_voltage > 9 %}
-                <a href="{{ feeder.get_absolute_url }}" type="button" class="btn btn-secondary px-3 py-0 m-1 ">{{ feeder.name }}</a>,
+                <a href="{{ feeder.get_absolute_url }}" type="button" class="btn btn-secondary border-primary px-3 py-0 m-1 ">{{ feeder.name }}</a>,
             {% endif %}
             {% endfor %}
               <br><br>
             {% for feeder in ps.feeders.all %}
             {% if feeder.section.voltage.class_voltage < 110 and feeder.section.voltage.class_voltage > 10 %}
-                <a href="{{ feeder.get_absolute_url }}" type="button" class="btn btn-secondary px-3 py-0 m-1 ">{{ feeder.name }}</a>,
+                <a href="{{ feeder.get_absolute_url }}" type="button" class="btn btn-secondary border-danger px-3 py-0 m-1 ">{{ feeder.name }}</a>,
             {% endif %}
             {% endfor %}
               <br><br>
             {% for feeder in ps.feeders.all %}
             {% if feeder.section.voltage.class_voltage > 35 %}
-                <a href="{{ feeder.get_absolute_url }}" type="button" class="btn btn-secondary px-3 py-0 m-1 ">{{ feeder.name }}</a>,
+                <a href="{{ feeder.get_absolute_url }}" type="button" class="btn btn-secondary border-warning px-3 py-0 m-1 ">{{ feeder.name }}</a>,
             {% endif %}
             {% endfor %}
 
           </div>
+            </b>
         </div>
 
 {% endblock %}
