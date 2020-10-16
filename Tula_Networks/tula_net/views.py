@@ -171,6 +171,7 @@ class SubscriberListView(ListView):
         return context
 
 
+
 class SubscribersBySectionView(ListView):
     context_object_name = 'subscribers'
     template_name = 'tula_net/subscribers.html'
