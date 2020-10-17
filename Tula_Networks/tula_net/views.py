@@ -8,7 +8,7 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from .forms import FeederAddFromPSForm, FeederFormUpd, PhoneSubscriberFormAdd, PhonePersonFormAdd, PhoneFormUpd, \
     PhonePSFormAdd, SubscriberFormAdd, PersonFormAdd, SubstationFormUpd, FeederAddFromSubscriberForm, SectionAddForm
 
-from .models import Substation, Subscriber, Section, Person, Phone, Feeder, Group, Res
+from .models import Substation, Subscriber, Section, Person, Phone, Feeder, Group, TransmissionLine
 from dal import autocomplete
 
 from .utils import AddPhoneViewMixin, DeleteObjectMixin, SubstationsViewMixin, FeedersViewMixin, AddFeederMixin
@@ -18,11 +18,12 @@ from .data import context_menu
 
 class MainView(View):
     """ главная """
+
     def get(self, request, *args, **kwargs):
         return render(request, 'tula_net/index.html', context={'context_menu': context_menu})
 
 
-class PsListView (SubstationsViewMixin, ListView):
+class PsListView(SubstationsViewMixin, ListView):
     """ вьюха для всех ПС """
     paginate_by = 20
 
@@ -52,7 +53,6 @@ class VoltPSView(SubstationsViewMixin, ListView):
         return Substation.objects.filter(voltage_h__class_voltage=self.kwargs['pk'])
 
 
-
 class SubstationsBySubscriberView(ListView):
     """ ПС по по абонентам со списком фидеров """
 
@@ -63,6 +63,7 @@ class SubstationsBySubscriberView(ListView):
         return Substation.objects.filter(feeders__subscriber__pk=self.kwargs['pk'])
 
     """ context['the_subscriber'] - тот абонент для которого выводятся ПС и фидера """
+
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         context['the_subscriber'] = Subscriber.objects.get(pk=self.kwargs['pk'])
@@ -117,7 +118,6 @@ class SectionView(DetailView):
     template_name = 'tula_net/one_section.html'
 
 
-
 class OneSectionView(FeedersViewMixin, ListView):
     """ одна секция - лист фидеров """
     second_model = Section
@@ -134,7 +134,6 @@ class OneSubstationView(FeedersViewMixin, ListView):
 
     def get_queryset(self):
         return Feeder.objects.filter(substation__pk=self.kwargs['pk'])
-
 
 
 class SectionPSView(ListView):
@@ -335,6 +334,7 @@ class AddFeederFromSubscriberView(AddFeederMixin, View):
 
 class UpdFeederView(View):
     """ изменение фидера"""
+
     def get(self, request, pk):
         feeder = Feeder.objects.get(pk=pk)
         form = FeederFormUpd(instance=feeder)
@@ -342,7 +342,7 @@ class UpdFeederView(View):
         form.fields['substation'].queryset = Substation.objects.filter(feeders__pk=pk)
         return render(request, 'tula_net/form_add_feeder.html', context={'form': form})
 
-    def post(self,request, pk):
+    def post(self, request, pk):
         feeder = Feeder.objects.get(pk=pk)
         form = FeederFormUpd(request.POST, instance=feeder)
         if form.is_valid():
@@ -446,15 +446,11 @@ class AddSubstationView(CreateView):
     form_class = SubstationFormUpd
     template_name = 'tula_net/form_add_person.html'
 
+
 class UpdSubstationView(UpdateView):
     model = Substation
     form_class = SubstationFormUpd
     template_name = 'tula_net/form_add_person.html'
-
-
-
-
-
 
 
 class AddSectionFromPSView(View):
@@ -473,18 +469,10 @@ class AddSectionFromPSView(View):
         return render(request, 'tula_net/form_add_feeder.html', context={'form': bound_form})
 
 
-
 class UpdSectionView(UpdateView):
-
     model = Section
     form_class = SectionAddForm
     template_name = 'tula_net/form_add_feeder.html'
-
-
-
-
-
-
 
 
 # ___________________
@@ -506,4 +494,17 @@ class SubstationAutocompleteView(autocomplete.Select2QuerySetView):
         if self.q:
             qs = qs.filter(name__istartswith=self.q)
         return qs
+
+
 # ________________________
+
+class LinesView(ListView):
+    model = TransmissionLine
+    context_object_name = 'lines'
+    template_name = 'tula_net/lines.html'
+
+
+class OneLineView(DetailView):
+    model = TransmissionLine
+    context_object_name = 'line'
+    template_name = 'tula_net/one_line.html'

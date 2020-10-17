@@ -1,7 +1,8 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import Substation, Section, Feeder, Subscriber, Person, Phone, Group, Res, ClassVoltage
+from .models import Substation, Section, Feeder, Subscriber, Person, Phone, Group, Res, ClassVoltage, TransmissionLine,\
+    Region
 
 
 # автокомплит не работает:
@@ -51,7 +52,6 @@ admin.site.register(Person, PersonAdnin)
 
 
 class FeederAdmin(admin.ModelAdmin):
-    # form = FeederForm # автокомплит не работает
     list_display = ['pk', 'name', 'substation', 'section', 'subscriber', 'attention', 'number_tp', 'in_reserve']
     list_display_links = ['name']
     search_fields = ['name']
@@ -90,6 +90,20 @@ class ClassVoltageAdmin(admin.ModelAdmin):
     list_display_links = ['pk', 'class_voltage']
 
 
+class RegionAdmin(admin.ModelAdmin):
+    list_display = ['pk', 'name']
+    list_display_links = ['pk', 'name']
+
+
+class LineAdmin(admin.ModelAdmin):
+    list_display = ['pk', 'name', 'short_name', 'voltage', 'kvl', 'subscriber']
+    list_display_links = ['name']
+    search_fields = ['name', 'short_name', ]
+    list_filter = ['substation', 'management', 'voltage']
+
+
 admin.site.register(Group, GroupAdmin)
 admin.site.register(Res, ResAdmin)
 admin.site.register(ClassVoltage, ClassVoltageAdmin)
+admin.site.register(Region, RegionAdmin)
+admin.site.register(TransmissionLine, LineAdmin)

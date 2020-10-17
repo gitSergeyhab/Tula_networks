@@ -9,7 +9,7 @@ from tula_net.views import MainView, PsListView, GroupPSView, VoltPSView, OnePSV
     SearcherPhonesView, AddPSPhoneView, AddSubscriberPhoneView, PhoneDeleteView, FeederDeleteView, AddSubscriberView, \
     UpdSubscriberView, SubscriberDeleteView, AddPersonView, UpdPersonView, DelPersonView, UpdSubstationView, \
     AddFeederFromSubscriberView, AddSectionFromPSView, UpdSectionView, SectionView, AddFeederFromSecView, \
-    AddSubstationView
+    AddSubstationView, LinesView, OneLineView
 
 urlpatterns = [
     path('', MainView.as_view(), name='main'),
@@ -47,6 +47,10 @@ urlpatterns = [
     # 1 лист всех телефонов, 2 карточка 1-го телефона
     path('phones/', PhoneListView.as_view(), name='phones'),
     path('phone/<int:pk>/', OnePhoneView.as_view(), name='phone'),
+
+    # 1 лист всех ВЛ, 2 карточка 1-й ВЛ
+    path('lines/', LinesView.as_view(), name='lines'),
+    path('line/<int:pk>', OneLineView.as_view(), name='line'),
 
     # поиски 1. по абонента(полное и сокращеное имя), 2. по ПС, 3. по людям, 4. телефонам
     path('searcher_subscribers/', SearcherSubscribersView.as_view(), name='searcher_subscribers'),

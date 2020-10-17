@@ -33,7 +33,10 @@
                   <div class="row">
                     <div class="col-12 col-md-3 col-lg-2 d-flex px-0 align-items-center">
                         <div class="btn-group-vertical ">
-                            <a href="{{ feeder.get_absolute_url }}" type="button" class="btn btn-dark">{{ feeder.name }}</a>
+                            <a href="{{ feeder.get_absolute_url }}" type="button" class="btn btn-dark">
+                                {% if feeder.name|length > 13 %} {{ feeder.name|truncatechars:12 }} {% else %} {{ feeder.name }} {% endif %}
+
+                            </a>
                             <a href="{{ feeder.subscriber.get_absolute_url }}" type="button" class="btn btn-secondary">
                                 {% if feeder.subscriber.short_name %}
                                 {{ feeder.subscriber.short_name }}
