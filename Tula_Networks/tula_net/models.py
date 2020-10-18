@@ -4,6 +4,7 @@ from django.urls import reverse
 
 class Region(models.Model):
     name = models.CharField(max_length=128, verbose_name='Регион', unique=True)
+    for_menu = models.BooleanField(default=False, verbose_name='Добавить в меню',)
 
     class Meta:
         verbose_name = "Регион"
@@ -43,6 +44,25 @@ class Group(models.Model):
         ordering = ['-ours', 'name']
 
 
+class GroupLine(models.Model):
+    name = models.CharField(max_length=64, verbose_name='Группа', unique=True)
+    location = models.TextField(verbose_name='Расположение', blank=True)
+    description = models.TextField(verbose_name='Описение', blank=True)
+    ours = models.BooleanField(verbose_name='наши', blank=True, null=True)
+
+    def get_absolute_url(self):
+        return reverse('group', kwargs={'pk': self.pk})
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = "Участок сл ВЛ"
+        verbose_name_plural = "Участки сл ВЛ"
+        ordering = ['-ours', 'name']
+
+
+
 class Res(models.Model):
     name = models.CharField(max_length=32, verbose_name='РЭС', unique=True)
     short_name = models.CharField(max_length=16, verbose_name='РЭС сокращ + участок', unique=True)
@@ -75,7 +95,7 @@ class Substation(models.Model):
         blank=True, null=True, on_delete=models.PROTECT)
     alien = models.BooleanField(verbose_name='абонентская?')
     owner = models.ForeignKey('Subscriber', related_name='substations', verbose_name='Владелец',
-                              on_delete=models.CASCADE)
+                              on_delete=models.SET_NULL, blank=True, null=True)
     group = models.ForeignKey(Group, related_name='substations', verbose_name='Группа',
                               on_delete=models.CASCADE)
     location = models.TextField(verbose_name='Расположение', blank=True)
@@ -101,7 +121,7 @@ class Section(models.Model):
     voltage = models.ForeignKey(ClassVoltage, verbose_name='напряжение', on_delete=models.PROTECT, blank=True,
                                 null=True)
     from_T = models.PositiveSmallIntegerField(verbose_name='питается от Т №', blank=True, null=True)
-    blind = models.BooleanField(default=True, verbose_name='Тупиковая')
+    blind = models.BooleanField(default=False, verbose_name='Тупиковая')
     description = models.TextField(verbose_name='Описение', blank=True)
 
     def get_absolute_url(self):
@@ -214,16 +234,18 @@ class TransmissionLine(models.Model):
     name = models.CharField(max_length=64, verbose_name='Название')
     full_name = models.CharField(max_length=128, verbose_name='Полное название', blank=True, null=True)
     short_name = models.CharField(max_length=32, verbose_name='Цифровое название', blank=True, null=True)
-    substation = models.ManyToManyField(Substation, verbose_name='ПС', related_name='lines')
+    # substation = models.ManyToManyField(Substation, verbose_name='ПС', related_name='lines')
     section = models.ManyToManyField(Section, verbose_name='Секция', related_name='lines')
     voltage = models.ForeignKey(ClassVoltage, verbose_name='Напряжение', related_name='lines', on_delete=models.PROTECT)
     management = models.ForeignKey(Region, verbose_name='Управление', related_name='lines_upr',
-                                   on_delete=models.SET_NULL, blank=True, null=True)
+                                   on_delete=models.CASCADE, default=2)
     maintenance = models.ManyToManyField(Region, verbose_name='Ведение', related_name='lines_ved', blank=True)
     subscriber = models.ForeignKey(Subscriber, related_name='lines', on_delete=models.SET_NULL,
                                    verbose_name='абонент', blank=True, null=True)
     length = models.PositiveSmallIntegerField(verbose_name='Протяженность', blank=True, null=True)
     number_columns = models.PositiveSmallIntegerField(verbose_name='Количество опор', blank=True, null=True)
+    group = models.ForeignKey(GroupLine, related_name='lines', verbose_name='Участок сл ВЛ',
+                              on_delete=models.CASCADE, default=1)
     description = models.TextField(verbose_name='Описение', blank=True, null=True)
     kvl = models.BooleanField(verbose_name='КВЛ?', default=False)
 

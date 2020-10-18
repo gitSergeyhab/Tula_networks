@@ -9,7 +9,8 @@ from tula_net.views import MainView, PsListView, GroupPSView, VoltPSView, OnePSV
     SearcherPhonesView, AddPSPhoneView, AddSubscriberPhoneView, PhoneDeleteView, FeederDeleteView, AddSubscriberView, \
     UpdSubscriberView, SubscriberDeleteView, AddPersonView, UpdPersonView, DelPersonView, UpdSubstationView, \
     AddFeederFromSubscriberView, AddSectionFromPSView, UpdSectionView, SectionView, AddFeederFromSecView, \
-    AddSubstationView, LinesView, OneLineView
+    AddSubstationView, LinesView, OneLineView, LinesGroupView, LinesVoltageView, LinesRegionView, AddLineView, \
+    UpdlineView, LineDeleteView, SectionDeleteView
 
 urlpatterns = [
     path('', MainView.as_view(), name='main'),
@@ -50,7 +51,10 @@ urlpatterns = [
 
     # 1 лист всех ВЛ, 2 карточка 1-й ВЛ
     path('lines/', LinesView.as_view(), name='lines'),
-    path('line/<int:pk>', OneLineView.as_view(), name='line'),
+    path('line/<int:pk>/', OneLineView.as_view(), name='line'),
+    path('line_group/<int:pk>/', LinesGroupView.as_view(), name='line_group'),
+    path('line_voltage/<int:pk>/', LinesVoltageView.as_view(), name='line_voltage'),
+    path('line_region/<int:pk>/', LinesRegionView.as_view(), name='line_region'),
 
     # поиски 1. по абонента(полное и сокращеное имя), 2. по ПС, 3. по людям, 4. телефонам
     path('searcher_subscribers/', SearcherSubscribersView.as_view(), name='searcher_subscribers'),
@@ -85,7 +89,11 @@ urlpatterns = [
     # СкШ
     path('add_section/from_ps_pk/<int:pk>/', AddSectionFromPSView.as_view(), name='add_section'),
     path('upd_section/<int:pk>/', UpdSectionView.as_view(), name='upd_section'),
+    path('del_section/<int:pk>/', SectionDeleteView.as_view(), name='del_section'),
 
+    path('add_line/<int:pk>/', AddLineView.as_view(), name='add_line'),
+    path('upd_line/<int:pk>/', UpdlineView.as_view(), name='upd_line'),
+    path('del_line/<int:pk>/', LineDeleteView.as_view(), name='del_line'),
 
     # !не работают!
     path('subscriber_autocomplete/', SubscriberAutocompleteView.as_view(), name='subscriber_autocomplete'),

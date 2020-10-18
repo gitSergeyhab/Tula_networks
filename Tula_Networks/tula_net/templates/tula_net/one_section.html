@@ -13,9 +13,24 @@
 
 
 
-                <div class="col-12 col-md-9 col-lg-10">
 
+                {% if section.voltage.class_voltage < 20 %}
+                <div class="col-12 col-md-9 col-lg-10">
+                {% else %}
+                <div class="col-12">
+                {% endif %}
                         <a href="{{ section.substation.get_absolute_url }}" class="btn btn-dark py-0"><h4>ПС {{ section.substation }}</h4></a>
+                    {% if section.voltage.class_voltage < 10 %}
+                    <hr color="green" class="my-1 p-0">
+                    {% elif section.voltage.class_voltage < 30 %}
+                    <hr color="blue" class="my-1 p-0">
+                    {% elif section.voltage.class_voltage < 100 %}
+                    <hr color="red" class="my-1 p-0">
+                    {% elif section.voltage.class_voltage < 200 %}
+                    <hr color="yellow" class="my-1 p-0">
+                    {% else %}
+                    <hr color="blue" class="my-1 p-0">
+                    {% endif %}
 
                     <h4 class="text-center">{{ section.name }}</h4>
 
@@ -24,14 +39,22 @@
 
         <!--            block menu-->
                    <div class="card-footer py-0">
+                        {% if section.voltage.class_voltage < 20 %}
                        <div class="m-0 p-0 col-10 text-right">
+                           {% else %}
+                        <div class="m-0 p-0 col-12 text-right">
+                           {% endif %}
                         <div class="btn-group dropup">
                           <button type="button" class="btn btn-secondary dropdown-toggle dropdown-toggle-split py-0" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             править БД<span class="sr-only">Toggle Dropdown</span>
                           </button>
                           <div class="dropdown-menu">
-                            <a class="dropdown-item" href="{% url 'add_feeder_from_sec' section.pk %}">добавить фидер или ВЛ на СкШ</a>
+                            {% if .class_voltage < 20 %}
+                            <a class="dropdown-item" href="{% url 'add_feeder_from_sec' section.pk %}">добавить фидер на СкШ</a>
+                            {% endif %}
                             <a class="dropdown-item" href="{% url 'upd_section' section.pk %}">редактировать СкШ</a>
+                            <a class="dropdown-item" href="{% url 'del_section' section.pk %}">удалить СкШ</a>
+
                           </div>
                         </div>
                        </div>
@@ -44,15 +67,15 @@
 
 
                 </div>
-
+                {% if section.voltage.class_voltage < 20 %}
                 <div class="col-12 col-md-3 col-lg-2 d-flex align-items-center">
                     <div class="btn-group-vertical">
                         <a href="{% url 'section' section.pk %}" type="button" class="btn btn-dark">Фидеры</a>
                         <a href="{% url 'subscriber_sec' section.pk %}" type="button" class="btn btn-secondary">Абоненты</a>
 
                     </div>
-
                 </div>
+                  {% endif %}
 
               </div>
             </div>
@@ -71,6 +94,16 @@
                         </div>
                         {% for feeder in section.feeders.all %}
                         <a href="{{ feeder.get_absolute_url }}" class="btn btn-dark py-0 px-4 my-1"> {{ feeder.name }}</a> ,
+                        {% endfor %}
+                        {% endif %}
+
+
+                        {% if section.lines.count %}
+                        <div class="card-footer py-0">
+                        <h5>Все ВЛ {{ section }}</h5>
+                        </div>
+                        {% for line in section.lines.all %}
+                        <a href="{{ line.get_absolute_url }}" class="btn btn-dark py-0 px-4 my-1"> {{ line.name }}</a> ,
                         {% endfor %}
                         {% endif %}
                     </div>

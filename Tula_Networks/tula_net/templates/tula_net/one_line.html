@@ -3,7 +3,9 @@
 {% block cards1 %}
 
 <div class="card">
-    <h4 class="card-header mb-0 pb-0 text-center"><b>{{ line.short_name }}</b> | {{ line.name }} <br>
+    <h4 class="card-header mb-0 pb-0 text-center">
+ {% if line.short_name %} <b>{{ line.short_name }}</b> | {% endif %}
+        {{ line.name }} <br>
         <hr class="my-0"
             {% if line.voltage.class_voltage == 220 %}
             color="blue"
@@ -13,7 +15,8 @@
                         color="red"
             {% endif %}
         >
-        {{ line.full_name }} <br></h4>
+        {% if line.full_name %} {{ line.full_name }} <br> {% endif %}
+        </h4>
         <div class="card-body">
         <h5>Питающие ПС:</h5>
         {% for section in line.section.all %}
@@ -35,12 +38,21 @@
             {% endfor %} <br>
 <b>
             <hr class="my-0">
-            {% if line.management %} Управление : {{ line.management }} {% endif %}
-            <hr class="my-0">
+            {% if line.management %}
+                Управление : {{ line.management }}
+                <hr class="my-0">
+            {% endif %}
+
             {% if line.maintenance.count %} Ведение :
-            {% for m in line.maintenance.all %} {{ m }} , {% endfor %}
-             {% endif %}
-             <hr class="my-0">
+                {% for m in line.maintenance.all %} {{ m }} , {% endfor %}
+                <hr class="my-0">
+            {% endif %}
+
+            {% if line.group %}
+                {{ line.group }} участок сл ЛЭП
+                <hr class="my-0">
+            {% endif %}
+
             {% if line.subscriber %}
              <a href="{{ line.subscriber.get_absolute_url }}" class="btn btn-outline-secondary mx-auto  py-0"> <b>Владелец: {{ line.subscriber }}</b></a>
             {% endif %}
@@ -52,8 +64,8 @@
                     править БД<span class="sr-only">Toggle Dropdown</span>
                   </button>
                   <div class="dropdown-menu">
-                    <a class="dropdown-item" href="#">изменить</a>
-                    <a class="dropdown-item" href="#">удалить</a>
+                      <a class="dropdown-item" href="{% url 'upd_line' line.pk %}">изменить ВЛ</a>
+                      <a class="dropdown-item" href="{% url 'del_line' line.pk %}">удалить ВЛ</a>
                   </div>
                 </div>
             </div>

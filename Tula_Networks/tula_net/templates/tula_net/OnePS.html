@@ -38,7 +38,7 @@
                   </button>
                   <div class="dropdown-menu">
                     <a class="dropdown-item" href="{% url 'add_section' ps.pk %}">добавить секцию на ПС</a>
-                    <a class="dropdown-item" href="{% url 'add_feeder_from_ps' ps.pk %}">добавить фидер или ВЛ на ПС</a>
+                    <a class="dropdown-item" href="{% url 'add_feeder_from_ps' ps.pk %}">добавить фидер на ПС</a>
                     <a class="dropdown-item" href="{% url 'add_phone_ps' ps.pk %}">добавить телефон на ПС</a>
                     <a class="dropdown-item" href="{% url 'upd_substation' ps.pk %}">редактировать ПС</a>
                   </div>
@@ -82,21 +82,43 @@
                 <a href="{{ feeder.get_absolute_url }}" type="button" class="btn btn-secondary border-success px-3 py-0 m-1 ">{{ feeder.name }}</a>,
             {% endif %}
             {% endfor %}<br>
+
             {% for feeder in ps.feeders.all %}
             {% if feeder.section.voltage.class_voltage < 35 and feeder.section.voltage.class_voltage > 9 %}
                 <a href="{{ feeder.get_absolute_url }}" type="button" class="btn btn-secondary border-primary px-3 py-0 m-1 ">{{ feeder.name }}</a>,
             {% endif %}
             {% endfor %}
-              <br><br>
-            {% for feeder in ps.feeders.all %}
-            {% if feeder.section.voltage.class_voltage < 110 and feeder.section.voltage.class_voltage > 10 %}
-                <a href="{{ feeder.get_absolute_url }}" type="button" class="btn btn-secondary border-danger px-3 py-0 m-1 ">{{ feeder.name }}</a>,
+            </div>
+
+
+        <div class="card-body pb-0">
+            {% for section in ps.sections.all %}
+              {% for line in section.lines.all %}
+                {% if line.voltage.class_voltage < 40 %}
+                    <a href="{{ line.get_absolute_url }}" type="button" class="btn btn-secondary border-danger px-3 py-0 m-1 ">{{ line.name }}</a>,
+                {% endif %}
+              {% endfor %}
+            {% endfor %}
+<br>
+          {% for section in ps.sections.all %}
+              {% for line in section.lines.all %}
+                {% if line.voltage.class_voltage > 40 %}
+                    <a href="{{ line.get_absolute_url }}" type="button" class="btn btn-secondary border-warning px-3 py-0 m-1 ">{{ line.name }}</a>,
+                {% endif %}
+              {% endfor %}
+            {% endfor %}
+        </div>
+
+
+            {% for line in ps.lines.all %}
+            {% if line.section.voltage.class_voltage < 40 %}
+                <a href="{{ line.get_absolute_url }}" type="button" class="btn btn-secondary border-danger px-3 py-0 m-1 ">{{ line.name }}</a>,
             {% endif %}
             {% endfor %}
-              <br><br>
-            {% for feeder in ps.feeders.all %}
-            {% if feeder.section.voltage.class_voltage > 35 %}
-                <a href="{{ feeder.get_absolute_url }}" type="button" class="btn btn-secondary border-warning px-3 py-0 m-1 ">{{ feeder.name }}</a>,
+              <br>
+            {% for line in ps.lines.all %}
+            {% if line.voltage.class_voltage > 40 %}
+                <a href="{{ line.get_absolute_url }}" type="button" class="btn btn-secondary border-warning px-3 py-0 m-1 ">{{ line.name }}</a>,
             {% endif %}
             {% endfor %}
 

@@ -8,7 +8,7 @@ import re
 from .data import context_menu
 
 # ____ шаблон для форм ___
-from tula_net.models import Substation, Group, Feeder, Section
+from tula_net.models import Substation, Group, Feeder, Section, TransmissionLine, ClassVoltage, GroupLine, Region
 
 
 class BaseCrispyForms:
@@ -115,7 +115,7 @@ class AddFeederMixin:
         form = self.form_feeder()
         form.fields[self.first_field].queryset = self.first_model.objects.filter(pk=pk)
         if self.second_field and self.second_field == 'section':
-            form.fields[self.second_field].queryset = Section.objects.filter(substation__pk=pk)
+            form.fields[self.second_field].queryset = Section.objects.filter(substation__pk=pk, voltage__class_voltage__lte=10)
         if self.second_field and self.second_field == 'substation':
             form.fields[self.second_field].queryset = Substation.objects.filter(sections__pk=pk)
         return render(request, 'tula_net/form_add_feeder.html', context={'form': form})
@@ -126,3 +126,21 @@ class AddFeederMixin:
             new_feeder = bound_form.save()
             return redirect(new_feeder)
         return render(request, 'tula_net/form_add_feeder.html', context={'form': bound_form})
+
+
+class LinesViewMixin:
+    """ шаблон для  """
+    model = TransmissionLine
+    context_object_name = 'lines'
+    template_name = 'tula_net/lines.html'
+    menu = None  # добавление контехтного меню
+    flag = None  # добавление для отображения выборок ПС по группам и напряжению
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['context_menu'] = self.menu
+        context['groups'] = GroupLine.objects.all()
+        context['voltages'] = ClassVoltage.objects.all()[1:3]
+        context['regions'] = Region.objects.filter(for_menu=True)
+        context[self.flag] = 1
+        return context

@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+
+
+
+{% block menu %}
+<nav class="navbar navbar-expand-lg navbar-light bg-light border-left border-right border-dark py-0">
+  <p class="navbar-brand mr-4 font-weight-bold py-0 my-0">Участки: </p>
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav1" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+  <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse justify-content-between" id="navbarNav1">
+    <ul class="navbar-nav col-10 mt-1">
+        {% for group in groups %}
+      <li class="nav-item">
+
+          <a class="btn btn-light" href="{% url 'line_group' group.pk %}"><b>{{ group }}</b></a>
+
+      </li>
+        {% endfor %}
+
+    </ul>
+  </div>
+</nav>
+{% endblock %}
+
+
+
+{% block menu2 %}
+<nav class="navbar navbar-expand-lg navbar-light bg-light border border-dark py-0">
+  <p class="navbar-brand mr-4 font-weight-bold py-0 my-0">Напряжение: </p>
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav2" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+  <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse justify-content-between" id="navbarNav2">
+    <ul class="navbar-nav col-10 mt-1 d-flex justify-content-between">
+
+          <li class="nav-item">{% for volt in voltages %}
+              <a class="btn btn-light" href="{% url 'line_voltage' volt.pk %}"> {{ volt }} </a>
+          {% endfor %}</li>
+
+          <li class="nav-item">{% for volt in voltages %}
+              <a class="btn btn-dark" href="{% url 'add_line' volt.pk %}"> добавить ВЛ {{ volt }} </a>
+          {% endfor %}</li>
+
+    </ul>
+  </div>
+</nav>
+{% endblock %}
+
+{% block menu3 %}
+<nav class="navbar navbar-expand-lg navbar-light bg-light border-left border-right border-bottom border-dark py-0">
+  <p class="navbar-brand mr-4 font-weight-bold py-0 my-0">Управление: </p>
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav2" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+  <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse justify-content-between" id="navbarNav2">
+    <ul class="navbar-nav col-10 mt-1">
+        {% for region in regions %}
+          <li class="nav-item">
+              <a class="btn btn-light" href="{% url 'line_region' region.pk %}"> {{ region }} </a>
+          </li>
+        {% endfor %}
+    </ul>
+  </div>
+</nav>
+{% endblock %}
+
+
+
+
+{% block cards1 %}
+    <section class="my-5 py-3">
+      <div class="row mb-0 mx-2">
+        {% for line in lines %}
+        <div class="m-2">
+        <a href="{{ line.get_absolute_url }}"
+
+            {% if line.voltage.class_voltage == 220 %}
+            class="btn btn-outline-dark py-1 border-primary"
+            {% elif line.voltage.class_voltage == 110 %}
+            class="btn btn-outline-dark py-1 border-warning"
+            {% elif line.voltage.class_voltage == 35 %}
+            class="btn btn-outline-dark py-1 border-danger"
+            {% endif %}>
+
+            {% comment %}  {% endcomment %}
+            <b>{{ line.short_name }} | {{ line.name }}</b>
+        </a>
+         | <a href="{% url 'line_group' line.group.pk %}" class="btn btn-outline-secondary py-1" >{{ line.group }} участок </a>
+
+         | <a href="{% url 'line_region' line.management.pk %}" class="btn btn-light py-1" > Управление : {{ line.management }}</a>
+
+        </div>
+        {% endfor %}
+      </div>
+    </section>
+
+{% endblock %}

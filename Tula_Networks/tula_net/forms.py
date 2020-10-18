@@ -1,7 +1,7 @@
 from django import forms
 from django.forms import TextInput, SelectDateWidget
 
-from .models import Feeder, Subscriber, Substation, Section, Phone, Person
+from .models import Feeder, Subscriber, Substation, Section, Phone, Person, TransmissionLine
 from dal import autocomplete
 
 from django.core.exceptions import ValidationError
@@ -121,4 +121,13 @@ class SectionAddForm(BaseCrispyForms, forms.ModelForm):
 
     class Meta:
         model = Section
+        fields = '__all__'
+
+
+class LineForm(BaseCrispyForms, forms.ModelForm):
+
+    description = forms.CharField(label='Описание',required=False, widget=forms.Textarea(attrs={"rows": 1, }))
+
+    class Meta:
+        model = TransmissionLine
         fields = '__all__'

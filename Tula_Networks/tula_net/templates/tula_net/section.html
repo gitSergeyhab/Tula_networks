@@ -26,9 +26,12 @@
   </a>
    <div class="card-body p-1">
 
-     <p class="card-text"><b class="card-title">Фидеры:</b>
+     <p class="card-text"><b class="card-title"></b>
       {% for feeder in section.feeders.all %}
       <a href="{{ feeder.get_absolute_url }}" class="btn btn-secondary py-1">{{ feeder.name }} </a>
+      {% endfor %}
+      {% for line in section.lines.all %}
+      <a href="{{ line.get_absolute_url }}" class="btn btn-secondary py-1">{{ line.short_name }} | {{ line.name }} </a>
       {% endfor %}
      </p>
    </div>

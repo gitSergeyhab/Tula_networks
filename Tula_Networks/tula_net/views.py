@@ -6,12 +6,14 @@ from django.views import View
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
 
 from .forms import FeederAddFromPSForm, FeederFormUpd, PhoneSubscriberFormAdd, PhonePersonFormAdd, PhoneFormUpd, \
-    PhonePSFormAdd, SubscriberFormAdd, PersonFormAdd, SubstationFormUpd, FeederAddFromSubscriberForm, SectionAddForm
+    PhonePSFormAdd, SubscriberFormAdd, PersonFormAdd, SubstationFormUpd, FeederAddFromSubscriberForm, SectionAddForm, \
+    LineForm
 
-from .models import Substation, Subscriber, Section, Person, Phone, Feeder, Group, TransmissionLine
+from .models import Substation, Subscriber, Section, Person, Phone, Feeder, Group, TransmissionLine, Region, ClassVoltage
 from dal import autocomplete
 
-from .utils import AddPhoneViewMixin, DeleteObjectMixin, SubstationsViewMixin, FeedersViewMixin, AddFeederMixin
+from .utils import AddPhoneViewMixin, DeleteObjectMixin, SubstationsViewMixin, FeedersViewMixin, AddFeederMixin, \
+    LinesViewMixin
 
 from .data import context_menu
 
@@ -36,12 +38,12 @@ class GroupPSView(SubstationsViewMixin, ListView):
         return Substation.objects.filter(group__pk=self.kwargs['pk'])
 
 
-class VoltPSView1(SubstationsViewMixin, ListView):
-    """ вьюха для ПС с разбивкой по напряжению """
-    flag = 'flag_voltages'
-
-    def get_queryset(self):
-        return Substation.objects.filter(voltage_h=self.kwargs['pk'])
+# class VoltPSView1(SubstationsViewMixin, ListView):
+#     """ вьюха для ПС с разбивкой по напряжению """
+#     flag = 'flag_voltages'
+#
+#     def get_queryset(self):
+#         return Substation.objects.filter(voltage_h=self.kwargs['pk'])
 
 
 class VoltPSView(SubstationsViewMixin, ListView):
@@ -475,6 +477,35 @@ class UpdSectionView(UpdateView):
     template_name = 'tula_net/form_add_feeder.html'
 
 
+class SectionDeleteView(DeleteObjectMixin, View):
+    """ удаление секции"""
+    model = Section
+    target_reverse = 'main'
+
+
+class AddLineView(View):
+    """ добавление фидера c ПС !!! и оно работает !!!"""
+
+    def get(self, request, pk):
+        form = LineForm()
+        form.fields['section'].queryset = Section.objects.filter(voltage__pk=pk)
+        # form.fields['substation'].queryset = Substation.objects.filter(voltage_h__pk__gte=pk)
+        form.fields['voltage'].queryset = ClassVoltage.objects.filter(pk=pk)
+        form.fields['voltage'].initial = ClassVoltage.objects.get(pk=pk)
+        return render(request, 'tula_net/form_add_feeder.html', context={'form': form})
+
+    def post(self, request, *args, **kwargs):
+        bound_form = LineForm(request.POST)
+        if bound_form.is_valid():
+            new_line = bound_form.save()
+            return redirect(new_line)
+        return render(request, 'tula_net/form_add_feeder.html', context={'form': bound_form})
+
+
+class UpdlineView(UpdateView):
+    model = TransmissionLine
+    form_class = LineForm
+    template_name = 'tula_net/form_add_feeder.html'
 # ___________________
 class SubscriberAutocompleteView(autocomplete.Select2QuerySetView):
     def get_queryset(self):
@@ -498,10 +529,38 @@ class SubstationAutocompleteView(autocomplete.Select2QuerySetView):
 
 # ________________________
 
-class LinesView(ListView):
+class LinesView(LinesViewMixin, ListView):
+    paginate_by = 20
+
+
+class LinesGroupView(LinesViewMixin, ListView):
+    flag = 'flag_group'
+    paginate_by = 20
+
+    def get_queryset(self):
+        return TransmissionLine.objects.filter(group__pk=self.kwargs['pk'])
+
+
+class LinesVoltageView(LinesViewMixin, ListView):
+    flag = 'flag_voltages'
+    paginate_by = 20
+
+    def get_queryset(self):
+        return TransmissionLine.objects.filter(voltage__pk=self.kwargs['pk'])
+
+
+class LinesRegionView(LinesViewMixin, ListView):
+    flag = 'flag_region'
+    paginate_by = 20
+
+    def get_queryset(self):
+        return TransmissionLine.objects.filter(management__pk=self.kwargs['pk'])
+
+class LineDeleteView(DeleteObjectMixin, View):
+    """ удаление ВЛ"""
     model = TransmissionLine
-    context_object_name = 'lines'
-    template_name = 'tula_net/lines.html'
+    target_reverse = 'main'
+
 
 
 class OneLineView(DetailView):

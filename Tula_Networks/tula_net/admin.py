@@ -2,7 +2,7 @@ from django.contrib import admin
 
 # Register your models here.
 from .models import Substation, Section, Feeder, Subscriber, Person, Phone, Group, Res, ClassVoltage, TransmissionLine,\
-    Region
+    Region, GroupLine
 
 
 # автокомплит не работает:
@@ -99,10 +99,17 @@ class LineAdmin(admin.ModelAdmin):
     list_display = ['pk', 'name', 'short_name', 'voltage', 'kvl', 'subscriber']
     list_display_links = ['name']
     search_fields = ['name', 'short_name', ]
-    list_filter = ['substation', 'management', 'voltage']
+    list_filter = [ 'management', 'voltage']
+
+class GroupLineAdmin(admin.ModelAdmin):
+    list_display = ['pk', 'name', 'ours']
+    list_display_links = ['name']
+    search_fields = ['name']
+    list_filter = ['name', ]
 
 
 admin.site.register(Group, GroupAdmin)
+admin.site.register(GroupLine, GroupLineAdmin)
 admin.site.register(Res, ResAdmin)
 admin.site.register(ClassVoltage, ClassVoltageAdmin)
 admin.site.register(Region, RegionAdmin)
