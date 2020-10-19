@@ -71,13 +71,17 @@ class DeleteObjectMixin:
         return redirect(reverse(self.target_reverse))
 
 
+# 345ms overall/46ms on queries/73 queries
+# 72ms overall 5ms on queries 3 queries
 class SubstationsViewMixin:
     """ шаблон для ПС """
-    model = Substation
     context_object_name = 'substations'
     template_name = 'tula_net/listPS.html'
     menu = None  # добавление контехтного меню
     flag = None  # добавление для отображения выборок ПС по группам и напряжению
+
+    def get_queryset(self):
+        return Substation.objects.select_related('group', 'voltage_h', 'voltage_m', 'voltage_l').all()
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -135,6 +139,9 @@ class LinesViewMixin:
     template_name = 'tula_net/lines.html'
     menu = None  # добавление контехтного меню
     flag = None  # добавление для отображения выборок ПС по группам и напряжению
+
+    def get_queryset(self):
+        return TransmissionLine.objects.select_related('management', 'voltage', 'group').all()
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)

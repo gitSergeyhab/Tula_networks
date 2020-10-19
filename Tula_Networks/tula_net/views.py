@@ -17,7 +17,6 @@ from .utils import AddPhoneViewMixin, DeleteObjectMixin, SubstationsViewMixin, F
 
 from .data import context_menu
 
-
 class MainView(View):
     """ главная """
 
@@ -35,15 +34,8 @@ class GroupPSView(SubstationsViewMixin, ListView):
     flag = 'flag_group'
 
     def get_queryset(self):
-        return Substation.objects.filter(group__pk=self.kwargs['pk'])
-
-
-# class VoltPSView1(SubstationsViewMixin, ListView):
-#     """ вьюха для ПС с разбивкой по напряжению """
-#     flag = 'flag_voltages'
-#
-#     def get_queryset(self):
-#         return Substation.objects.filter(voltage_h=self.kwargs['pk'])
+        return Substation.objects.select_related('group', 'voltage_h', 'voltage_m', 'voltage_l').\
+            filter(group__pk=self.kwargs['pk'])
 
 
 class VoltPSView(SubstationsViewMixin, ListView):
@@ -52,7 +44,8 @@ class VoltPSView(SubstationsViewMixin, ListView):
     paginate_by = 20
 
     def get_queryset(self):
-        return Substation.objects.filter(voltage_h__class_voltage=self.kwargs['pk'])
+        return Substation.objects.select_related('group', 'voltage_h', 'voltage_m', 'voltage_l').\
+            filter(voltage_h__class_voltage=self.kwargs['pk'])
 
 
 class SubstationsBySubscriberView(ListView):
@@ -79,9 +72,15 @@ class ResPS(ListView):
 
 class OnePSView(DetailView):
     """ карточка одной пс """
-    model = Substation
+
     template_name = 'tula_net/onePS.html'
     context_object_name = 'ps'
+
+    def get_queryset(self):
+        return Substation.objects.select_related('group', 'voltage_h', 'voltage_m', 'voltage_l').\
+            prefetch_related(
+            'feeders', 'sections__lines', 'sections', 'phones', 'feeders__section__voltage', 'sections__lines__voltage'
+        ).all()
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -259,7 +258,7 @@ class SearcherPSView(ListView):
     template_name = 'tula_net/listPS.html'
 
     def get_queryset(self):
-        return Substation.objects.filter(
+        return Substation.objects.select_related('group', 'voltage_h', 'voltage_m', 'voltage_l').filter(
             Q(name__icontains=self.request.GET.get('s')) |
             Q(name__icontains=self.request.GET.get('s').title()) |
             Q(name__icontains=self.request.GET.get('s').lower())
@@ -538,7 +537,8 @@ class LinesGroupView(LinesViewMixin, ListView):
     paginate_by = 20
 
     def get_queryset(self):
-        return TransmissionLine.objects.filter(group__pk=self.kwargs['pk'])
+        return TransmissionLine.objects.select_related('management', 'voltage', 'group').\
+            filter(group__pk=self.kwargs['pk'])
 
 
 class LinesVoltageView(LinesViewMixin, ListView):
@@ -546,7 +546,8 @@ class LinesVoltageView(LinesViewMixin, ListView):
     paginate_by = 20
 
     def get_queryset(self):
-        return TransmissionLine.objects.filter(voltage__pk=self.kwargs['pk'])
+        return TransmissionLine.objects.select_related('management', 'voltage', 'group').\
+            filter(voltage__pk=self.kwargs['pk'])
 
 
 class LinesRegionView(LinesViewMixin, ListView):
@@ -554,7 +555,8 @@ class LinesRegionView(LinesViewMixin, ListView):
     paginate_by = 20
 
     def get_queryset(self):
-        return TransmissionLine.objects.filter(management__pk=self.kwargs['pk'])
+        return TransmissionLine.objects.select_related('management', 'voltage', 'group').\
+            filter(management__pk=self.kwargs['pk'])
 
 class LineDeleteView(DeleteObjectMixin, View):
     """ удаление ВЛ"""
