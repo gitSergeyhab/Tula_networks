@@ -2,7 +2,7 @@ from django.contrib import admin
 
 # Register your models here.
 from .models import Substation, Section, Feeder, Subscriber, Person, Phone, Group, Res, ClassVoltage, TransmissionLine,\
-    Region, GroupLine
+    Region, GroupLine, Line
 
 
 # автокомплит не работает:
@@ -62,7 +62,7 @@ admin.site.register(Feeder, FeederAdmin)
 
 
 class PhoneAdmin(admin.ModelAdmin):
-    list_display = ['pk', 'number', 'search_number', 'subscriber', 'person', 'mail', 'priority']
+    list_display = ['pk', 'number', 'search_number', 'subscriber', 'person', 'priority']
     list_display_links = ['number']
     search_fields = ['number']
     list_filter = ['priority', 'subscriber', ]
@@ -101,6 +101,12 @@ class LineAdmin(admin.ModelAdmin):
     search_fields = ['name', 'short_name', ]
     list_filter = [ 'management', 'voltage']
 
+class Line1Admin(admin.ModelAdmin):
+    list_display = ['pk', 'name', 'short_name', 'voltage', 'kvl', 'subscriber']
+    list_display_links = ['name']
+    search_fields = ['name', 'short_name', ]
+    list_filter = [ 'management', 'voltage']
+
 class GroupLineAdmin(admin.ModelAdmin):
     list_display = ['pk', 'name', 'ours']
     list_display_links = ['name']
@@ -114,3 +120,4 @@ admin.site.register(Res, ResAdmin)
 admin.site.register(ClassVoltage, ClassVoltageAdmin)
 admin.site.register(Region, RegionAdmin)
 admin.site.register(TransmissionLine, LineAdmin)
+admin.site.register(Line, Line1Admin)

@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+
+{% block cards1 %}
+
+<div class="card">
+    <h4 class="card-header mb-0 pb-0 text-center">
+ {% if line.short_name %} <b>{{ line.short_name }}</b> | {% endif %}
+        {{ line.name }} <br>
+        <hr class="my-0"
+            {% if line.voltage.class_voltage == 220 %}
+            color="blue"
+            {% elif line.voltage.class_voltage == 110 %}
+                        color="yellow"
+            {% elif line.voltage.class_voltage == 35 %}
+                        color="red"
+            {% endif %}
+        >
+        {% if line.full_name %} {{ line.full_name }} <br> {% endif %}
+        </h4>
+        <div class="card-body mx-5 px-5">
+        <h5>Питающие ПС:</h5>
+
+            {% if sec_plus1.exists %}
+                <a href="{{ sec_plus1.0.substation.get_absolute_url }}" class="btn btn-outline-dark mx-auto px-5 mx-5 py-0">
+                    <b>{{ sec_plus1.0.substation }}</b>
+                </a> :
+                <a href="{{ sec_plus1.0.get_absolute_url }}" class="btn btn-dark mx-auto px-5 mx-5 py-0">
+                    <b> {{ sec_plus1.0.name }}</b>
+                </a><br>
+            {% endif %}
+
+            {% if sec_plus2.exists %}
+                <a href="{{ sec_plus2.0.substation.get_absolute_url }}" class="btn btn-outline-dark mx-auto px-5 mx-5 py-0">
+                    <b>{{ sec_plus2.0.substation }}</b>
+                </a> :
+                <a href="{{ sec_plus2.0.get_absolute_url }}" class="btn btn-dark mx-auto px-5 mx-5 py-0">
+                    <b> {{ sec_plus2.0.name }}</b>
+                </a><br>
+            {% endif %}
+
+            <h5 class="mt-2">Тупиковые  ПС:</h5>
+
+            {% if sec_minus1.exists %}
+                <a href="{{ sec_minus1.0.substation.get_absolute_url }}" class="btn btn-outline-dark mx-auto px-5 mx-5  py-0">
+                    <b>{{ sec_minus1.0.substation }}</b>
+                </a> :
+                <a href="{{ sec_minus1.0.get_absolute_url }}" class="btn btn-dark mx-auto px-5 mx-5 py-0">
+                    <b> {{ sec_minus1.0.name }}</b>
+                </a>
+            {% endif %}
+
+            {% if sec_minus2.exists %}<br>
+                <a href="{{ sec_minus2.0.substation.get_absolute_url }}" class="btn btn-outline-dark mx-auto px-5 mx-5 py-0">
+                    <b>{{ sec_minus2.0.substation }}</b>
+                </a> :
+                <a href="{{ sec_minus2.0.get_absolute_url }}" class="btn btn-dark mx-auto px-5 mx-5 py-0">
+                    <b> {{ sec_minus2.0.name }}</b>
+                </a><br>
+            {% endif %}
+
+            {% if sec_minus3.exists %}<br>
+                <a href="{{ sec_minus3.0.substation.get_absolute_url }}" class="btn btn-outline-dark mx-auto px-5 mx-5  py-0">
+                    <b>{{ sec_minus3.0.substation }}</b>
+                </a> :
+                <a href="{{ sec_minus3.0.get_absolute_url }}" class="btn btn-dark mx-auto px-5 mx-5 py-0">
+                    <b> {{ sec_minus3.0.name }}</b>
+                </a>
+            {% endif %}
+
+            {% if sec_minus4.exists %}<br>
+                <a href="{{ sec_minus4.0.substation.get_absolute_url }}" class="btn btn-outline-dark mx-auto px-5 mx-5 py-0">
+                    <b>{{ sec_minus4.0.substation }}</b>
+                </a> :
+                <a href="{{ sec_minus4.0.get_absolute_url }}" class="btn btn-dark mx-auto px-5 mx-5 py-0">
+                    <b> {{ sec_minus4.0.name }}</b>
+                </a><br>
+            {% endif %}
+{% if not sec_minus1.exists and not sec_minus2.exists and not sec_minus3.exists and not sec_minus4.exists %}
+
+            У {{ line }} нет тупиков
+            {% endif %}
+
+            <hr class="my-1">
+            {% if line.management %}
+                Управление : {{ line.management }}
+                <hr class="my-1">
+            {% endif %}
+
+            {% if line.maintenance.count %} Ведение :
+                {% for m in line.maintenance.all %} {{ m }} , {% endfor %}
+                <hr class="my-1">
+            {% endif %}
+
+            {% if line.group %}
+                {{ line.group }} участок сл ЛЭП
+                <hr class="my-1">
+            {% endif %}
+
+            {% if line.subscriber %}
+             <a href="{{ line.subscriber.get_absolute_url }}" class="btn btn-outline-secondary mx-auto  py-0"> <b>Владелец: {{ line.subscriber }}</b></a>
+            {% endif %}
+</b>
+
+            <div class="card-footer text-right py-0">
+                <div class="btn-group dropup">
+                  <button type="button" class="btn btn-secondary dropdown-toggle dropdown-toggle-split py-0 my-0" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    править БД<span class="sr-only">Toggle Dropdown</span>
+                  </button>
+                  <div class="dropdown-menu">
+                      <a class="dropdown-item" href="{% url 'upd_line' line.pk %}">изменить ВЛ</a>
+                      <a class="dropdown-item" href="{% url 'del_line' line.pk %}">удалить ВЛ</a>
+                  </div>
+                </div>
+            </div>
+
+            <div class="card-footer">
+                {% if line.length %}
+                <p>Протяженность : {{ line.length }}</p>
+                {% endif %}
+                {% if line.number_columns %}
+                <p>Количество опор : {{ line.number_columns }}</p>
+                {% endif %}
+                {% if line.description %}
+                <p>Примечание : {{ line.description }}</p>
+                {% endif %}
+
+            </div>
+
+
+
+
+
+
+
+  </div>
+
+</div>
+
+{% endblock %}

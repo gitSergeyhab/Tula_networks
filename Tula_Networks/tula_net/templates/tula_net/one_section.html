@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% block cards1 %}
+{{ lines1 }}
 
 
 
@@ -52,9 +53,10 @@
                             {% if .class_voltage < 20 %}
                             <a class="dropdown-item" href="{% url 'add_feeder_from_sec' section.pk %}">добавить фидер на СкШ</a>
                             {% endif %}
+                              {% comment %}
                             <a class="dropdown-item" href="{% url 'upd_section' section.pk %}">редактировать СкШ</a>
                             <a class="dropdown-item" href="{% url 'del_section' section.pk %}">удалить СкШ</a>
-
+{% endcomment %}
                           </div>
                         </div>
                        </div>
