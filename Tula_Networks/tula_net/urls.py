@@ -10,7 +10,7 @@ from tula_net.views import MainView, PsListView, GroupPSView, VoltPSView, OnePSV
     UpdSubscriberView, SubscriberDeleteView, AddPersonView, UpdPersonView, DelPersonView, UpdSubstationView, \
     AddFeederFromSubscriberView, AddSectionFromPSView, UpdSectionView, SectionView, AddFeederFromSecView, \
     AddSubstationView, LinesView, OneLineView, LinesGroupView, LinesVoltageView, LinesRegionView, AddLineView, \
-    UpdlineView, LineDeleteView, SectionDeleteView
+    UpdlineView, LineDeleteView, SectionDeleteView, SearcherLinesView, Lines1View, OneLine1View, AddLine1View, Section1View
 
 urlpatterns = [
     path('', MainView.as_view(), name='main'),
@@ -24,7 +24,7 @@ urlpatterns = [
     path('section_ps/<int:pk>/', SectionPSView.as_view(), name='section_ps'),
 
     # СкШ
-    path('section/<int:pk>/', SectionView.as_view(), name='one_section'),
+    path('section/<int:pk>/', Section1View.as_view(), name='one_section'),
     path('sections/', SectionListView.as_view(), name='sections'),
 
     # 1 лист всех фидеров, 2 карточка 1-го фидера, 3-4 все фидера по секции-подстаннции
@@ -50,7 +50,9 @@ urlpatterns = [
     path('phone/<int:pk>/', OnePhoneView.as_view(), name='phone'),
 
     # 1 лист всех ВЛ, 2 карточка 1-й ВЛ
+    path('lines1/', Lines1View.as_view(), name='lines1'),
     path('lines/', LinesView.as_view(), name='lines'),
+    path('line1/<int:pk>/', OneLine1View.as_view(), name='line1'),
     path('line/<int:pk>/', OneLineView.as_view(), name='line'),
     path('line_group/<int:pk>/', LinesGroupView.as_view(), name='line_group'),
     path('line_voltage/<int:pk>/', LinesVoltageView.as_view(), name='line_voltage'),
@@ -61,6 +63,7 @@ urlpatterns = [
     path('searcher_substations/', SearcherPSView.as_view(), name='searcher_substations'),
     path('searcher_persons/', SearcherPersonsView.as_view(), name='searcher_persons'),
     path('searcher_phones/', SearcherPhonesView.as_view(), name='searcher_phones'),
+    path('searcher_lines/', SearcherLinesView.as_view(), name='searcher_lines'),
 
     # формы
     # фидера 1.добавление с ПС, 2. !... от абонента! 3.обновление, 4. удаление
@@ -91,7 +94,8 @@ urlpatterns = [
     path('upd_section/<int:pk>/', UpdSectionView.as_view(), name='upd_section'),
     path('del_section/<int:pk>/', SectionDeleteView.as_view(), name='del_section'),
 
-    path('add_line/<int:pk>/', AddLineView.as_view(), name='add_line'),
+    path('add_line/', AddLine1View.as_view(), name='add_line'),
+    path('add_line0/<int:pk>/', AddLineView.as_view(), name='add_line0'),
     path('upd_line/<int:pk>/', UpdlineView.as_view(), name='upd_line'),
     path('del_line/<int:pk>/', LineDeleteView.as_view(), name='del_line'),
 

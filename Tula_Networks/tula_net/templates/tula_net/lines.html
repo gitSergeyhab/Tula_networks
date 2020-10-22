@@ -11,7 +11,7 @@
   </button>
 
   <div class="collapse navbar-collapse justify-content-between" id="navbarNav1">
-    <ul class="navbar-nav col-10 mt-1">
+    <ul class="navbar-nav col-10 mt-0">
         {% for group in groups %}
       <li class="nav-item">
 
@@ -36,15 +36,12 @@
   </button>
 
   <div class="collapse navbar-collapse justify-content-between" id="navbarNav2">
-    <ul class="navbar-nav col-10 mt-1 d-flex justify-content-between">
-
-          <li class="nav-item">{% for volt in voltages %}
+    <ul class="navbar-nav col-10 mt-0 ">
+        {% for volt in voltages %}
+          <li class="nav-item">
               <a class="btn btn-light" href="{% url 'line_voltage' volt.pk %}"> {{ volt }} </a>
-          {% endfor %}</li>
-
-          <li class="nav-item">{% for volt in voltages %}
-              <a class="btn btn-dark" href="{% url 'add_line' volt.pk %}"> добавить ВЛ {{ volt }} </a>
-          {% endfor %}</li>
+         </li>
+        {% endfor %}
 
     </ul>
   </div>
@@ -55,12 +52,12 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light border-left border-right border-bottom border-dark py-0">
   <p class="navbar-brand mr-4 font-weight-bold py-0 my-0">Управление: </p>
 
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav2" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav3" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
   <span class="navbar-toggler-icon"></span>
   </button>
 
-  <div class="collapse navbar-collapse justify-content-between" id="navbarNav2">
-    <ul class="navbar-nav col-10 mt-1">
+  <div class="collapse navbar-collapse justify-content-between" id="navbarNav3">
+    <ul class="navbar-nav col-10 mt-0">
         {% for region in regions %}
           <li class="nav-item">
               <a class="btn btn-light" href="{% url 'line_region' region.pk %}"> {{ region }} </a>
@@ -71,11 +68,31 @@
 </nav>
 {% endblock %}
 
+{% block search %}
+    {% if not flag_group and not flag_voltages and not flag_region %}
+        <div class="mb-4">
+        {% include 'incl/_searcher_lines.html' %}
+
+            {% if flag_search %}
+                {% if lines.count > 0 %}
+                    <h3 class="text-center">Вы искали: <span class="text-warning">{{ flag_search }}</span>, и я нашел {{ substations.count }}:</h3>
+                {% else %}
+                    <h3 class="text-center">Вы искали: <span class="text-warning">{{ flag_search }}</span>, но он где-то потерялся :((</h3>
+                {% endif %}
+            {% endif %}
+        </div>
+    {% endif %}
+{% endblock %}
+
+
+
+
+
 
 
 
 {% block cards1 %}
-    <section class="my-5 py-3">
+    <section class="my-3 py-3">
       <div class="row mb-0 mx-2">
         {% for line in lines %}
         <div class="m-2">
@@ -92,7 +109,7 @@
             {% comment %}  {% endcomment %}
             <b>{{ line.short_name }} | {{ line.name }}</b>
         </a>
-         | <a href="{% url 'line_group' line.group.pk %}" class="btn btn-outline-secondary py-1" >{{ line.group }} участок </a>
+         | <a href="{% url 'line_group' line.group.pk %}" class="btn btn-outline-secondary py-1" >{{ line.group }} участок сл ЛЭП </a>
 
          | <a href="{% url 'line_region' line.management.pk %}" class="btn btn-light py-1" > Управление : {{ line.management }}</a>
 
@@ -101,4 +118,8 @@
       </div>
     </section>
 
+{% endblock %}
+
+{% block paginator %}
+{% include 'incl/_block_paginator.html' %}
 {% endblock %}

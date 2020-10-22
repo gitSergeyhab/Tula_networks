@@ -37,20 +37,20 @@
             У {{ line }} нет тупиков
             {% endfor %} <br>
 <b>
-            <hr class="my-0">
+            <hr class="my-1">
             {% if line.management %}
                 Управление : {{ line.management }}
-                <hr class="my-0">
+                <hr class="my-1">
             {% endif %}
 
             {% if line.maintenance.count %} Ведение :
                 {% for m in line.maintenance.all %} {{ m }} , {% endfor %}
-                <hr class="my-0">
+                <hr class="my-1">
             {% endif %}
 
             {% if line.group %}
                 {{ line.group }} участок сл ЛЭП
-                <hr class="my-0">
+                <hr class="my-1">
             {% endif %}
 
             {% if line.subscriber %}
@@ -70,7 +70,7 @@
                 </div>
             </div>
 
-            <div class="card-footer text-right">
+            <div class="card-footer">
                 {% if line.length %}
                 <p>Протяженность : {{ line.length }}</p>
                 {% endif %}

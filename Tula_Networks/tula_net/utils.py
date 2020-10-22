@@ -8,7 +8,7 @@ import re
 from .data import context_menu
 
 # ____ шаблон для форм ___
-from tula_net.models import Substation, Group, Feeder, Section, TransmissionLine, ClassVoltage, GroupLine, Region
+from tula_net.models import Substation, Group, Feeder, Section, TransmissionLine, ClassVoltage, GroupLine, Region, Line
 
 
 class BaseCrispyForms:
@@ -23,6 +23,7 @@ class BaseCrispyForms:
         self.helper.form_class = 'form-horizontal'
         self.helper.label_class = 'col-lg-4'
         self.helper.field_class = 'col-lg-7'
+
 
 
 # ____ шаблон для форм телефонов ___
@@ -94,11 +95,13 @@ class SubstationsViewMixin:
 
 class FeedersViewMixin:
     """ шаблон для фидеров """
-    model = None
-    second_model = None  # модель в контекст для оторажения конкретной секции ии ПС
+    second_model = None  # модель в контекст для отображения конкретной секции ии ПС
     the_context = None  # см. предыд пункт
     template_name = 'tula_net/feeders.html'
     context_object_name = 'feeders'
+
+    def get_queryset(self):
+        return Feeder.objects.select_related('substation', 'section', 'subscriber', 'section__voltage').all()
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -142,6 +145,35 @@ class LinesViewMixin:
 
     def get_queryset(self):
         return TransmissionLine.objects.select_related('management', 'voltage', 'group').all()
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['context_menu'] = self.menu
+        context['groups'] = GroupLine.objects.all()
+        context['voltages'] = ClassVoltage.objects.all()[1:3]
+        context['regions'] = Region.objects.filter(for_menu=True)
+        context[self.flag] = 1
+        return context
+
+
+def chang_search(obs):
+    if '-' in obs:
+        list_obs = obs.split('-')
+        obs_n = ' - '.join([word.strip() for word in list_obs])
+        print(obs_n)
+        return obs_n
+    return obs
+
+
+class Lines1ViewMixin:
+    """ шаблон для  """
+    context_object_name = 'lines'
+    template_name = 'tula_net/lines1.html'
+    menu = None  # добавление контехтного меню
+    flag = None  # добавление для отображения выборок ПС по группам и напряжению
+
+    def get_queryset(self):
+        return Line.objects.select_related('management', 'voltage', 'group').all()
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
