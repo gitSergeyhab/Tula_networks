@@ -13,14 +13,14 @@
 
       {% for person in subscriber.persons.all %}
         <div>
-        <div class="my-0 card-header">
-            <a href="{{ person.get_absolute_url }}" class="btn btn-secondary p-1">
+        <div class="my-0 p-1 card-header">
+            <a href="{{ person.get_absolute_url }}" class="btn btn-light p-0 m-1">
             <b>{{ person }}</b>
             </a>
             {% if person.position %} | {{ person.position }} {% endif %}
             {% if person.phones.count %} |
                 {% for phone in person.phones.all %}
-                <a class="btn btn-light p-0" href="{{ phone.get_absolute_url }}"><b>{{ phone }}</b></a>,
+                    <b>{{ phone }}</b>,
                 {% endfor %}
             {% endif %}
         </div>

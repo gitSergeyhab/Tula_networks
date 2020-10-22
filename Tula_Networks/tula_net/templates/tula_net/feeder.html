@@ -27,13 +27,26 @@
         <hr class="p-0 m-0"  color="#00008B" >
 
         {% for person in feeder.subscriber.persons.all %}
-            <h6 class="px-0 mx-0">
-                <p class="my-0 card-header p-1"><b>{{ person }}</b> | {{person.position}} |
-                {% for phone in person.phones.all %}
-                   <a class="btn btn-light p-0" href="{{ phone.get_absolute_url }}"><b>{{ phone }}</b></a>,
-                {% endfor %}</p>
-            </h6>
+          {% if person.priority == 1 %}
+                <h6 class="px-0 mx-0">
+                    <p class="my-0 card-header p-0"><b>{{ person }}</b> | {{person.position}} |
+                    {% for phone in person.phones.all %}
+                      <b>{{ phone }}</b> ,
+                    {% endfor %}</p>
+                </h6>
+          {% endif %}
         {% endfor %}
+
+      <div class="my-0 card-header p-0">{% for person in feeder.subscriber.persons.all %}
+          {% if not person.priority or person.priority > 1 %}
+
+                    {{ person }} {% if person.position %} ({{person.position}}) {% endif %}
+                    {% for phone in person.phones.all %}
+                        {{ phone }},
+                    {% endfor %};
+
+          {% endif %}
+        {% endfor %}</div>
 
     <div class="my-3 card-footer">
         {% if feeder.subscriber.ours %}

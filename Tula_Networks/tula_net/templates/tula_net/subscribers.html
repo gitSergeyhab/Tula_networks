@@ -23,15 +23,76 @@
         </div>
 
 
-    <div class="card-body">
+    <div class="card-body bg-dark">
         {% for subscriber in subscribers.distinct %}
-         <div class="card mb-2">
+         <div class="card mb-3 border border-dark">
+
             <a href="{{ subscriber.get_absolute_url }}" class="btn btn-outline-dark p-1 m-1" >
                 <p class="m-1">{{ subscriber }}</p>
             </a>
+            <div class="card-body p-1"> Телефоны организации:
+            {% for phone in subscriber.phones.all %}
+                {{ phone }},
+            {% endfor %}
+           </div>
+
+
+            <div class="container">
+              <div class="panel-group ">
+                <div class="panel panel-default ">
+                  <div class="panel-heading">
+                    <h4 class="panel-title text-center">
+                      <a data-toggle="collapse" class="btn btn-outline-dark btn-lg btn-block py-0"  href="#{{ subscriber.pk }}">
+                          списки лиц {% if subscriber.year_update %}
+                          на {{ subscriber.year_update }} год
+                          {% else %}
+                          <span class="text-danger">год не указан</span>
+                          {% endif %}
+                      </a>
+                    </h4>
+                  </div>
+
+                  <div id="{{ subscriber.pk }}" class="panel-collapse collapse">
+                    <ul class="list-group">
+
+                      <li class="list-group-item list-group-item-light">
+                       <div class="row mb-0">
+                          {% for person in subscriber.persons.all %}
+                            {% if person.priority == 1 %}
+                                <div class=" col-6 col-md-6 col-lg-4 px-1 my-2">
+                                    <a href="{{ person.get_absolute_url }}" class="btn btn-light py-0 mx-auto d-block" >
+                                        {{ person }} </a>
+                                    {% for phone in person.phones.all %}
+                                    {{ phone }},
+                                    {% endfor %}
+                                </div>
+                                {% endif %}
+                            {% endfor %}
+                       </div>
+                      </li>
+
+                       <li class="list-group-item list-group-item-secondary">
+                           <p class="px-1 py-0 my-0">
+                           {% for person in subscriber.persons.all %}
+                              {% if not person.priority or person.priority > 1 %}
+                                        {{ person }} {% if person.position %} ({{person.position}}) {% endif %}
+                                        {% for phone in person.phones.all %}
+                                            {{ phone }},
+                                        {% endfor %};
+                              {% endif %}
+                            {% endfor %}
+                           </p>
+                       </li>
+
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
            <div class="card-body p-1">
             {% for feeder in subscriber.feeders.all %}
-
                 {% if feeder.substation == the_substation or feeder.section == the_section and feeder.section %}
                           <a href="{{ feeder.get_absolute_url }}" class="btn btn-outline-secondary py-0">{{ feeder.name }} </a>
                {% endif %}
@@ -39,8 +100,32 @@
            </div>
          </div>
         {% endfor %}
+
     </div>
     </div>
 
 {% endblock %}
 
+
+
+
+
+<!--<div class="container">-->
+<!--  <div class="panel-group ">-->
+<!--    <div class="panel panel-default ">-->
+<!--      <div class="panel-heading">-->
+<!--        <h4 class="panel-title">-->
+<!--          <a data-toggle="collapse" href="#MyColl">Бургеры</a>-->
+<!--        </h4>-->
+<!--      </div>-->
+<!--      <div id="MyColl" class="panel-collapse collapse">-->
+<!--        <ul class="list-group">-->
+<!--          <li class="list-group-item list-group-item-success">Чизбургер</li>-->
+<!--          <li class="list-group-item list-group-item-success">Гамбургер</li>-->
+<!--          <li class="list-group-item list-group-item-success">Королевский</li>-->
+<!--        </ul>-->
+<!--        <div class="panel-footer">Приготовление длится около 10-15 минут. Приятного аппетита!</div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</div>-->

@@ -109,7 +109,7 @@
             {% endfor %}
         </div>
 
-
+            <div>
             {% for line in ps.lines.all %}
             {% if line.section.voltage.class_voltage < 40 %}
                 <a href="{{ line.get_absolute_url }}" type="button" class="btn btn-secondary border-danger px-3 py-0 m-1 ">{{ line.name }}</a>,
