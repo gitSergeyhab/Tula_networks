@@ -86,7 +86,16 @@ class OnePSView(DetailView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['context_menu'] = context_menu
+        context['lines'] = Line.objects.filter(
+            Q(ps_p1=self.object.number) |
+            Q(ps_p2=self.object.number) |
+            Q(ps_m1=self.object.number) |
+            Q(ps_m2=self.object.number) |
+            Q(ps_m3=self.object.number) |
+            Q(ps_m4=self.object.number)
+        )
+        # context['context_menu'] = context_menu
+
         return context
 
 
@@ -138,14 +147,15 @@ class Section1View(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['lines1'] = Line.objects.filter(
-            Q(ps_p1=self.object.number, sec_p1=self.object.number, voltage=self.object.voltage) |
-            Q(ps_p2=self.object.number, sec_p2=self.object.number, voltage=self.object.voltage) |
-            Q(ps_m1=self.object.number, sec_m1=self.object.number, voltage=self.object.voltage) |
-            Q(ps_m2=self.object.number, sec_m2=self.object.number, voltage=self.object.voltage) |
-            Q(ps_m3=self.object.number, sec_m3=self.object.number, voltage=self.object.voltage) |
-            Q(ps_m4=self.object.number, sec_m4=self.object.number, voltage=self.object.voltage)
+        context['lines'] = Line.objects.filter(
+            Q(ps_p1=self.object.substation.number, sec_p1=self.object.number, voltage=self.object.voltage) |
+            Q(ps_p2=self.object.substation.number, sec_p2=self.object.number, voltage=self.object.voltage) |
+            Q(ps_m1=self.object.substation.number, sec_m1=self.object.number, voltage=self.object.voltage) |
+            Q(ps_m2=self.object.substation.number, sec_m2=self.object.number, voltage=self.object.voltage) |
+            Q(ps_m3=self.object.substation.number, sec_m3=self.object.number, voltage=self.object.voltage) |
+            Q(ps_m4=self.object.substation.number, sec_m4=self.object.number, voltage=self.object.voltage)
         )
+        return context
 
 
 class OneSectionView(FeedersViewMixin, ListView):
@@ -179,7 +189,7 @@ class SectionPSView(ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         context['the_substation'] = Substation.objects.get(pk=self.kwargs['pk'])
-        context['context_menu'] = context_menu
+
         return context
 
 

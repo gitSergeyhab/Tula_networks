@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block cards1 %}
-{{ lines1 }}
+
 
 
 
@@ -53,10 +53,10 @@
                             {% if .class_voltage < 20 %}
                             <a class="dropdown-item" href="{% url 'add_feeder_from_sec' section.pk %}">добавить фидер на СкШ</a>
                             {% endif %}
-                              {% comment %}
+
                             <a class="dropdown-item" href="{% url 'upd_section' section.pk %}">редактировать СкШ</a>
                             <a class="dropdown-item" href="{% url 'del_section' section.pk %}">удалить СкШ</a>
-{% endcomment %}
+
                           </div>
                         </div>
                        </div>
@@ -69,15 +69,20 @@
 
 
                 </div>
-                {% if section.voltage.class_voltage < 20 %}
+{% if section.voltage.class_voltage < 20 %}
                 <div class="col-12 col-md-3 col-lg-2 d-flex align-items-center">
                     <div class="btn-group-vertical">
+
                         <a href="{% url 'section' section.pk %}" type="button" class="btn btn-dark">Фидеры</a>
                         <a href="{% url 'subscriber_sec' section.pk %}" type="button" class="btn btn-secondary">Абоненты</a>
 
+
+
+
+
                     </div>
                 </div>
-                  {% endif %}
+ {% endif %}
 
               </div>
             </div>
@@ -99,15 +104,26 @@
                         {% endfor %}
                         {% endif %}
 
-
+{% comment %}
                         {% if section.lines.count %}
                         <div class="card-footer py-0">
                         <h5>Все ВЛ {{ section }}</h5>
                         </div>
-                        {% for line in section.lines.all %}
-                        <a href="{{ line.get_absolute_url }}" class="btn btn-dark py-0 px-4 my-1"> {{ line.name }}</a> ,
-                        {% endfor %}
+                            {% for line in section.lines.all %}
+                            <a href="{{ line.get_absolute_url }}" class="btn btn-dark py-0 px-4 my-1"> {{ line.name }}</a> ,
+                            {% endfor %}
                         {% endif %}
+                        {% endcomment %}
+
+{% if lines.exists %}
+                        <div class="card-footer py-0">
+                        <h5>Все ВЛ {{ section }}</h5>
+                        </div>
+                            {% for line in lines %}
+                            <a href="{{ line.get_absolute_url }}" class="btn btn-dark py-0 px-4 my-1"> {{ line.name }}</a> ,
+                            {% endfor %}
+                        {% endif %}
+
                     </div>
         </div>
       </div>

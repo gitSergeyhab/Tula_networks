@@ -11,9 +11,8 @@
               <div class="row">
                 <div class="col-12 col-md-3 col-lg-2 d-flex align-items-center">
                     <div class="btn-group-vertical">
-                        <a href="{% url 'section_ps' ps.pk %}" type="button" class="btn btn-secondary border border-dark">Секции</a>
-                        <a href="{% url 'subscriber_ps' ps.pk %}" type="button" class="btn btn-secondary border border-dark">Абоненты</a>
-                        <a href="{% url 'substation_f' ps.pk %}" type="button" class="btn btn-secondary border border-dark">Фидера</a>
+                        <a href="{% url 'subscriber_ps' ps.pk %}" type="button" class="btn btn-secondary border border-dark">Абоненты <br> подрбно</a>
+                        <a href="{% url 'substation_f' ps.pk %}" type="button" class="btn btn-secondary border border-dark">Фидера <br> подробно</a>
                     </div>
 
                 </div>
@@ -72,11 +71,48 @@
 
 
         <div class="card">
-          <div class="card-header">
+
+          <div class="card-header pt-2 pb-0">
+            <b>Список секций:</b>
+          </div>
+            <b>
+          <div class="card-body py-1">
+            {% for section in ps.sections.all %}
+            {% if section.voltage.class_voltage < 8 %}
+                <a href="{{ section.get_absolute_url }}" type="button" class="btn btn-outline-dark text-success px-2 py-0">
+                    {{ section.name }}
+                </a> ,
+            {% elif section.voltage.class_voltage < 20 %}
+                <a href="{{ section.get_absolute_url }}" type="button" class="btn btn-outline-dark text-primary px-2 py-0">
+                    {{ section.name }}
+                </a> ,
+            {% elif section.voltage.class_voltage < 40 %}
+                <a href="{{ section.get_absolute_url }}" type="button" class="btn btn-outline-dark text-danger px-2 py-0">
+                    {{ section.name }}
+                </a> ,
+            {% elif section.voltage.class_voltage < 120 %}
+                <a href="{{ section.get_absolute_url }}" type="button" class="btn btn-outline-dark text-warning px-2 py-0">
+                    {{ section.name }}
+                </a> ,
+            {% else %}
+                <a href="{{ section.get_absolute_url }}" type="button" class="btn btn-outline-dark px-2 py-0">
+                    {{ section.name }}
+                </a> ,
+
+            {% endif %}
+
+            {% endfor %}<br>
+
+            </div>
+
+
+
+
+          <div class="card-header pt-2 pb-0">
             <b>Список фидеров:</b>
           </div>
             <b>
-          <div class="card-body pb-0">
+          <div class="card-body py-1">
             {% for feeder in ps.feeders.all %}
             {% if feeder.section.voltage.class_voltage < 10 %}
                 <a href="{{ feeder.get_absolute_url }}" type="button" class="btn btn-secondary border-success px-3 py-0 m-1 ">{{ feeder.name }}</a>,
@@ -89,41 +125,71 @@
             {% endif %}
             {% endfor %}
             </div>
+<div class="card pb-3">
 
 
-        <div class="card-body pb-0">
-            {% for section in ps.sections.all %}
-              {% for line in section.lines.all %}
-                {% if line.voltage.class_voltage < 40 %}
-                    <a href="{{ line.get_absolute_url }}" type="button" class="btn btn-secondary border-danger px-3 py-0 m-1 ">{{ line.name }}</a>,
-                {% endif %}
-              {% endfor %}
-            {% endfor %}
-<br>
-          {% for section in ps.sections.all %}
-              {% for line in section.lines.all %}
-                {% if line.voltage.class_voltage > 40 %}
-                    <a href="{{ line.get_absolute_url }}" type="button" class="btn btn-secondary border-warning px-3 py-0 m-1 ">{{ line.name }}</a>,
-                {% endif %}
-              {% endfor %}
-            {% endfor %}
-        </div>
-
-            <div>
-            {% for line in ps.lines.all %}
-            {% if line.section.voltage.class_voltage < 40 %}
-                <a href="{{ line.get_absolute_url }}" type="button" class="btn btn-secondary border-danger px-3 py-0 m-1 ">{{ line.name }}</a>,
-            {% endif %}
-            {% endfor %}
-              <br>
-            {% for line in ps.lines.all %}
-            {% if line.voltage.class_voltage > 40 %}
-                <a href="{{ line.get_absolute_url }}" type="button" class="btn btn-secondary border-warning px-3 py-0 m-1 ">{{ line.name }}</a>,
-            {% endif %}
-            {% endfor %}
+        {% if lines.exists %}
+          <div class="card-header pt-2 pb-0">
+            <b>Список ВЛ:</b>
+          </div>
+            <div class="card-body py-1">
+                {% for line in lines %}
+                    {% if line.voltage.class_voltage < 40 %}
+                        <a href="{{ line.get_absolute_url }}" class="border-danger btn btn-dark py-0 px-4 my-1">
+                            {{ line.name }}
+                        </a> ,
+                    {% endif %}
+                {% endfor %}
+            <br>
+                {% for line in lines %}
+                    {% if line.voltage.class_voltage < 120 and line.voltage.class_voltage > 40 %}
+                        <a href="{{ line.get_absolute_url }}" class="border-warning btn btn-dark py-0 px-4 my-1">
+                            {{ line.name }}
+                        </a> ,
+                    {% endif %}
+                {% endfor %}
+               {% endif %}
+    </div>
 
           </div>
             </b>
         </div>
 
 {% endblock %}
+
+
+
+<!--{% comment %}-->
+<!--                Первая модель ВЛ - запасная-->
+
+<!--{% for section in ps.sections.all %}-->
+<!--{% for line in section.lines.all %}-->
+<!--{% if line.voltage.class_voltage < 40 %}-->
+<!--<a href="{{ line.get_absolute_url }}" type="button" class="btn btn-secondary border-danger px-3 py-0 m-1 ">{{ line.name }}</a>,-->
+<!--{% endif %}-->
+<!--{% endfor %}-->
+<!--{% endfor %}-->
+<!--<br>-->
+<!--{% for section in ps.sections.all %}-->
+<!--{% for line in section.lines.all %}-->
+<!--{% if line.voltage.class_voltage > 40 %}-->
+<!--<a href="{{ line.get_absolute_url }}" type="button" class="btn btn-secondary border-warning px-3 py-0 m-1 ">{{ line.name }}</a>,-->
+<!--{% endif %}-->
+<!--{% endfor %}-->
+<!--{% endfor %}-->
+<!--</div>-->
+
+<!--<div>-->
+<!--{% comment %}-->
+<!--{% for line in ps.lines.all %}-->
+<!--{% if line.section.voltage.class_voltage < 40 %}-->
+<!--<a href="{{ line.get_absolute_url }}" type="button" class="btn btn-secondary border-danger px-3 py-0 m-1 ">{{ line.name }}</a>,-->
+<!--{% endif %}-->
+<!--{% endfor %}-->
+<!--<br>-->
+<!--{% for line in ps.lines.all %}-->
+<!--{% if line.voltage.class_voltage > 40 %}-->
+<!--<a href="{{ line.get_absolute_url }}" type="button" class="btn btn-secondary border-warning px-3 py-0 m-1 ">{{ line.name }}</a>,-->
+<!--{% endif %}-->
+<!--{% endfor %}-->
+<!--{% endcomment %}-->
