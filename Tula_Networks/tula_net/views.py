@@ -7,14 +7,14 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView
 
 from .forms import FeederAddFromPSForm, FeederFormUpd, PhoneSubscriberFormAdd, PhonePersonFormAdd, PhoneFormUpd, \
     PhonePSFormAdd, SubscriberFormAdd, PersonFormAdd, SubstationFormUpd, FeederAddFromSubscriberForm, SectionAddForm, \
-    LineForm, Line1Form
+    Line1Form
 
-from .models import Substation, Subscriber, Section, Person, Phone, Feeder, Group, TransmissionLine, Region, \
+from .models import Substation, Subscriber, Section, Person, Phone, Feeder, Group, Region, \
     ClassVoltage, GroupLine, Line
 from dal import autocomplete
 
 from .utils import AddPhoneViewMixin, DeleteObjectMixin, SubstationsViewMixin, FeedersViewMixin, AddFeederMixin, \
-    LinesViewMixin, chang_search, Lines1ViewMixin
+     chang_search, Lines1ViewMixin
 
 from .data import context_menu
 
@@ -79,10 +79,7 @@ class OnePSView(DetailView):
     context_object_name = 'ps'
 
     def get_queryset(self):
-        return Substation.objects.select_related('group', 'voltage_h', 'voltage_m', 'voltage_l'). \
-            prefetch_related(
-            'feeders', 'sections__lines', 'sections', 'phones', 'feeders__section__voltage', 'sections__lines__voltage'
-        ).all()
+        return Substation.objects.select_related('group', 'voltage_h', 'voltage_m', 'voltage_l')
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -106,7 +103,7 @@ class SectionListView(ListView):
     context_object_name = 'sections'
 
     def get_queryset(self):
-        return Section.objects.prefetch_related('lines', 'feeders').select_related('voltage', 'substation').all()
+        return Section.objects.prefetch_related('feeders').select_related('voltage', 'substation').all()
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -129,16 +126,29 @@ class AllFeedersView(FeedersViewMixin, ListView):
     paginate_by = 10
 
 
-class SectionView(DetailView):
-    context_object_name = 'section'
-    template_name = 'tula_net/one_section.html'
+class OneSubstationView(FeedersViewMixin, ListView):
+    """ одна ПС - лист фидеров """
+    second_model = Substation
+    the_context = 'the_substation'
 
     def get_queryset(self):
-        return Section.objects.prefetch_related('feeders', 'lines').all()
+        return Feeder.objects.select_related('substation', 'section', 'subscriber', 'section__voltage'). \
+            filter(substation__pk=self.kwargs['pk'])
 
+
+# __________ секции _____________
+class OneSectionView(FeedersViewMixin, ListView):
+    """ одна секция - лист фидеров """
+    second_model = Section
+    the_context = 'the_section'
+
+    def get_queryset(self):
+        return Feeder.objects.select_related('substation', 'section', 'subscriber', 'section__voltage'). \
+            filter(section__pk=self.kwargs['pk'])
 
 
 class Section1View(DetailView):
+    """ одна секция - объект """
     context_object_name = 'section'
     template_name = 'tula_net/one_section.html'
 
@@ -147,6 +157,8 @@ class Section1View(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+
+        """линии по секциям - можно проще, но 400 кверис при добавлении объекта ВЛ........"""
         context['lines'] = Line.objects.filter(
             Q(ps_p1=self.object.substation.number, sec_p1=self.object.number, voltage=self.object.voltage) |
             Q(ps_p2=self.object.substation.number, sec_p2=self.object.number, voltage=self.object.voltage) |
@@ -158,43 +170,8 @@ class Section1View(DetailView):
         return context
 
 
-class OneSectionView(FeedersViewMixin, ListView):
-    """ одна секция - лист фидеров """
-    second_model = Section
-    the_context = 'the_section'
-
-    def get_queryset(self):
-        return Feeder.objects.select_related('substation', 'section', 'subscriber', 'section__voltage'). \
-            filter(section__pk=self.kwargs['pk'])
-
-
-class OneSubstationView(FeedersViewMixin, ListView):
-    """ одна ПС - лист фидеров """
-    second_model = Substation
-    the_context = 'the_substation'
-
-    def get_queryset(self):
-        return Feeder.objects.select_related('substation', 'section', 'subscriber', 'section__voltage'). \
-            filter(substation__pk=self.kwargs['pk'])
-
-
-class SectionPSView(ListView):
-    template_name = 'tula_net/section.html'
-    context_object_name = 'sections'
-
-    def get_queryset(self):
-        return Section.objects.prefetch_related('feeders', 'lines', 'substation').select_related('voltage'). \
-            filter(substation__pk=self.kwargs['pk'])
-
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['the_substation'] = Substation.objects.get(pk=self.kwargs['pk'])
-
-        return context
-
-
+# _________ организации _____________
 class OneSubscriberView(DetailView):
-    # model = Subscriber
     template_name = 'tula_net/one_subscriber.html'
     context_object_name = 'subscriber'
 
@@ -266,13 +243,13 @@ class OnePersonView(DetailView):
     model = Person
     template_name = 'tula_net/one_person.html'
     context_object_name = 'person'
+
     def get_queryset(self):
         return Person.objects.select_related('subscriber').prefetch_related('phones', 'subscriber__phones')
 
 
 # ____________ телефоны _______________
 class PhoneListView(ListView):
-
     template_name = 'tula_net/phones.html'
     context_object_name = 'phones'
     paginate_by = 32
@@ -287,7 +264,7 @@ class OnePhoneView(DetailView):
     context_object_name = 'phone'
 
     def get_queryset(self):
-        return Phone.objects.select_related('subscriber', 'person', 'substation').\
+        return Phone.objects.select_related('subscriber', 'person', 'substation'). \
             prefetch_related('person__phones', 'subscriber__phones', 'substation__phones')
 
 
@@ -374,7 +351,7 @@ class SearcherLinesView(ListView):
     def get_queryset(self):
         obj_serch = self.request.GET.get('s')
         obj_serch_n = chang_search(obj_serch)
-        return TransmissionLine.objects.select_related('management', 'voltage', 'group').filter(
+        return Line.objects.select_related('management', 'voltage', 'group').filter(
             Q(name__icontains=obj_serch) |
             Q(name__icontains=obj_serch.title()) |
             Q(short_name__icontains=obj_serch) |
@@ -563,31 +540,6 @@ class SectionDeleteView(DeleteObjectMixin, View):
     model = Section
     target_reverse = 'main'
 
-
-class AddLineView(View):
-    """ добавление фидера c ПС !!! и оно работает !!!"""
-
-    def get(self, request, pk):
-        form = LineForm()
-        form.fields['section'].queryset = Section.objects.filter(voltage__pk=pk)
-        form.fields['voltage'].queryset = ClassVoltage.objects.filter(pk=pk)
-        form.fields['voltage'].initial = ClassVoltage.objects.get(pk=pk)
-        return render(request, 'tula_net/form_add_feeder.html', context={'form': form})
-
-    def post(self, request, *args, **kwargs):
-        bound_form = LineForm(request.POST)
-        if bound_form.is_valid():
-            new_line = bound_form.save()
-            return redirect(new_line)
-        return render(request, 'tula_net/form_add_feeder.html', context={'form': bound_form})
-
-
-class UpdlineView(UpdateView):
-    model = TransmissionLine
-    form_class = LineForm
-    template_name = 'tula_net/form_add_feeder.html'
-
-
 # ___________________
 class SubscriberAutocompleteView(autocomplete.Select2QuerySetView):
     def get_queryset(self):
@@ -611,54 +563,47 @@ class SubstationAutocompleteView(autocomplete.Select2QuerySetView):
 
 # ________________________
 
-class LinesView(LinesViewMixin, ListView):
-    paginate_by = 12
+# class LinesView(LinesViewMixin, ListView):
+#     paginate_by = 12
 
 
 class Lines1View(Lines1ViewMixin, ListView):
     paginate_by = 12
 
-class LinesGroupView(LinesViewMixin, ListView):
+
+class LinesGroupView(Lines1ViewMixin, ListView):
     flag = 'flag_group'
     paginate_by = 12
 
     def get_queryset(self):
-        return TransmissionLine.objects.select_related('management', 'voltage', 'group'). \
+        return Line.objects. \
             filter(group__pk=self.kwargs['pk'])
 
 
-class LinesVoltageView(LinesViewMixin, ListView):
+class LinesVoltageView(Lines1ViewMixin, ListView):
     flag = 'flag_voltages'
     paginate_by = 12
 
     def get_queryset(self):
-        return TransmissionLine.objects.select_related('management', 'voltage', 'group'). \
+        return Line.objects. \
             filter(voltage__pk=self.kwargs['pk'])
 
 
-class LinesRegionView(LinesViewMixin, ListView):
+class LinesRegionView(Lines1ViewMixin, ListView):
     flag = 'flag_region'
     paginate_by = 12
 
     def get_queryset(self):
-        return TransmissionLine.objects.select_related('management', 'voltage', 'group'). \
+        return Line.objects. \
             filter(management__pk=self.kwargs['pk'])
 
 
 class LineDeleteView(DeleteObjectMixin, View):
     """ удаление ВЛ"""
-    model = TransmissionLine
+    model = Line
     target_reverse = 'main'
 
 
-class OneLineView(DetailView):
-    model = TransmissionLine
-    context_object_name = 'line'
-    template_name = 'tula_net/one_line.html'
-
-    def get_queryset(self):
-        return TransmissionLine.objects.prefetch_related('section', 'section__substation','maintenance').\
-            select_related('management', 'group', 'voltage', 'subscriber')
 
 class OneLine1View(DetailView):
     model = Line
@@ -667,19 +612,20 @@ class OneLine1View(DetailView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['sec_plus1'] = Section.objects.\
+        context['sec_plus1'] = Section.objects. \
             filter(substation__number=self.object.ps_p1, number=self.object.sec_p1, voltage=self.object.voltage)
-        context['sec_plus2'] = Section.objects.\
+        context['sec_plus2'] = Section.objects. \
             filter(substation__number=self.object.ps_p2, number=self.object.sec_p2, voltage=self.object.voltage)
-        context['sec_minus1'] = Section.objects.\
+        context['sec_minus1'] = Section.objects. \
             filter(substation__number=self.object.ps_m1, number=self.object.sec_m1, voltage=self.object.voltage)
-        context['sec_minus2'] = Section.objects.\
+        context['sec_minus2'] = Section.objects. \
             filter(substation__number=self.object.ps_m2, number=self.object.sec_m2, voltage=self.object.voltage)
-        context['sec_minus3'] = Section.objects.\
+        context['sec_minus3'] = Section.objects. \
             filter(substation__number=self.object.ps_m3, number=self.object.sec_m3, voltage=self.object.voltage)
-        context['sec_minus4'] = Section.objects.\
+        context['sec_minus4'] = Section.objects. \
             filter(substation__number=self.object.ps_m4, number=self.object.sec_m4, voltage=self.object.voltage)
         return context
+
 
 class AddLine1View(View):
     """ добавление фидера c ПС !!! и оно работает !!!"""
@@ -695,3 +641,9 @@ class AddLine1View(View):
             new_line = bound_form.save()
             return redirect(new_line)
         return render(request, 'tula_net/form_add_line.html', context={'form': bound_form})
+
+
+class UpdLineView(UpdateView):
+    model = Line
+    form_class = Line1Form
+    template_name = 'tula_net/form_add_line.html'

@@ -81,3 +81,89 @@ class PsList(ListView):
 
 
 """
+
+"""
+Для первой модели ВЛ 
+"""
+# class SectionPSView(ListView):
+#     template_name = 'tula_net/section.html'
+#     context_object_name = 'sections'
+#
+#     def get_queryset(self):
+#         return Section.objects.prefetch_related('feeders', 'lines', 'substation').select_related('voltage'). \
+#             filter(substation__pk=self.kwargs['pk'])
+#
+#     def get_context_data(self, *, object_list=None, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         context['the_substation'] = Substation.objects.get(pk=self.kwargs['pk'])
+#         return context
+
+
+# class LineForm(BaseCrispyForms, forms.ModelForm):
+#     description = forms.CharField(label='Описание', required=False, widget=forms.Textarea(attrs={"rows": 1, }))
+#
+#     class Meta:
+#         model = TransmissionLine
+#         fields = '__all__'
+
+
+# class AddLineView(View):
+#     """ добавление фидера c ПС !!! и оно работает !!!"""
+#
+#     def get(self, request, pk):
+#         form = LineForm()
+#         form.fields['section'].queryset = Section.objects.filter(voltage__pk=pk)
+#         form.fields['voltage'].queryset = ClassVoltage.objects.filter(pk=pk)
+#         form.fields['voltage'].initial = ClassVoltage.objects.get(pk=pk)
+#         return render(request, 'tula_net/form_add_feeder.html', context={'form': form})
+#
+#     def post(self, request, *args, **kwargs):
+#         bound_form = LineForm(request.POST)
+#         if bound_form.is_valid():
+#             new_line = bound_form.save()
+#             return redirect(new_line)
+#         return render(request, 'tula_net/form_add_feeder.html', context={'form': bound_form})
+
+
+# class SectionView(DetailView):
+#     context_object_name = 'section'
+#     template_name = 'tula_net/one_section.html'
+#
+#     def get_queryset(self):
+#         return Section.objects.prefetch_related('feeders', 'lines').all()
+
+
+
+
+# class LinesViewMixin:
+#     """ шаблон для  """
+#     model = TransmissionLine
+#     context_object_name = 'lines'
+#     template_name = 'tula_net/lines.html'
+#     menu = None  # добавление контехтного меню
+#     flag = None  # добавление для отображения выборок ПС по группам и напряжению
+#
+#     def get_queryset(self):
+#         return TransmissionLine.objects.select_related('management', 'voltage', 'group').all()
+#
+#     def get_context_data(self, *, object_list=None, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         context['context_menu'] = self.menu
+#         context['groups'] = GroupLine.objects.all()
+#         context['voltages'] = ClassVoltage.objects.all()[1:3]
+#         context['regions'] = Region.objects.filter(for_menu=True)
+#         context[self.flag] = 1
+#         return context
+
+
+
+
+
+# class OneLineView(DetailView):
+#     model = TransmissionLine
+#     context_object_name = 'line'
+#     template_name = 'tula_net/one_line.html'
+#
+#     def get_queryset(self):
+#         return TransmissionLine.objects.prefetch_related('section', 'section__substation', 'maintenance'). \
+#             select_related('management', 'group', 'voltage', 'subscriber')

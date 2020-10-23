@@ -124,20 +124,13 @@ class SectionAddForm(BaseCrispyForms, forms.ModelForm):
         fields = '__all__'
 
 
-class LineForm(BaseCrispyForms, forms.ModelForm):
-    description = forms.CharField(label='Описание', required=False, widget=forms.Textarea(attrs={"rows": 1, }))
 
-    class Meta:
-        model = TransmissionLine
-        fields = '__all__'
 
 class Line1Form(BaseCrispyForms, forms.ModelForm):
     # description = forms.CharField(label='Описание', required=False, widget=forms.Textarea(attrs={"rows": 1, }))
-
     class Meta:
         model = Line
         fields = '__all__'
-
 
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control'}),
@@ -164,23 +157,4 @@ class Line1Form(BaseCrispyForms, forms.ModelForm):
             'number_columns': forms.NumberInput(attrs={'class': 'form-control'}),
             'description': forms.TextInput(attrs={'class': 'form-control'}),
             # 'kvl': forms.BooleanField(),
-            # 'user': forms.HiddenInput(),
-
         }
-
-        # widgets = {
-        #     'name': ti, 'full_name': ti, 'short_name': ti,
-        #     'management': forms.Select(attrs={'class': 'form-control'}),
-        #     'maintenance': forms.CheckboxSelectMultiple(attrs={'class': 'form-control'}),
-        #     'subscriber': forms.Select(attrs={'class': 'form-control'}),
-        #     'voltage': forms.Select(attrs={'class': 'form-control'}),
-        #     'group': forms.Select(attrs={'class': 'form-control'}),
-        #     'ps_p1': fcn, 'ps_p2': fcn, 'sec_p1': fcn, 'sec_p2': fcn,
-        #     'ps_m1': fcn, 'ps_m2': fcn, 'ps_m3': fcn, 'ps_m4': fcn,
-        #     'sec_m1': fcn, 'sec_m2': fcn, 'sec_m3': fcn, 'sec_m4': fcn,
-        #     'length': fcn, 'number_columns': fcn,
-        #     'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 1, }),
-        #     'kvl': forms.BooleanField(),
-        #     # 'user': forms.HiddenInput(),
-        #
-        # }

@@ -2,15 +2,16 @@ from django.contrib import admin
 from django.urls import path
 
 from tula_net.views import MainView, PsListView, GroupPSView, VoltPSView, OnePSView, SectionListView, OneSectionView, \
-    OneSubstationView, SectionPSView, SubscriberListView, OneSubscriberView, SubscribersBySectionView, \
+    OneSubstationView, SubscriberListView, OneSubscriberView, SubscribersBySectionView, \
     SubscribersByPSView, SubstationsBySubscriberView, SearcherSubscribersView, SearcherPSView, SearcherPersonsView, \
     AllFeedersView, OneFeedersView, OnePersonView, PersonListView, OnePhoneView, PhoneListView, AddFeederFromPSView, \
     UpdFeederView, UpdPhoneView, SubscriberAutocompleteView, SubstationAutocompleteView, AddPersonPhoneView, \
     SearcherPhonesView, AddPSPhoneView, AddSubscriberPhoneView, PhoneDeleteView, FeederDeleteView, AddSubscriberView, \
     UpdSubscriberView, SubscriberDeleteView, AddPersonView, UpdPersonView, DelPersonView, UpdSubstationView, \
-    AddFeederFromSubscriberView, AddSectionFromPSView, UpdSectionView, SectionView, AddFeederFromSecView, \
-    AddSubstationView, LinesView, OneLineView, LinesGroupView, LinesVoltageView, LinesRegionView, AddLineView, \
-    UpdlineView, LineDeleteView, SectionDeleteView, SearcherLinesView, Lines1View, OneLine1View, AddLine1View, Section1View
+    AddFeederFromSubscriberView, AddSectionFromPSView, UpdSectionView,  AddFeederFromSecView, \
+    AddSubstationView, LinesGroupView, LinesVoltageView, LinesRegionView, \
+    UpdLineView, LineDeleteView, SectionDeleteView, SearcherLinesView, Lines1View, OneLine1View, AddLine1View, \
+    Section1View
 
 urlpatterns = [
     path('', MainView.as_view(), name='main'),
@@ -21,13 +22,12 @@ urlpatterns = [
     path('group/<int:pk>/', GroupPSView.as_view(), name='group'),
     path('voltage/<int:pk>/', VoltPSView.as_view(), name='voltage'),
     # одна ПС со списком секций - секция со списком фидеров:
-    path('section_ps/<int:pk>/', SectionPSView.as_view(), name='section_ps'),
+    # path('section_ps/<int:pk>/', SectionPSView.as_view(), name='section_ps'),
 
 
 
     # СкШ
     path('section/<int:pk>/', Section1View.as_view(), name='one_section'),
-    # path('section/<int:pk>/', SectionView.as_view(), name='one_section'),
     path('sections/', SectionListView.as_view(), name='sections'),
 
 
@@ -55,10 +55,8 @@ urlpatterns = [
     path('phone/<int:pk>/', OnePhoneView.as_view(), name='phone'),
 
     # 1 лист всех ВЛ, 2 карточка 1-й ВЛ
-    path('lines1/', Lines1View.as_view(), name='lines1'),
-    path('lines/', LinesView.as_view(), name='lines'),
-    path('line1/<int:pk>/', OneLine1View.as_view(), name='line1'),
-    path('line/<int:pk>/', OneLineView.as_view(), name='line'),
+    path('lines/', Lines1View.as_view(), name='lines'),
+    path('line/<int:pk>/', OneLine1View.as_view(), name='line'),
     path('line_group/<int:pk>/', LinesGroupView.as_view(), name='line_group'),
     path('line_voltage/<int:pk>/', LinesVoltageView.as_view(), name='line_voltage'),
     path('line_region/<int:pk>/', LinesRegionView.as_view(), name='line_region'),
@@ -100,8 +98,7 @@ urlpatterns = [
     path('del_section/<int:pk>/', SectionDeleteView.as_view(), name='del_section'),
 
     path('add_line/', AddLine1View.as_view(), name='add_line'),
-    path('add_line0/<int:pk>/', AddLineView.as_view(), name='add_line0'),
-    path('upd_line/<int:pk>/', UpdlineView.as_view(), name='upd_line'),
+    path('upd_line/<int:pk>/', UpdLineView.as_view(), name='upd_line'),
     path('del_line/<int:pk>/', LineDeleteView.as_view(), name='del_line'),
 
     # !не работают!

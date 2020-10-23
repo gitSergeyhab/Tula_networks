@@ -236,22 +236,22 @@ class TransmissionLine(models.Model):
     name = models.CharField(max_length=64, verbose_name='Название')
     full_name = models.CharField(max_length=128, verbose_name='Полное название', blank=True, null=True)
     short_name = models.CharField(max_length=32, verbose_name='Цифровое название', blank=True, default='')
-    section = models.ManyToManyField(Section, verbose_name='Секция', related_name='lines')
-    voltage = models.ForeignKey(ClassVoltage, verbose_name='Напряжение', related_name='lines', on_delete=models.PROTECT)
-    management = models.ForeignKey(Region, verbose_name='Управление', related_name='lines_upr',
+    section = models.ManyToManyField(Section, verbose_name='Секция', related_name='lines0')
+    voltage = models.ForeignKey(ClassVoltage, verbose_name='Напряжение', related_name='lines0', on_delete=models.PROTECT)
+    management = models.ForeignKey(Region, verbose_name='Управление', related_name='lines_upr0',
                                    on_delete=models.CASCADE, default=2)
-    maintenance = models.ManyToManyField(Region, verbose_name='Ведение', related_name='lines_ved', blank=True)
-    subscriber = models.ForeignKey(Subscriber, related_name='lines', on_delete=models.SET_NULL,
+    maintenance = models.ManyToManyField(Region, verbose_name='Ведение', related_name='lines_ved0', blank=True)
+    subscriber = models.ForeignKey(Subscriber, related_name='lines0', on_delete=models.SET_NULL,
                                    verbose_name='абонент', blank=True, null=True)
     length = models.FloatField(verbose_name='Протяженность', blank=True, null=True)
     number_columns = models.PositiveSmallIntegerField(verbose_name='Количество опор', blank=True, null=True)
-    group = models.ForeignKey(GroupLine, related_name='lines', verbose_name='Участок сл ВЛ',
+    group = models.ForeignKey(GroupLine, related_name='lines0', verbose_name='Участок сл ВЛ',
                               on_delete=models.CASCADE, default=1)
     description = models.TextField(verbose_name='Описение', blank=True, null=True)
     kvl = models.BooleanField(verbose_name='КВЛ?', default=False)
 
     def get_absolute_url(self):
-        return reverse('line', kwargs={'pk': self.pk})
+        return reverse('line0', kwargs={'pk': self.pk})
 
     def __str__(self):
         return self.name
@@ -279,21 +279,21 @@ class Line(models.Model):
     sec_m3 = models.PositiveSmallIntegerField('СШ ПС №5', blank=True, null=True)
     ps_m4 = models.PositiveSmallIntegerField('ПС №6', blank=True, null=True)
     sec_m4 = models.PositiveSmallIntegerField('СШ ПС №6', blank=True, null=True)
-    voltage = models.ForeignKey(ClassVoltage, verbose_name='Напряжение', related_name='lines1', on_delete=models.PROTECT)
-    management = models.ForeignKey(Region, verbose_name='Управление', related_name='lines_upr1',
+    voltage = models.ForeignKey(ClassVoltage, verbose_name='Напряжение', related_name='lines', on_delete=models.PROTECT)
+    management = models.ForeignKey(Region, verbose_name='Управление', related_name='lines_upr',
                                    on_delete=models.CASCADE, default=2)
-    maintenance = models.ManyToManyField(Region, verbose_name='Ведение', related_name='lines_ved1', blank=True)
-    subscriber = models.ForeignKey(Subscriber, related_name='lines1', on_delete=models.SET_NULL,
+    maintenance = models.ManyToManyField(Region, verbose_name='Ведение', related_name='lines_ved', blank=True)
+    subscriber = models.ForeignKey(Subscriber, related_name='lines', on_delete=models.SET_NULL,
                                    verbose_name='абонент', blank=True, null=True)
     length = models.FloatField(verbose_name='Протяженность', blank=True, null=True)
     number_columns = models.PositiveSmallIntegerField(verbose_name='Количество опор', blank=True, null=True)
-    group = models.ForeignKey(GroupLine, related_name='lines1', verbose_name='Участок сл ВЛ',
+    group = models.ForeignKey(GroupLine, related_name='lines', verbose_name='Участок сл ВЛ',
                               on_delete=models.CASCADE, default=1)
     description = models.TextField(verbose_name='Описение', blank=True, null=True)
     kvl = models.BooleanField(verbose_name='КВЛ?', default=False)
 
     def get_absolute_url(self):
-        return reverse('line1', kwargs={'pk': self.pk})
+        return reverse('line', kwargs={'pk': self.pk})
 
     def __str__(self):
         return self.name

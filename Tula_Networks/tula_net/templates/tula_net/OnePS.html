@@ -3,27 +3,25 @@
  {% block first_section %}
 
 
-
       <div class="row mt-5">
         <div class="col-12 col-lg-10 offset-lg-2 m-auto">
           <div class="card mb-4">
             <div class="card-body px-4">
               <div class="row">
+
                 <div class="col-12 col-md-3 col-lg-2 d-flex align-items-center">
                     <div class="btn-group-vertical">
                         <a href="{% url 'subscriber_ps' ps.pk %}" type="button" class="btn btn-secondary border border-dark">Абоненты <br> подрбно</a>
                         <a href="{% url 'substation_f' ps.pk %}" type="button" class="btn btn-secondary border border-dark">Фидера <br> подробно</a>
                     </div>
-
                 </div>
+
                 <div class="col-12 col-md-9 col-lg-10">
                     <h4 class="bg-light text-center">
                         ПС № {{ ps.number }} {{ ps }} {% include 'incl/_voltage_full.html' %} кВ
-
-
                     </h4>
                     <a href="{% url 'group' ps.group.pk %}" class="btn btn-dark"><h6> <b>Группа:</b> {{ ps.group }}</h6></a>
-                    {% if ps.alien %}
+                    {% if ps.alien and ps.owner %}
                     <a href="{% url 'subscriber' ps.owner.pk %}" class="btn btn-dark"><h6>{{ ps.owner }}</h6></a>
                      {% endif %}
                     {% if ps.location %}
@@ -44,38 +42,32 @@
                 </div>
           </div>
 
-
                     {% if ps.description %}
                     <h5><b>О подстанции:</b> {{ ps.description }} </h5>
                     {% endif %}
 
-
                 </div>
               </div>
             </div>
-        {% if ps.phones.count %}
-            <h5 class="text-center p-0 m-0"> телефоны:
-                {% for phone in ps.phones.all %}
-                <a class="btn btn-light p-0" href="{{ phone.get_absolute_url }}"><b>{{ phone }}</b></a>,
-                 {% endfor %}
-            </h5>
-        {% endif %}
+
+            {% if ps.phones.count %}
+                <h5 class="text-center p-0 m-0"> телефоны:
+                    {% for phone in ps.phones.all %}
+                    <a class="btn btn-light p-0" href="{{ phone.get_absolute_url }}"><b>{{ phone }}</b></a>,
+                     {% endfor %}
+                </h5>
+            {% endif %}
           </div>
 
         </div>
       </div>
-
-
-
-
-
 
         <div class="card">
 
           <div class="card-header pt-2 pb-0">
             <b>Список секций:</b>
           </div>
-            <b>
+
           <div class="card-body py-1">
             {% for section in ps.sections.all %}
             {% if section.voltage.class_voltage < 8 %}
@@ -98,21 +90,16 @@
                 <a href="{{ section.get_absolute_url }}" type="button" class="btn btn-outline-dark px-2 py-0">
                     {{ section.name }}
                 </a> ,
-
             {% endif %}
-
             {% endfor %}<br>
 
             </div>
 
-
-
-
           <div class="card-header pt-2 pb-0">
             <b>Список фидеров:</b>
           </div>
-            <b>
-          <div class="card-body py-1">
+
+      <div class="card-body py-1">
             {% for feeder in ps.feeders.all %}
             {% if feeder.section.voltage.class_voltage < 10 %}
                 <a href="{{ feeder.get_absolute_url }}" type="button" class="btn btn-secondary border-success px-3 py-0 m-1 ">{{ feeder.name }}</a>,
@@ -125,8 +112,7 @@
             {% endif %}
             {% endfor %}
             </div>
-<div class="card pb-3">
-
+        <div class="card pb-3">
 
         {% if lines.exists %}
           <div class="card-header pt-2 pb-0">
@@ -149,10 +135,8 @@
                     {% endif %}
                 {% endfor %}
                {% endif %}
-    </div>
-
+            </div>
           </div>
-            </b>
         </div>
 
 {% endblock %}

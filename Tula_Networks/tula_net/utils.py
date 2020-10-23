@@ -135,26 +135,6 @@ class AddFeederMixin:
         return render(request, 'tula_net/form_add_feeder.html', context={'form': bound_form})
 
 
-class LinesViewMixin:
-    """ шаблон для  """
-    model = TransmissionLine
-    context_object_name = 'lines'
-    template_name = 'tula_net/lines.html'
-    menu = None  # добавление контехтного меню
-    flag = None  # добавление для отображения выборок ПС по группам и напряжению
-
-    def get_queryset(self):
-        return TransmissionLine.objects.select_related('management', 'voltage', 'group').all()
-
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['context_menu'] = self.menu
-        context['groups'] = GroupLine.objects.all()
-        context['voltages'] = ClassVoltage.objects.all()[1:3]
-        context['regions'] = Region.objects.filter(for_menu=True)
-        context[self.flag] = 1
-        return context
-
 
 def chang_search(obs):
     if '-' in obs:
