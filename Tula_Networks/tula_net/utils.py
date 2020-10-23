@@ -153,7 +153,7 @@ class Lines1ViewMixin:
     flag = None  # добавление для отображения выборок ПС по группам и напряжению
 
     def get_queryset(self):
-        return Line.objects.select_related('management', 'voltage', 'group').all()
+        return Line.objects.select_related('management', 'voltage', 'group')
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)

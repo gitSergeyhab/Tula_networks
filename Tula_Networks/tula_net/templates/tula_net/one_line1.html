@@ -3,6 +3,7 @@
 {% block cards1 %}
 
 <div class="card">
+
     <h4 class="card-header mb-0 pb-0 text-center">
  {% if line.short_name %} <b>{{ line.short_name }}</b> | {% endif %}
         {{ line.name }} <br>
@@ -20,65 +21,28 @@
         <div class="card-body mx-5 px-5">
         <h5>Питающие ПС:</h5>
 
-            {% if sec_plus1.exists %}
-                <a href="{{ sec_plus1.0.substation.get_absolute_url }}" class="btn btn-outline-dark mx-auto px-5 mx-5 py-0">
-                    <b>{{ sec_plus1.0.substation }}</b>
+            {% for pl in plus %}
+                <a href="{{ pl.substation.get_absolute_url }}" class="btn btn-outline-dark mx-auto px-5 mx-5 py-0">
+                    <b>{{ pl.substation }}</b>
                 </a> :
-                <a href="{{ sec_plus1.0.get_absolute_url }}" class="btn btn-dark mx-auto px-5 mx-5 py-0">
-                    <b> {{ sec_plus1.0.name }}</b>
+                <a href="{{ pl.get_absolute_url }}" class="btn btn-dark mx-auto px-5 mx-5 py-0">
+                    <b> {{ pl.name }}</b>
                 </a><br>
-            {% endif %}
+            {% endfor %}
 
-            {% if sec_plus2.exists %}
-                <a href="{{ sec_plus2.0.substation.get_absolute_url }}" class="btn btn-outline-dark mx-auto px-5 mx-5 py-0">
-                    <b>{{ sec_plus2.0.substation }}</b>
-                </a> :
-                <a href="{{ sec_plus2.0.get_absolute_url }}" class="btn btn-dark mx-auto px-5 mx-5 py-0">
-                    <b> {{ sec_plus2.0.name }}</b>
-                </a><br>
-            {% endif %}
 
             <h5 class="mt-2">Тупиковые  ПС:</h5>
 
-            {% if sec_minus1.exists %}
-                <a href="{{ sec_minus1.0.substation.get_absolute_url }}" class="btn btn-outline-dark mx-auto px-5 mx-5  py-0">
-                    <b>{{ sec_minus1.0.substation }}</b>
+            {% for min in minus %}
+                <a href="{{ min.substation.get_absolute_url }}" class="btn btn-outline-dark mx-auto px-5 mx-5 py-0">
+                    <b>{{ min.substation }}</b>
                 </a> :
-                <a href="{{ sec_minus1.0.get_absolute_url }}" class="btn btn-dark mx-auto px-5 mx-5 py-0">
-                    <b> {{ sec_minus1.0.name }}</b>
-                </a>
-            {% endif %}
-
-            {% if sec_minus2.exists %}<br>
-                <a href="{{ sec_minus2.0.substation.get_absolute_url }}" class="btn btn-outline-dark mx-auto px-5 mx-5 py-0">
-                    <b>{{ sec_minus2.0.substation }}</b>
-                </a> :
-                <a href="{{ sec_minus2.0.get_absolute_url }}" class="btn btn-dark mx-auto px-5 mx-5 py-0">
-                    <b> {{ sec_minus2.0.name }}</b>
+                <a href="{{ min.get_absolute_url }}" class="btn btn-dark mx-auto px-5 mx-5 py-0">
+                    <b> {{ min.name }}</b>
                 </a><br>
-            {% endif %}
-
-            {% if sec_minus3.exists %}<br>
-                <a href="{{ sec_minus3.0.substation.get_absolute_url }}" class="btn btn-outline-dark mx-auto px-5 mx-5  py-0">
-                    <b>{{ sec_minus3.0.substation }}</b>
-                </a> :
-                <a href="{{ sec_minus3.0.get_absolute_url }}" class="btn btn-dark mx-auto px-5 mx-5 py-0">
-                    <b> {{ sec_minus3.0.name }}</b>
-                </a>
-            {% endif %}
-
-            {% if sec_minus4.exists %}<br>
-                <a href="{{ sec_minus4.0.substation.get_absolute_url }}" class="btn btn-outline-dark mx-auto px-5 mx-5 py-0">
-                    <b>{{ sec_minus4.0.substation }}</b>
-                </a> :
-                <a href="{{ sec_minus4.0.get_absolute_url }}" class="btn btn-dark mx-auto px-5 mx-5 py-0">
-                    <b> {{ sec_minus4.0.name }}</b>
-                </a><br>
-            {% endif %}
-{% if not sec_minus1.exists and not sec_minus2.exists and not sec_minus3.exists and not sec_minus4.exists %}
-
+            {% empty %}
             У {{ line }} нет тупиков
-            {% endif %}
+            {% endfor %}
 
             <hr class="my-1">
             {% if line.management %}
@@ -99,6 +63,7 @@
             {% if line.subscriber %}
              <a href="{{ line.subscriber.get_absolute_url }}" class="btn btn-outline-secondary mx-auto  py-0"> <b>Владелец: {{ line.subscriber }}</b></a>
             {% endif %}
+
 </b>
 
             <div class="card-footer text-right py-0">
@@ -125,15 +90,9 @@
                 {% endif %}
 
             </div>
-
-
-
-
-
-
-
   </div>
 
 </div>
 
 {% endblock %}
+

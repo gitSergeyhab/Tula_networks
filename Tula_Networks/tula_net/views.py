@@ -57,14 +57,14 @@ class SubstationsBySubscriberView(ListView):
     template_name = 'tula_net/substations_by_ss.html'
 
     def get_queryset(self):
-        return Substation.objects.filter(feeders__subscriber__pk=self.kwargs['pk'])
+        return Substation.objects.filter(feeders__subscriber__pk=self.kwargs['pk']).\
+            prefetch_related('feeders', 'feeders__subscriber')
 
     """ context['the_subscriber'] - тот абонент для которого выводятся ПС и фидера """
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         context['the_subscriber'] = Subscriber.objects.get(pk=self.kwargs['pk'])
-        context['context_menu'] = context_menu
         return context
 
 
@@ -91,8 +91,6 @@ class OnePSView(DetailView):
             Q(ps_m3=self.object.number) |
             Q(ps_m4=self.object.number)
         )
-        # context['context_menu'] = context_menu
-
         return context
 
 
@@ -346,7 +344,7 @@ class SearcherPhonesView(ListView):
 class SearcherLinesView(ListView):
     """ Поиск по линиям """
     context_object_name = 'lines'
-    template_name = 'tula_net/lines.html'
+    template_name = 'tula_net/lines1.html'
 
     def get_queryset(self):
         obj_serch = self.request.GET.get('s')
@@ -576,7 +574,7 @@ class LinesGroupView(Lines1ViewMixin, ListView):
     paginate_by = 12
 
     def get_queryset(self):
-        return Line.objects. \
+        return Line.objects.select_related('management', 'voltage', 'group'). \
             filter(group__pk=self.kwargs['pk'])
 
 
@@ -585,7 +583,7 @@ class LinesVoltageView(Lines1ViewMixin, ListView):
     paginate_by = 12
 
     def get_queryset(self):
-        return Line.objects. \
+        return Line.objects.select_related('management', 'voltage', 'group'). \
             filter(voltage__pk=self.kwargs['pk'])
 
 
@@ -594,15 +592,8 @@ class LinesRegionView(Lines1ViewMixin, ListView):
     paginate_by = 12
 
     def get_queryset(self):
-        return Line.objects. \
+        return Line.objects.select_related('management', 'voltage', 'group'). \
             filter(management__pk=self.kwargs['pk'])
-
-
-class LineDeleteView(DeleteObjectMixin, View):
-    """ удаление ВЛ"""
-    model = Line
-    target_reverse = 'main'
-
 
 
 class OneLine1View(DetailView):
@@ -610,20 +601,22 @@ class OneLine1View(DetailView):
     context_object_name = 'line'
     template_name = 'tula_net/one_line1.html'
 
+    def get_queryset(self):
+        return Line.objects.select_related('voltage', 'group', 'voltage', 'subscriber', 'management').\
+                prefetch_related('maintenance')
+
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['sec_plus1'] = Section.objects. \
-            filter(substation__number=self.object.ps_p1, number=self.object.sec_p1, voltage=self.object.voltage)
-        context['sec_plus2'] = Section.objects. \
-            filter(substation__number=self.object.ps_p2, number=self.object.sec_p2, voltage=self.object.voltage)
-        context['sec_minus1'] = Section.objects. \
-            filter(substation__number=self.object.ps_m1, number=self.object.sec_m1, voltage=self.object.voltage)
-        context['sec_minus2'] = Section.objects. \
-            filter(substation__number=self.object.ps_m2, number=self.object.sec_m2, voltage=self.object.voltage)
-        context['sec_minus3'] = Section.objects. \
-            filter(substation__number=self.object.ps_m3, number=self.object.sec_m3, voltage=self.object.voltage)
-        context['sec_minus4'] = Section.objects. \
-            filter(substation__number=self.object.ps_m4, number=self.object.sec_m4, voltage=self.object.voltage)
+        context['plus'] = Section.objects.select_related('substation').\
+            filter(Q(substation__number=self.object.ps_p1, number=self.object.sec_p1, voltage=self.object.voltage) |
+                   Q(substation__number=self.object.ps_p2, number=self.object.sec_p2, voltage=self.object.voltage) )
+
+        context['minus'] = Section.objects.select_related('substation').\
+            filter(Q(substation__number=self.object.ps_m1, number=self.object.sec_m1, voltage=self.object.voltage) |
+                   Q(substation__number=self.object.ps_m2, number=self.object.sec_m2, voltage=self.object.voltage) |
+                   Q(substation__number=self.object.ps_m3, number=self.object.sec_m3, voltage=self.object.voltage) |
+                   Q(substation__number=self.object.ps_m4, number=self.object.sec_m4, voltage=self.object.voltage)
+                   )
         return context
 
 
@@ -647,3 +640,9 @@ class UpdLineView(UpdateView):
     model = Line
     form_class = Line1Form
     template_name = 'tula_net/form_add_line.html'
+
+
+class LineDeleteView(DeleteObjectMixin, View):
+    """ удаление ВЛ"""
+    model = Line
+    target_reverse = 'main'
