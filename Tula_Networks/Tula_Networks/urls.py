@@ -20,5 +20,4 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('tula_net.urls')),
     # path('silk/', include('silk.urls', namespace='silk')),
-
 ]
