@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
 
 
+
+
 {% block search %}
     <div class="mb-5">
     {% include 'incl/_searcher_subscribers.html' %}
@@ -8,7 +10,7 @@
         {% if flag_search %}
 
             {% if subscribers.count > 0 %}
-                <h3 class="text-center">Вы искали: <span class="text-warning">{{ flag_search }}</span>, и я нашел {{ subscribers.count }}:</h3>
+                <h3 class="text-center">Вы искали: <span class="text-warning">{{ flag_search }}</span>, и я нашел {{ page_obj.paginator.count }}:</h3>
             {% else %}
                 <h3 class="text-center">Вы искали: <span class="text-warning">{{ flag_search }}</span>, но он где-то потерялся :((</h3>
             {% endif %}
@@ -24,12 +26,24 @@
 
 {% block cards1 %}
 
+
     {% for subscriber in subscribers.all %}
-         <a href="{{ subscriber.get_absolute_url }}" type="button" class="m-1 btn btn-secondary">{{ subscriber }}</a>
+         <a href="{{ subscriber.get_absolute_url }}" type="button"
+
+            {% if not subscriber.year_update %}
+            class="m-1 btn btn-secondary"
+            {% elif current_year == subscriber.year_update %}
+            class="m-1 btn btn-light border border-success"
+            {% elif current_year|add:-1 == subscriber.year_update %}
+            class="m-1 btn btn-light border border-danger"
+            {% elif current_year|add:-1 > subscriber.year_update %}
+             class="m-1 btn btn-danger"
+            {% endif %}
+>{{ subscriber }} {% if subscriber.year_update %} | {{ subscriber.year_update }} {% endif %}</a>
     {% endfor %}
 
 {% endblock %}
 
 {% block paginator %}
-{% include 'incl/_block_paginator.html' %}
+{% include 'incl/_block_paginator_long.html' %}
 {% endblock %}

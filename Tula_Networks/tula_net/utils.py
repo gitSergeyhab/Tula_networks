@@ -163,3 +163,11 @@ class Lines1ViewMixin:
         context['regions'] = Region.objects.filter(for_menu=True)
         context[self.flag] = 1
         return context
+
+
+class SearchMixin:
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['s'] = f"s={self.request.GET.get('s')}&"
+        context['flag_search'] = self.request.GET.get('s')
+        return context

@@ -1,3 +1,4 @@
+from django.contrib.auth import login
 from django.db.models import Q
 from django.shortcuts import render, redirect
 from django.urls import reverse
@@ -7,14 +8,14 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView
 
 from .forms import FeederAddFromPSForm, FeederFormUpd, PhoneSubscriberFormAdd, PhonePersonFormAdd, PhoneFormUpd, \
     PhonePSFormAdd, SubscriberFormAdd, PersonFormAdd, SubstationFormUpd, FeederAddFromSubscriberForm, SectionAddForm, \
-    Line1Form
+    Line1Form, UserAutForm
 
 from .models import Substation, Subscriber, Section, Person, Phone, Feeder, Group, Region, \
     ClassVoltage, GroupLine, Line
 from dal import autocomplete
 
 from .utils import AddPhoneViewMixin, DeleteObjectMixin, SubstationsViewMixin, FeedersViewMixin, AddFeederMixin, \
-     chang_search, Lines1ViewMixin
+    chang_search, Lines1ViewMixin, SearchMixin
 
 from .data import context_menu
 
@@ -57,7 +58,7 @@ class SubstationsBySubscriberView(ListView):
     template_name = 'tula_net/substations_by_ss.html'
 
     def get_queryset(self):
-        return Substation.objects.filter(feeders__subscriber__pk=self.kwargs['pk']).\
+        return Substation.objects.filter(feeders__subscriber__pk=self.kwargs['pk']). \
             prefetch_related('feeders', 'feeders__subscriber')
 
     """ context['the_subscriber'] - тот абонент для которого выводятся ПС и фидера """
@@ -79,8 +80,8 @@ class OnePSView(DetailView):
     context_object_name = 'ps'
 
     def get_queryset(self):
-        return Substation.objects.select_related('group', 'voltage_h', 'voltage_m', 'voltage_l').\
-            prefetch_related('sections', 'feeders', 'sections__voltage',  'phones', 'sections__feeders')
+        return Substation.objects.select_related('group', 'voltage_h', 'voltage_m', 'voltage_l'). \
+            prefetch_related('sections', 'feeders', 'sections__voltage', 'phones', 'sections__feeders')
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -268,10 +269,11 @@ class OnePhoneView(DetailView):
 
 
 # __________________ Поиски ____________________
-class SearcherSubscribersView(ListView):
+class SearcherSubscribersView(SearchMixin, ListView):
     """ Поиск по абонентам """
     context_object_name = 'subscribers'
     template_name = 'tula_net/subscribers_all.html'
+    paginate_by = 20
 
     def get_queryset(self):
         return Subscriber.objects.filter(
@@ -281,16 +283,12 @@ class SearcherSubscribersView(ListView):
             Q(short_name__icontains=self.request.GET.get('s').title().upper())
         )
 
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['flag_search'] = self.request.GET.get('s')
-        return context
-
 
 class SearcherPSView(ListView):
     """ Поиск по подстанциям """
     context_object_name = 'substations'
     template_name = 'tula_net/listPS.html'
+    paginate_by = 20
 
     def get_queryset(self):
         return Substation.objects.select_related('group', 'voltage_h', 'voltage_m', 'voltage_l').filter(
@@ -301,16 +299,18 @@ class SearcherPSView(ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['s'] = f"s={self.request.GET.get('s')}&"
         context['flag_search'] = self.request.GET.get('s')
         context['groups'] = Group.objects.all()
         context['voltages'] = [35, 110, 220]
         return context
 
 
-class SearcherPersonsView(ListView):
+class SearcherPersonsView(SearchMixin, ListView):
     """ Поиск по людям """
     context_object_name = 'persons'
     template_name = 'tula_net/persons.html'
+    paginate_by = 18
 
     def get_queryset(self):
         return Person.objects.select_related('subscriber').filter(
@@ -319,27 +319,18 @@ class SearcherPersonsView(ListView):
             Q(name__icontains=self.request.GET.get('s').lower())
         )
 
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['flag_search'] = self.request.GET.get('s')
-        return context
 
-
-class SearcherPhonesView(ListView):
+class SearcherPhonesView(SearchMixin, ListView):
     """ Поиск по телефонам """
     context_object_name = 'phones'
     template_name = 'tula_net/phones.html'
+    paginate_by = 20
 
     def get_queryset(self):
         return Phone.objects.select_related('subscriber', 'substation', 'person').filter(
-            Q(number__contains=self.request.GET.get('s')) |
-            Q(search_number__contains=self.request.GET.get('s'))
+            Q(number__icontains=self.request.GET.get('s')) |
+            Q(search_number__icontains=self.request.GET.get('s'))
         )
-
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['flag_search'] = self.request.GET.get('s')
-        return context
 
 
 class SearcherLinesView(ListView):
@@ -359,11 +350,30 @@ class SearcherLinesView(ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['s'] = f"s={self.request.GET.get('s')}&"
         context['flag_search'] = self.request.GET.get('s')
         context['groups'] = GroupLine.objects.all()
         context['voltages'] = ClassVoltage.objects.all()[1:3]
         context['regions'] = Region.objects.filter(for_menu=True)
         return context
+
+class FeedersView(ListView):
+    model = Feeder
+    context_object_name = 'feeders'
+    template_name = 'tula_net/feeder_search.html'
+    paginate_by = 28
+
+class SearcherFeedersView(SearchMixin, ListView):
+    context_object_name = 'feeders'
+    template_name = 'tula_net/feeder_search.html'
+    paginate_by = 20
+
+    def get_queryset(self):
+        return Feeder.objects.filter(
+            Q(name__icontains=self.request.GET.get('s')) |
+            Q(name__icontains=self.request.GET.get('s').title()) |
+            Q(name__icontains=self.request.GET.get('s').lower())
+        ).select_related('substation', 'subscriber')
 
 
 # ___________________ ФОРМЫ ____________________
@@ -539,6 +549,7 @@ class SectionDeleteView(DeleteObjectMixin, View):
     model = Section
     target_reverse = 'main'
 
+
 # ___________________
 class SubscriberAutocompleteView(autocomplete.Select2QuerySetView):
     def get_queryset(self):
@@ -603,16 +614,16 @@ class OneLine1View(DetailView):
     template_name = 'tula_net/one_line1.html'
 
     def get_queryset(self):
-        return Line.objects.select_related('voltage', 'group', 'voltage', 'subscriber', 'management').\
-                prefetch_related('maintenance')
+        return Line.objects.select_related('voltage', 'group', 'voltage', 'subscriber', 'management'). \
+            prefetch_related('maintenance')
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['plus'] = Section.objects.select_related('substation').\
+        context['plus'] = Section.objects.select_related('substation'). \
             filter(Q(substation__number=self.object.ps_p1, number=self.object.sec_p1, voltage=self.object.voltage) |
-                   Q(substation__number=self.object.ps_p2, number=self.object.sec_p2, voltage=self.object.voltage) )
+                   Q(substation__number=self.object.ps_p2, number=self.object.sec_p2, voltage=self.object.voltage))
 
-        context['minus'] = Section.objects.select_related('substation').\
+        context['minus'] = Section.objects.select_related('substation'). \
             filter(Q(substation__number=self.object.ps_m1, number=self.object.sec_m1, voltage=self.object.voltage) |
                    Q(substation__number=self.object.ps_m2, number=self.object.sec_m2, voltage=self.object.voltage) |
                    Q(substation__number=self.object.ps_m3, number=self.object.sec_m3, voltage=self.object.voltage) |
@@ -647,3 +658,21 @@ class LineDeleteView(DeleteObjectMixin, View):
     """ удаление ВЛ"""
     model = Line
     target_reverse = 'main'
+
+
+
+class MyLogin(View):
+
+    def get(self, request):
+        if request.user.is_authenticated:
+            return redirect('main')
+        form = UserAutForm()
+        return render(request, 'login.html', {'form': form, 'my_login': 'Вход', })
+
+    def post(self, request):
+        form = UserAutForm(data=request.POST)
+        if form.is_valid():
+            user = form.get_user()
+            login(request, user)
+            return redirect('main')
+        return render(request, 'login.html', context={'form': form, })

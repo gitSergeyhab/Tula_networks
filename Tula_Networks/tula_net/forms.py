@@ -1,7 +1,8 @@
 from django import forms
+from django.contrib.auth.forms import AuthenticationForm
 from django.forms import TextInput, SelectDateWidget
 
-from .models import Feeder, Subscriber, Substation, Section, Phone, Person, TransmissionLine, Line
+from .models import Feeder, Subscriber, Substation, Section, Phone, Person, Line
 from dal import autocomplete
 
 from django.core.exceptions import ValidationError
@@ -158,3 +159,10 @@ class Line1Form(BaseCrispyForms, forms.ModelForm):
             'description': forms.TextInput(attrs={'class': 'form-control'}),
             # 'kvl': forms.BooleanField(),
         }
+
+
+class UserAutForm(AuthenticationForm):
+    username = forms.CharField(label='Логин',
+                               widget=forms.TextInput(attrs={'class': 'form-control'}))
+    password = forms.CharField(label='Пароль',
+                               widget=forms.PasswordInput(attrs={'class': 'form-control'}))

@@ -7,7 +7,7 @@
 
             {% if flag_search %}
                 {% if substations.count > 0 %}
-                    <h3 class="text-center">Вы искали: <span class="text-warning">{{ flag_search }}</span>, и я нашел {{ substations.count }}:</h3>
+                    <h3 class="text-center">Вы искали: <span class="text-warning">{{ flag_search }}</span>, и я нашел {{ page_obj.paginator.count }}:</h3>
                 {% else %}
                     <h3 class="text-center">Вы искали: <span class="text-warning">{{ flag_search }}</span>, но он где-то потерялся :((</h3>
                 {% endif %}
@@ -139,5 +139,5 @@
 {% endblock %}
 
 {% block paginator %}
-{% include 'incl/_block_paginator.html' %}
+{% include 'incl/_block_paginator_long.html' %}
 {% endblock %}

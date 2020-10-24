@@ -1,3 +1,5 @@
+from datetime import datetime
+
 def add_titles(request):
     return {
         'title': 'Тульские Сети',
@@ -10,11 +12,13 @@ def add_titles(request):
         'title_phone': 'телефон',
         'title_person': 'лицо',
         'title_section': 'секцию',
+        'title_line': 'линию',
     }
 
 
 def logik(request):
     return {
+        'current_year': datetime.now().year,
         'logik_kostyl': '/35',
         'logik_volt2': request.path[-3:-1],
         'logik_volt': request.path[-4:-1],
@@ -30,7 +34,5 @@ def logik(request):
         'logik_phone': '_phone',
         'logik_person': '_perso',
         'logik_section': '_secti',
-
-
-
+        'logik_line': '_line/',
     }

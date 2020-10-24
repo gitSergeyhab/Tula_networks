@@ -13,6 +13,7 @@
 <body>
 
   <main class="container mt-3">
+      {% if request.user.is_authenticated %}
 
                   <!--NAVBAR-->
 
@@ -35,6 +36,17 @@
         {% block cards2 %}{% endblock %}
 
       {% block paginator %} {% endblock %}
+      {% else %}
+{% if not my_login %}
+      <h2 class="text-center m-5">Для просмотра требуется вход. Регистрация невозможна <br>
+          <a href="{% url 'in' %}" class="btn btn-primary mt-4 mb-2">Войти</a>
+      </h2>
+
+
+      {% endif %}
+        {% block in %}{% endblock %}
+
+      {% endif %}
 
   </main>
   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>

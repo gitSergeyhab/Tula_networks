@@ -4,12 +4,14 @@
 {% block search %}
     <div class="mb-5">
 
-    {% include 'incl/_searcher_phones.html' %}
+
+    {% include 'incl/_searcher_feeders.html' %}
 
 
-<h3 class="text-center">Телефоны</h3>
+
+
 {% if flag_search %}
-            {% if phones.count %}
+            {% if feeders.exists %}
                 <h3 class="text-center">Вы искали: <span class="text-warning">{{ flag_search }}</span>, и я нашел {{ page_obj.paginator.count }}:</h3>
             {% else %}
                 <h3 class="text-center">Вы хотели: <span class="text-warning">{{ flag_search }}</span>, но у меня нету :((</h3>
@@ -19,39 +21,39 @@
     </div>
 {% endblock %}
 
+
+
 {% block cards1 %}
     <section class="my-5 py-3">
       <div class="row mb-0">
-        {% for phone in phones %}
+        {% for feeder in feeders %}
             <div class="col-6 col-md-6 col-lg-3 mb-2">
                 <div class="card pt-0 text-center p-0 m-0">
 
                     <div class="card-body p-0 m-0 ">
-                        <a href="{{ phone.get_absolute_url }}" class="btn btn-light mx-auto d-block">
-                            <p class="card-text mb-0">{{ phone }}</p>
+                        <a href="{{ feeder.get_absolute_url }}" class="btn btn-light mx-auto d-block">
+                            <p class="card-text mb-0">{{ feeder.name }}</p>
                         </a>
                     </div>
-                    {% if phone.subscriber %}
+
                     <div class="card-body p-0 m-0 ">
-                        <a href="{{ phone.subscriber.get_absolute_url }}" class="btn btn-outline-dark mx-auto d-block py-0 my-0">
-                            <p class="card-text">{{ phone.subscriber }}</p>
+                        <a href="{{ feeder.substation.get_absolute_url }}" class="btn btn-dark mx-auto d-block py-0 my-0">
+                            <p class="card-text">ПС {{ feeder.substation.number }} {{ feeder.substation }}</p>
+                        </a>
+                    </div>
+                    {% if feeder.subscriber %}
+                    <div class="card-body p-0 m-0 ">
+                        <a href="{{ feeder.subscriber.get_absolute_url }}" class="btn btn-outline-dark mx-auto d-block py-0 my-0">
+                            {% if feeder.subscriber.short_name %}
+                            <p class="card-text">{{ feeder.subscriber.short_name }}</p>
+                            {% else %}
+                            <p class="card-text">{{ feeder.subscriber }}</p>
+                            {% endif %}
                         </a>
                     </div>
                     {% endif %}
-                    {% if phone.person %}
-                    <div class="card-body p-0 m-0 ">
-                        <a href="{{ phone.person.get_absolute_url }}" class="btn btn-secondary mx-auto d-block py-0 my-0">
-                            <p class="card-text">{{ phone.person }}</p>
-                        </a>
-                    </div>
-                    {% endif %}
-                    {% if phone.substation %}
-                    <div class="card-body p-0 m-0 ">
-                        <a href="{{ phone.substation.get_absolute_url }}" class="btn btn-dark mx-auto d-block py-0 my-0">
-                            <p class="card-text">{{ phone.substation }}</p>
-                        </a>
-                    </div>
-                    {% endif %}
+
+
 
                 </div>
             </div>

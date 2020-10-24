@@ -7,7 +7,7 @@
 <h3 class="text-center">Ответственные лица</h3>
 {% if flag_search %}
             {% if persons.count %}
-                <h3 class="text-center">Вы искали: <span class="text-warning">{{ flag_search }}</span>, и я нашел {{ persons.count }}:</h3>
+                <h3 class="text-center">Вы искали: <span class="text-warning">{{ flag_search }}</span>, и я нашел {{ page_obj.paginator.count }}:</h3>
             {% else %}
                 <h3 class="text-center">Вы искали: <span class="text-warning">{{ flag_search }}</span>, но он где-то потерялся :((</h3>
             {% endif %}
@@ -48,6 +48,6 @@
 </div>
 
 {% block paginator %}
-{% include 'incl/_block_paginator.html' %}
+{% include 'incl/_block_paginator_long.html' %}
 {% endblock %}
 

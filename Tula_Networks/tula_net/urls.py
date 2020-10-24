@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.urls import path
+from django.contrib.auth.views import LogoutView
 
 from tula_net.views import MainView, PsListView, GroupPSView, VoltPSView, OnePSView, SectionListView, OneSectionView, \
     OneSubstationView, SubscriberListView, OneSubscriberView, SubscribersBySectionView, \
@@ -11,9 +12,11 @@ from tula_net.views import MainView, PsListView, GroupPSView, VoltPSView, OnePSV
     AddFeederFromSubscriberView, AddSectionFromPSView, UpdSectionView,  AddFeederFromSecView, \
     AddSubstationView, LinesGroupView, LinesVoltageView, LinesRegionView, \
     UpdLineView, LineDeleteView, SectionDeleteView, SearcherLinesView, Lines1View, OneLine1View, AddLine1View, \
-    Section1View
+    Section1View, SearcherFeedersView, FeedersView, MyLogin
 
 urlpatterns = [
+    path('in', MyLogin.as_view(), name='in'),
+    path('out', LogoutView.as_view(), name='out'),
     path('', MainView.as_view(), name='main'),
 
     # ПС
@@ -29,6 +32,8 @@ urlpatterns = [
     path('sections/', SectionListView.as_view(), name='sections'),
 
     # 1 лист всех фидеров, 2 карточка 1-го фидера, 3-4 все фидера по секции-подстаннции
+
+    path('sfeeders/', FeedersView.as_view(), name='sfeeders'),
     path('feeders/', AllFeedersView.as_view(), name='feeders'),
     path('feeder/<int:pk>/', OneFeedersView.as_view(), name='feeder'),
     path('feeders/section/<int:pk>/', OneSectionView.as_view(), name='section'),
@@ -63,7 +68,7 @@ urlpatterns = [
     path('searcher_persons/', SearcherPersonsView.as_view(), name='searcher_persons'),
     path('searcher_phones/', SearcherPhonesView.as_view(), name='searcher_phones'),
     path('searcher_lines/', SearcherLinesView.as_view(), name='searcher_lines'),
-
+    path('searcher_feeders/', SearcherFeedersView.as_view(), name='searcher_feeders'),
     # формы
     # фидера 1.добавление с ПС, 2. !... от абонента! 3.обновление, 4. удаление
     path('add_feeder/from_ps_pk/<int:pk>/', AddFeederFromPSView.as_view(), name='add_feeder_from_ps'),
