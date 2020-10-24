@@ -12,6 +12,7 @@
   <div class="card-body">
 
       {% for person in subscriber.persons.all %}
+      {% if person.priority and person.priority == 1 %}
         <div>
         <div class="my-0 p-1 card-header">
             <a href="{{ person.get_absolute_url }}" class="btn btn-light p-0 m-1">
@@ -25,6 +26,25 @@
             {% endif %}
         </div>
         </div>
+      {% endif %}
+      {% endfor %}
+
+        {% for person in subscriber.persons.all %}
+      {% if not person.priority or person.priority != 1 %}
+        <div>
+        <div class="my-0 p-1 card-header">
+            <a href="{{ person.get_absolute_url }}" class="btn btn-light p-0 m-1">
+            <b>{{ person }}</b>
+            </a>
+            {% if person.position %} | {{ person.position }} {% endif %}
+            {% if person.phones.count %} |
+                {% for phone in person.phones.all %}
+                    <b>{{ phone }}</b>,
+                {% endfor %}
+            {% endif %}
+        </div>
+        </div>
+      {% endif %}
       {% endfor %}
 <div>
       {% if subscriber.year_update %}

@@ -34,7 +34,13 @@
                     {% if phone.subscriber %}
                     <div class="card-body p-0 m-0 ">
                         <a href="{{ phone.subscriber.get_absolute_url }}" class="btn btn-outline-dark mx-auto d-block py-0 my-0">
-                            <p class="card-text">{{ phone.subscriber }}</p>
+                            <p class="card-text">
+                            {% if phone.subscriber.short_name %}
+                            {{ phone.subscriber.short_name }}
+                            {% else %}
+                            {{ phone.subscriber }}
+                            {% endif %}
+                            </p>
                         </a>
                     </div>
                     {% endif %}
@@ -48,7 +54,7 @@
                     {% if phone.substation %}
                     <div class="card-body p-0 m-0 ">
                         <a href="{{ phone.substation.get_absolute_url }}" class="btn btn-dark mx-auto d-block py-0 my-0">
-                            <p class="card-text">{{ phone.substation }}</p>
+                            <p class="card-text">ПС {{ phone.substation.number }} {{ phone.substation }}</p>
                         </a>
                     </div>
                     {% endif %}

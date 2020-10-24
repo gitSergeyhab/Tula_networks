@@ -31,9 +31,9 @@ class PhoneFormAddMixin(BaseCrispyForms):
 
     def clean_search_number(self):
         raw_number = self.cleaned_data['number']
-        for i in raw_number:
-            if i.isalpha():
-                raise ValueError('хм, а у Вас в номере буквы, например...', i)
+        # for i in raw_number:
+        #     if i.isalpha():
+        #         raise ValueError('хм, а у Вас в номере буквы, например...', i)
         search_number = ''.join([sign for sign in raw_number if sign.isdigit()])
         return search_number
 
