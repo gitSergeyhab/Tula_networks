@@ -229,7 +229,7 @@ class Phone(models.Model):
     class Meta:
         verbose_name = "Телефон"
         verbose_name_plural = "Телефоны"
-        ordering = ['priority']
+        ordering = ['-priority']
 
 
 class TransmissionLine(models.Model):

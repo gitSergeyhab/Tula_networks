@@ -22,10 +22,10 @@
         <h5>Питающие / транзитные ПС:</h5>
 
             {% for pl in plus %}
-                <a href="{{ pl.substation.get_absolute_url }}" class="btn btn-outline-dark mx-auto px-5 mx-5 py-0">
+                <a href="{{ pl.substation.get_absolute_url }}" class="btn btn-outline-dark mx-auto px-5 mx-5 py-0 my-1">
                     <b>{{ pl.substation }}</b>
                 </a> :
-                <a href="{{ pl.get_absolute_url }}" class="btn btn-dark mx-auto px-5 mx-5 py-0">
+                <a href="{{ pl.get_absolute_url }}" class="btn btn-dark mx-auto px-5 mx-5 py-0 my-1">
                     <b> {{ pl.name }}</b>
                 </a><br>
             {% endfor %}
@@ -34,10 +34,10 @@
             <h5 class="mt-2">Тупиковые  ПС:</h5>
 
             {% for min in minus %}
-                <a href="{{ min.substation.get_absolute_url }}" class="btn btn-outline-dark mx-auto px-5 mx-5 py-0">
+                <a href="{{ min.substation.get_absolute_url }}" class="btn btn-outline-dark mx-auto px-5 mx-5 py-0 my-1">
                     <b>{{ min.substation }}</b>
                 </a> :
-                <a href="{{ min.get_absolute_url }}" class="btn btn-dark mx-auto px-5 mx-5 py-0">
+                <a href="{{ min.get_absolute_url }}" class="btn btn-dark mx-auto px-5 mx-5 py-0 my-1">
                     <b> {{ min.name }}</b>
                 </a><br>
             {% empty %}

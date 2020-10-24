@@ -69,6 +69,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'tula_net.context_processors.add_titles',
                 'tula_net.context_processors.logik',
+                'tula_net.context_processors.signs',
             ],
         },
     },

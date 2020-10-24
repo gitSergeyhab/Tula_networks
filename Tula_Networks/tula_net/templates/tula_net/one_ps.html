@@ -115,6 +115,7 @@
               {% endfor %}
           {% endif %}
           {% endfor %}
+      </div>
 
         <div class="card pb-3">
 
@@ -145,40 +146,3 @@
         </div>
 
 {% endblock %}
-
-
-
-<!--{% comment %}-->
-<!--                Первая модель ВЛ - запасная-->
-
-<!--{% for section in ps.sections.all %}-->
-<!--{% for line in section.lines.all %}-->
-<!--{% if line.voltage.class_voltage < 40 %}-->
-<!--<a href="{{ line.get_absolute_url }}" type="button" class="btn btn-secondary border-danger px-3 py-0 m-1 ">{{ line.name }}</a>,-->
-<!--{% endif %}-->
-<!--{% endfor %}-->
-<!--{% endfor %}-->
-<!--<br>-->
-<!--{% for section in ps.sections.all %}-->
-<!--{% for line in section.lines.all %}-->
-<!--{% if line.voltage.class_voltage > 40 %}-->
-<!--<a href="{{ line.get_absolute_url }}" type="button" class="btn btn-secondary border-warning px-3 py-0 m-1 ">{{ line.name }}</a>,-->
-<!--{% endif %}-->
-<!--{% endfor %}-->
-<!--{% endfor %}-->
-<!--</div>-->
-
-<!--<div>-->
-<!--{% comment %}-->
-<!--{% for line in ps.lines.all %}-->
-<!--{% if line.section.voltage.class_voltage < 40 %}-->
-<!--<a href="{{ line.get_absolute_url }}" type="button" class="btn btn-secondary border-danger px-3 py-0 m-1 ">{{ line.name }}</a>,-->
-<!--{% endif %}-->
-<!--{% endfor %}-->
-<!--<br>-->
-<!--{% for line in ps.lines.all %}-->
-<!--{% if line.voltage.class_voltage > 40 %}-->
-<!--<a href="{{ line.get_absolute_url }}" type="button" class="btn btn-secondary border-warning px-3 py-0 m-1 ">{{ line.name }}</a>,-->
-<!--{% endif %}-->
-<!--{% endfor %}-->
-<!--{% endcomment %}-->

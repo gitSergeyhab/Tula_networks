@@ -8,7 +8,7 @@ import re
 from .data import context_menu
 
 # ____ шаблон для форм ___
-from tula_net.models import Substation, Group, Feeder, Section, TransmissionLine, ClassVoltage, GroupLine, Region, Line
+from tula_net.models import Substation, Group, Feeder, Section, ClassVoltage, GroupLine, Region, Line
 
 
 class BaseCrispyForms:
@@ -77,7 +77,7 @@ class DeleteObjectMixin:
 class SubstationsViewMixin:
     """ шаблон для ПС """
     context_object_name = 'substations'
-    template_name = 'tula_net/listPS.html'
+    template_name = 'tula_net/substations.html'
     menu = None  # добавление контехтного меню
     flag = None  # добавление для отображения выборок ПС по группам и напряжению
 

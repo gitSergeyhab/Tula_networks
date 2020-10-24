@@ -68,7 +68,7 @@ class PsList(ListView):
 
     model = Substation
     context_object_name = 'substations'
-    template_name = 'tula_net/listPS.html'
+    template_name = 'tula_net/substations.html'
     extra_context = title1
 
 

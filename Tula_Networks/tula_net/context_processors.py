@@ -36,3 +36,8 @@ def logik(request):
         'logik_section': '_secti',
         'logik_line': '_line/',
     }
+
+def signs(request):
+    return {
+        'drop1': 1
+    }

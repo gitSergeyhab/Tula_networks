@@ -2,7 +2,7 @@
 #     """ все ПС """
 #     model = Substation
 #     context_object_name = 'substations'
-#     template_name = 'tula_net/listPS.html'
+#     template_name = 'tula_net/substations.html'
 #     extra_context = title1
 #     """ context['groups'] - меню в верху страницы с названиями групп ПС
 #     ['flag_group'] - для того чтобы не выводить названия групп, если группа уже выбрана и убрать поле поиска """

@@ -76,7 +76,7 @@ class ResPS(ListView):
 class OnePSView(DetailView):
     """ карточка одной пс """
 
-    template_name = 'tula_net/onePS.html'
+    template_name = 'tula_net/one_ps.html'
     context_object_name = 'ps'
 
     def get_queryset(self):
@@ -287,7 +287,7 @@ class SearcherSubscribersView(SearchMixin, ListView):
 class SearcherPSView(ListView):
     """ Поиск по подстанциям """
     context_object_name = 'substations'
-    template_name = 'tula_net/listPS.html'
+    template_name = 'tula_net/substations.html'
     paginate_by = 20
 
     def get_queryset(self):
@@ -407,7 +407,8 @@ class UpdFeederView(View):
     def get(self, request, pk):
         feeder = Feeder.objects.get(pk=pk)
         form = FeederFormUpd(instance=feeder)
-        form.fields['section'].queryset = Section.objects.filter(substation__feeders__pk=pk)
+        form.fields['section'].queryset = Section.objects.\
+            filter(substation__feeders__pk=pk, voltage__class_voltage__lt=11)
         form.fields['substation'].queryset = Substation.objects.filter(feeders__pk=pk)
         return render(request, 'tula_net/form_add_feeder.html', context={'form': form})
 
