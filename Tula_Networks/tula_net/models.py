@@ -257,8 +257,8 @@ class TransmissionLine(models.Model):
         return self.name
 
     class Meta:
-        verbose_name = "Линия"
-        verbose_name_plural = "Линии"
+        verbose_name = "Линия - МОДЕЛЬ ЗАМЕНЕНА"
+        verbose_name_plural = "Линии - МОДЕЛЬ ЗАМЕНЕНА"
         ordering = ['voltage', 'short_name']
 
 

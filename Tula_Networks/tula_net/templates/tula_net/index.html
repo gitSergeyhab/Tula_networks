@@ -12,14 +12,12 @@
 
     <div class="card mx-5">
     <div class="card-header">
-    </div>{{ substations }}
-
+    </div>
  <a href="{{ k }}/" class=" btn btn-outline-dark ">
-    <div class="card-body">
+
       <blockquote class="blockquote mb-0">
         <h2>{{ v }}</h2>
       </blockquote>
-    </div>
     </a>
   </div>
 
@@ -30,6 +28,3 @@
 
 
 {% endblock %}
-
-context_menu = {'title': title, 'substations': 'Подсташции', 'subscribers': 'Абоненты', 'feeders': 'Присоединения',
-            'persons': 'Ответственные лица', 'sections': 'Секции', 'phones': 'Телефоны'}

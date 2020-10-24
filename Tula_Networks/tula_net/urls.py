@@ -24,13 +24,9 @@ urlpatterns = [
     # одна ПС со списком секций - секция со списком фидеров:
     # path('section_ps/<int:pk>/', SectionPSView.as_view(), name='section_ps'),
 
-
-
     # СкШ
     path('section/<int:pk>/', Section1View.as_view(), name='one_section'),
     path('sections/', SectionListView.as_view(), name='sections'),
-
-
 
     # 1 лист всех фидеров, 2 карточка 1-го фидера, 3-4 все фидера по секции-подстаннции
     path('feeders/', AllFeedersView.as_view(), name='feeders'),

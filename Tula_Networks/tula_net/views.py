@@ -79,7 +79,8 @@ class OnePSView(DetailView):
     context_object_name = 'ps'
 
     def get_queryset(self):
-        return Substation.objects.select_related('group', 'voltage_h', 'voltage_m', 'voltage_l')
+        return Substation.objects.select_related('group', 'voltage_h', 'voltage_m', 'voltage_l').\
+            prefetch_related('sections', 'feeders', 'sections__voltage',  'phones', 'sections__feeders')
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -90,7 +91,7 @@ class OnePSView(DetailView):
             Q(ps_m2=self.object.number) |
             Q(ps_m3=self.object.number) |
             Q(ps_m4=self.object.number)
-        )
+        ).select_related('voltage')
         return context
 
 
@@ -151,7 +152,7 @@ class Section1View(DetailView):
     template_name = 'tula_net/one_section.html'
 
     def get_queryset(self):
-        return Section.objects.all()
+        return Section.objects.prefetch_related('feeders')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

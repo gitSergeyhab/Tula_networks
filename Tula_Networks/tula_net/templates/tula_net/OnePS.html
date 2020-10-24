@@ -100,18 +100,22 @@
           </div>
 
       <div class="card-body py-1">
-            {% for feeder in ps.feeders.all %}
-            {% if feeder.section.voltage.class_voltage < 10 %}
-                <a href="{{ feeder.get_absolute_url }}" type="button" class="btn btn-secondary border-success px-3 py-0 m-1 ">{{ feeder.name }}</a>,
-            {% endif %}
-            {% endfor %}<br>
+          {% for section in ps.sections.all %}
+          {% if section.voltage.class_voltage < 10 %}
+              {% for feeder in section.feeders.all %}
+                  <a href="{{ feeder.get_absolute_url }}" type="button" class="btn btn-secondary border-success px-3 py-0 m-1 ">{{ feeder.name }}</a>,
+              {% endfor %}
+          {% endif %}
+          {% endfor %}
+            <br>
+          {% for section in ps.sections.all %}
+          {% if section.voltage.class_voltage > 8 and section.voltage.class_voltage < 30 %}
+              {% for feeder in section.feeders.all %}
+                  <a href="{{ feeder.get_absolute_url }}" type="button" class="btn btn-secondary border-primary px-3 py-0 m-1 ">{{ feeder.name }}</a>,
+              {% endfor %}
+          {% endif %}
+          {% endfor %}
 
-            {% for feeder in ps.feeders.all %}
-            {% if feeder.section.voltage.class_voltage < 35 and feeder.section.voltage.class_voltage > 9 %}
-                <a href="{{ feeder.get_absolute_url }}" type="button" class="btn btn-secondary border-primary px-3 py-0 m-1 ">{{ feeder.name }}</a>,
-            {% endif %}
-            {% endfor %}
-            </div>
         <div class="card pb-3">
 
         {% if lines.exists %}
@@ -135,6 +139,7 @@
                     {% endif %}
                 {% endfor %}
                {% endif %}
+
             </div>
           </div>
         </div>

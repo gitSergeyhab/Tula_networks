@@ -19,7 +19,7 @@
         {% if line.full_name %} {{ line.full_name }} <br> {% endif %}
         </h4>
         <div class="card-body mx-5 px-5">
-        <h5>Питающие ПС:</h5>
+        <h5>Питающие / транзитные ПС:</h5>
 
             {% for pl in plus %}
                 <a href="{{ pl.substation.get_absolute_url }}" class="btn btn-outline-dark mx-auto px-5 mx-5 py-0">

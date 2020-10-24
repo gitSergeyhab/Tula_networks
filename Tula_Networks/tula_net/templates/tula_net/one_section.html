@@ -50,7 +50,7 @@
                             править БД<span class="sr-only">Toggle Dropdown</span>
                           </button>
                           <div class="dropdown-menu">
-                            {% if .class_voltage < 20 %}
+                            {% if section.voltage.class_voltage < 20 %}
                             <a class="dropdown-item" href="{% url 'add_feeder_from_sec' section.pk %}">добавить фидер на СкШ</a>
                             {% endif %}
 
