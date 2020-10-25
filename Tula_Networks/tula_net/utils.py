@@ -5,7 +5,7 @@ from django.urls import reverse
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 import re
-from .data import context_menu
+# from .data import context_menu
 
 # ____ шаблон для форм ___
 from tula_net.models import Substation, Group, Feeder, Section, ClassVoltage, GroupLine, Region, Line
@@ -86,7 +86,7 @@ class SubstationsViewMixin:
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['context_menu'] = self.menu
+        # context['context_menu'] = self.menu
         context['groups'] = Group.objects.all()
         context['voltages'] = [35, 110, 220]
         context[self.flag] = 1
@@ -105,7 +105,7 @@ class FeedersViewMixin:
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['context_menu'] = context_menu
+        # context['context_menu'] = context_menu
         if self.second_model:
             context[self.the_context] = self.second_model.objects.get(pk=self.kwargs['pk'])
         return context
@@ -157,7 +157,7 @@ class Lines1ViewMixin:
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['context_menu'] = self.menu
+        # context['context_menu'] = self.menu
         context['groups'] = GroupLine.objects.all()
         context['voltages'] = ClassVoltage.objects.all()[1:3]
         context['regions'] = Region.objects.filter(for_menu=True)

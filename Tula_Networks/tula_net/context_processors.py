@@ -1,5 +1,6 @@
 from datetime import datetime
 
+
 def add_titles(request):
     return {
         'title': 'Тульские Сети',
@@ -37,7 +38,15 @@ def logik(request):
         'logik_line': '_line/',
     }
 
+
 def signs(request):
     return {
-        'drop1': 1
+        'context_menu': {
+            'substations': 'Подстанции',
+            'lines': 'Линии',
+            'sfeeders': 'Фидеры',
+            'subscribers': 'Организации',
+            'persons': ' Ответственные лица',
+            'phones': 'Телефоны',
+        }
     }

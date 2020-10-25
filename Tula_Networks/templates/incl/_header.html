@@ -1,5 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark px-5 pt-1 pb-0 my-0 justify-content-around">
-    {% include 'incl/_user_head.html' %}</nav>
+
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <a class="navbar-brand " data-test="logo" href="{% url 'main' %}"><b class="text-monospace px-4">Тульские Сети</b><br></a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -8,24 +7,7 @@
   <div class="collapse navbar-collapse" id="navbarNav">
     <ul class="navbar-nav" data-test="navigation">
 
-      <li class="nav-item active">
-          <a class="nav-link" href="{% url 'substations' %}" data-test="navlink"><b> Подстанции </b></a>
-      </li>
-      <li class="nav-item active">
-          <a class="nav-link" href="{% url 'lines' %}" data-test="navlink"><b> Линии </b></a>
-      </li>
-      <li class="nav-item active">
-          <a class="nav-link" href="{% url 'sfeeders' %}" data-test="navlink"><b> Фидеры </b></a>
-      </li>
-      <li class="nav-item active">
-          <a class="nav-link" href="{% url 'subscribers' %}" data-test="navlink"><b> Организации </b></a>
-      </li>
-      <li class="nav-item active">
-          <a class="nav-link" href="{% url 'persons' %}" data-test="navlink"><b> Ответственные лица </b></a>
-      </li>
-      <li class="nav-item active">
-          <a class="nav-link" href="{% url 'phones' %}" data-test="navlink"><b> Телефоны </b></a>
-      </li>
+        {% include 'incl/_menu.html' %}
 
     </ul>
 

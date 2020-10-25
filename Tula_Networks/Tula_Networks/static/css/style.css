@@ -1,0 +1,38 @@
+body {
+    background-color: #FFFAFA;
+}
+
+.user_bar {
+    z-index: 999999;
+    position: fixed;
+    left: 25px;
+    top: 40px;
+    opacity: 0.4;
+}
+
+.user_bar:hover {
+    opacity: 1;
+    border: 2px solid;
+}
+
+.side_bar_menu {
+
+    z-index: 999999;
+    position: fixed;
+    right: 10px;
+    top: 300px;
+    opacity: 0.5;
+
+
+}
+
+@media screen and (max-width: 1400px) {
+    .side_bar_menu {
+        visibility: hidden;
+        display: none;
+    }
+}
+
+.side_bar_menu:hover { opacity: 0.7; }
+
+.side_bar_menu li:hover { background-color: #DCDCDC; }

@@ -17,14 +17,14 @@ from dal import autocomplete
 from .utils import AddPhoneViewMixin, DeleteObjectMixin, SubstationsViewMixin, FeedersViewMixin, AddFeederMixin, \
     chang_search, Lines1ViewMixin, SearchMixin
 
-from .data import context_menu
+# from .data import context_menu
 
 
 class MainView(View):
     """ главная """
 
     def get(self, request, *args, **kwargs):
-        return render(request, 'tula_net/index.html', context={'context_menu': context_menu})
+        return render(request, 'tula_net/index.html')
 
 
 class PsListView(SubstationsViewMixin, ListView):
@@ -105,10 +105,10 @@ class SectionListView(ListView):
     def get_queryset(self):
         return Section.objects.prefetch_related('feeders').select_related('voltage', 'substation').all()
 
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['context_menu'] = context_menu
-        return context
+    # def get_context_data(self, *, object_list=None, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     # context['context_menu'] = context_menu
+    #     return context
 
 
 # ____________фидера_____________
@@ -178,10 +178,10 @@ class OneSubscriberView(DetailView):
     def get_queryset(self):
         return Subscriber.objects.prefetch_related('phones', 'persons', 'persons__phones').all()
 
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['context_menu'] = context_menu
-        return context
+    # def get_context_data(self, *, object_list=None, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     context['context_menu'] = context_menu
+    #     return context
 
 
 class SubscriberListView(ListView):
