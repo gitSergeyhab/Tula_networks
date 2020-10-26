@@ -3,6 +3,7 @@ from django.db.models import Q
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views import View
+from django import forms
 
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
 
@@ -15,7 +16,7 @@ from .models import Substation, Subscriber, Section, Person, Phone, Feeder, Grou
 from dal import autocomplete
 
 from .utils import AddPhoneViewMixin, DeleteObjectMixin, SubstationsViewMixin, FeedersViewMixin, AddFeederMixin, \
-    chang_search, Lines1ViewMixin, SearchMixin
+    chang_search, make_digits, Lines1ViewMixin, SearchMixin
 
 # from .data import context_menu
 
@@ -327,9 +328,10 @@ class SearcherPhonesView(SearchMixin, ListView):
     paginate_by = 20
 
     def get_queryset(self):
+        digits = make_digits(self.request.GET.get('s'))
         return Phone.objects.select_related('subscriber', 'substation', 'person').filter(
             Q(number__icontains=self.request.GET.get('s')) |
-            Q(search_number__icontains=self.request.GET.get('s'))
+            Q(search_number__icontains=digits)
         )
 
 
@@ -442,11 +444,25 @@ class AddPSPhoneView(AddPhoneViewMixin, View):
     form_x = PhonePSFormAdd
 
 
-class UpdPhoneView(UpdateView):
-    """ изменение телефона"""
-    form_class = PhoneFormUpd
-    model = Phone
-    template_name = 'tula_net/form_add_phone.html'
+class UpdPhoneView(View):
+    """ добавление телефона"""
+
+    def get(self, request, pk):
+        phone = Phone.objects.get(pk=pk)
+        form = PhoneFormUpd(instance=phone)
+        form.fields['search_number'].widget = forms.HiddenInput()
+        return render(request, 'tula_net/form_add_phone.html', context={'form': form})
+
+    def post(self, request, pk):
+        phone = Phone.objects.get(pk=pk)
+        bound_form = PhoneFormUpd(request.POST, instance=phone)
+        if bound_form.is_valid():
+            new_phone = bound_form.save()
+            return redirect(new_phone)
+        return render(request, 'tula_net/form_add_phone.html', context={'form': bound_form})
+
+
+
 
 
 class PhoneDeleteView(DeleteObjectMixin, View):

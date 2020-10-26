@@ -25,7 +25,6 @@ class BaseCrispyForms:
         self.helper.field_class = 'col-lg-7'
 
 
-
 # ____ шаблон для форм телефонов ___
 class PhoneFormAddMixin(BaseCrispyForms):
 
@@ -47,6 +46,7 @@ class AddPhoneViewMixin:
         form = self.form_x()
 
         form.fields[self.model.__name__.lower()].queryset = self.model.objects.filter(pk=self.kwargs['pk'])
+        form.fields['search_number'].widget = forms.HiddenInput()
         return render(request, 'tula_net/form_add_phone.html', context={'form': form})
 
     def post(self, request, *args, **kwargs):
@@ -105,7 +105,6 @@ class FeedersViewMixin:
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        # context['context_menu'] = context_menu
         if self.second_model:
             context[self.the_context] = self.second_model.objects.get(pk=self.kwargs['pk'])
         return context
@@ -122,7 +121,8 @@ class AddFeederMixin:
         form = self.form_feeder()
         form.fields[self.first_field].queryset = self.first_model.objects.filter(pk=pk)
         if self.second_field and self.second_field == 'section':
-            form.fields[self.second_field].queryset = Section.objects.filter(substation__pk=pk, voltage__class_voltage__lte=10)
+            form.fields[self.second_field].queryset = Section.objects.filter(substation__pk=pk,
+                                                                             voltage__class_voltage__lte=10)
         if self.second_field and self.second_field == 'substation':
             form.fields[self.second_field].queryset = Substation.objects.filter(sections__pk=pk)
         return render(request, 'tula_net/form_add_feeder.html', context={'form': form})
@@ -135,7 +135,6 @@ class AddFeederMixin:
         return render(request, 'tula_net/form_add_feeder.html', context={'form': bound_form})
 
 
-
 def chang_search(obs):
     if '-' in obs:
         list_obs = obs.split('-')
@@ -143,6 +142,10 @@ def chang_search(obs):
         print(obs_n)
         return obs_n
     return obs
+
+
+def make_digits(num):
+    return ''.join([n for n in num if n.isdigit()])
 
 
 class Lines1ViewMixin:

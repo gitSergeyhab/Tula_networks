@@ -72,6 +72,7 @@ class PhonePersonFormAdd(PhoneFormAddMixin, forms.ModelForm):
 
 # __________________ форма добавления телефона для ПС _______________________
 class PhonePSFormAdd(PhoneFormAddMixin, forms.ModelForm):
+
     substation = forms.ModelChoiceField(label='ПС', empty_label=None, queryset=Substation.objects.all())
     description = forms.CharField(label='Примечание', required=False, widget=forms.Textarea(attrs={"rows": 3, }))
 
