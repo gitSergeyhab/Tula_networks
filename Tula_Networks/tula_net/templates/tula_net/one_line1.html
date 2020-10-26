@@ -19,7 +19,7 @@
         {% if line.full_name %} {{ line.full_name }} <br> {% endif %}
         </h4>
         <div class="card-body mx-5 px-5">
-        <h5>Питающие / транзитные ПС:</h5>
+        <h5>Питающие / транзитные ПС : СкШ:</h5>
 
             {% for pl in plus %}
                 <a href="{{ pl.substation.get_absolute_url }}" class="btn btn-outline-dark mx-auto px-5 mx-5 py-0 my-1">
@@ -31,7 +31,7 @@
             {% endfor %}
 
 
-            <h5 class="mt-2">Тупиковые  ПС:</h5>
+            <h5 class="mt-2">Тупиковые  ПС : СкШ:</h5>
 
             {% for min in minus %}
                 <a href="{{ min.substation.get_absolute_url }}" class="btn btn-outline-dark mx-auto px-5 mx-5 py-0 my-1">

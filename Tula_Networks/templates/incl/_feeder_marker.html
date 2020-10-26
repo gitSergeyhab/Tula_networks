@@ -1,0 +1,8 @@
+<span
+      {% if feeder.attention %}
+      class="text-danger"
+      {% elif feeder.in_reserve %}
+      class="text-warning"
+      {% endif %}
+>{{ feeder.name }}
+</span>

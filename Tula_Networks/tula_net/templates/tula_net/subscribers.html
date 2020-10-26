@@ -66,9 +66,11 @@
                                 <div class=" col-6 col-md-6 col-lg-4 px-1 my-2">
                                     <a href="{{ person.get_absolute_url }}" class="btn btn-light py-0 mx-auto d-block" >
                                         {{ person }} </a>
+                                    <div class="text-center">
                                     {% for phone in person.phones.all %}
                                     {{ phone }},
                                     {% endfor %}
+                                    </div>
                                 </div>
                                 {% endif %}
                             {% endfor %}
@@ -80,9 +82,11 @@
                            {% for person in subscriber.persons.all %}
                               {% if not person.priority or person.priority > 1 %}
                                         {{ person }} {% if person.position %} ({{person.position}}) {% endif %}
+
                                         {% for phone in person.phones.all %}
                                             {{ phone }},
                                         {% endfor %};
+
                               {% endif %}
                             {% endfor %}
                            </p>
@@ -95,10 +99,12 @@
             </div>
 
 
-           <div class="card-body p-1">
+           <div class="card-body p-1 text-center">
             {% for feeder in subscriber.feeders.all %}
                 {% if feeder.substation == the_substation or feeder.section == the_section and feeder.section %}
-                          <a href="{{ feeder.get_absolute_url }}" class="btn btn-outline-secondary py-0">{{ feeder.name }} </a>
+                          <a href="{{ feeder.get_absolute_url }}" class="btn btn-outline-secondary py-0 mx-2">
+                              {% include 'incl/_feeder_marker.html' %}
+                          </a>
                {% endif %}
             {% endfor %}
            </div>

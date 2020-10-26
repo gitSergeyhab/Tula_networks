@@ -70,27 +70,25 @@
 
           <div class="card-body py-1">
             {% for section in ps.sections.all %}
-            {% if section.voltage.class_voltage < 8 %}
-                <a href="{{ section.get_absolute_url }}" type="button" class="btn btn-outline-dark text-success px-2 py-0">
-                    {{ section.name }}
+
+                <a href="{{ section.get_absolute_url }}" type="button"
+                    {% if section.voltage.class_voltage < 8 %}
+                        class="btn btn-outline-dark text-success px-2 py-0"
+                    {% elif section.voltage.class_voltage < 20 %}
+                        class="btn btn-outline-dark text-primary px-2 py-0"
+                    {% elif section.voltage.class_voltage < 40 %}
+                        class="btn btn-outline-dark text-danger px-2 py-0"
+                    {% elif section.voltage.class_voltage < 120 %}
+                         class="btn btn-outline-dark text-warning px-2 py-0"
+                    {% else %}
+                        class="btn btn-outline-dark px-2 py-0"
+                    {% endif %}
+                    >{{ section.name }}
+              {% if section.from_T != section.number %}
+              (T-{{ section.from_T }})
+              {% endif %}
                 </a> ,
-            {% elif section.voltage.class_voltage < 20 %}
-                <a href="{{ section.get_absolute_url }}" type="button" class="btn btn-outline-dark text-primary px-2 py-0">
-                    {{ section.name }}
-                </a> ,
-            {% elif section.voltage.class_voltage < 40 %}
-                <a href="{{ section.get_absolute_url }}" type="button" class="btn btn-outline-dark text-danger px-2 py-0">
-                    {{ section.name }}
-                </a> ,
-            {% elif section.voltage.class_voltage < 120 %}
-                <a href="{{ section.get_absolute_url }}" type="button" class="btn btn-outline-dark text-warning px-2 py-0">
-                    {{ section.name }}
-                </a> ,
-            {% else %}
-                <a href="{{ section.get_absolute_url }}" type="button" class="btn btn-outline-dark px-2 py-0">
-                    {{ section.name }}
-                </a> ,
-            {% endif %}
+
             {% endfor %}<br>
 
             </div>
@@ -103,7 +101,9 @@
           {% for section in ps.sections.all %}
           {% if section.voltage.class_voltage < 10 %}
               {% for feeder in section.feeders.all %}
-                  <a href="{{ feeder.get_absolute_url }}" type="button" class="btn btn-secondary border-success px-3 py-0 m-1 ">{{ feeder.name }}</a>,
+                  <a href="{{ feeder.get_absolute_url }}" type="button" class="btn btn-light border-success px-3 py-0 m-1 ">
+                      {% include 'incl/_feeder_marker.html' %}
+                  </a>,
               {% endfor %}
           {% endif %}
           {% endfor %}
@@ -111,7 +111,9 @@
           {% for section in ps.sections.all %}
           {% if section.voltage.class_voltage > 8 and section.voltage.class_voltage < 30 %}
               {% for feeder in section.feeders.all %}
-                  <a href="{{ feeder.get_absolute_url }}" type="button" class="btn btn-secondary border-primary px-3 py-0 m-1 ">{{ feeder.name }}</a>,
+                  <a href="{{ feeder.get_absolute_url }}" type="button" class="btn btn-light border-primary px-3 py-0 m-1 ">
+                      {% include 'incl/_feeder_marker.html' %}
+                  </a>,
               {% endfor %}
           {% endif %}
           {% endfor %}

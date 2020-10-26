@@ -37,7 +37,7 @@
             {% elif current_year|add:-1 == subscriber.year_update %}
             class="m-1 btn btn-light border border-danger"
             {% elif current_year|add:-1 > subscriber.year_update %}
-             class="m-1 btn btn-danger"
+             class="m-1 btn btn-light border border-danger text-danger"
             {% endif %}
 >{{ subscriber }} {% if subscriber.year_update %} | {{ subscriber.year_update }} {% endif %}</a>
     {% endfor %}
