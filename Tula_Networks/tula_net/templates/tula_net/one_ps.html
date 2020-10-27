@@ -101,7 +101,7 @@
           {% for section in ps.sections.all %}
           {% if section.voltage.class_voltage < 10 %}
               {% for feeder in section.feeders.all %}
-                  <a href="{{ feeder.get_absolute_url }}" type="button" class="btn btn-light border-success px-3 py-0 m-1 ">
+                  <a href="{{ feeder.get_absolute_url }}" type="button" class="{{ feeder_6 }}">
                       {% include 'incl/_feeder_marker.html' %}
                   </a>,
               {% endfor %}
@@ -111,7 +111,7 @@
           {% for section in ps.sections.all %}
           {% if section.voltage.class_voltage > 8 and section.voltage.class_voltage < 30 %}
               {% for feeder in section.feeders.all %}
-                  <a href="{{ feeder.get_absolute_url }}" type="button" class="btn btn-light border-primary px-3 py-0 m-1 ">
+                  <a href="{{ feeder.get_absolute_url }}" type="button" class="{{ feeder_10 }}">
                       {% include 'incl/_feeder_marker.html' %}
                   </a>,
               {% endfor %}
@@ -128,7 +128,7 @@
             <div class="card-body py-1">
                 {% for line in lines %}
                     {% if line.voltage.class_voltage < 40 %}
-                        <a href="{{ line.get_absolute_url }}" class="border-danger btn btn-dark py-0 px-4 my-1">
+                        <a href="{{ line.get_absolute_url }}" class="{{ line_35 }}">
                             {{ line.name }}
                         </a> ,
                     {% endif %}
@@ -136,7 +136,7 @@
             <br>
                 {% for line in lines %}
                     {% if line.voltage.class_voltage < 120 and line.voltage.class_voltage > 40 %}
-                        <a href="{{ line.get_absolute_url }}" class="border-warning btn btn-dark py-0 px-4 my-1">
+                        <a href="{{ line.get_absolute_url }}"  class="{{ line_110 }}">
                             {{ line.name }}
                         </a> ,
                     {% endif %}

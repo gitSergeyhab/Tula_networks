@@ -46,7 +46,7 @@
                             </div>
                             {% if feeder.attention %}
                             <div class="btn btn-dark py-0">
-                                <span class="badge badge-danger">см. описание!!!</span>
+                                <span class="badge badge-danger">описание!!!</span>
                             </div>
                             {% endif %}
                             {% if feeder.in_reserve %}
@@ -62,6 +62,10 @@
                             <p class="my-0">{{ feeder.subscriber.name }}</p>
                         </a> <br>
                         <a href="{{ feeder.get_absolute_url }}" class="btn btn-outline-dark mx-auto px-2 py-0">
+                            <b>Фидер {{ feeder.name }}</b>
+                        </a>
+
+                        <a href="{% url 'upd_feeder' feeder.pk %}" class="btn btn-dark mx-auto p-3 py-0">
                             <b>Фидер {{ feeder.name }}</b>
                         </a>
                         <a href="{{ feeder.section.get_absolute_url }}"
@@ -93,48 +97,7 @@
                         </div>
 
 
-                        {% comment %}
 
-
-
-    social = models.PositiveSmallIntegerField(blank=True, verbose_name='Социалка', null=True)
-    attention = models.BooleanField(verbose_name='!!!', default=False)
-    reliability_category = models.PositiveSmallIntegerField(blank=True, verbose_name='категория надежности', null=True)
-    in_reserve = models.BooleanField(default=False, verbose_name='Резервный')
-    region = models.ForeignKey(Region, verbose_name='Участок', related_name='feeders',
-                               on_delete=models.SET_NULL, blank=True, null=True)
-    description = models.TextField(verbose_name='Описение', blank=True, null=True)
-    res = models.CharField(blank=True, max_length=32, verbose_name='РЭС', null=True)
-                        <h6 class="bg-light px-1">
-                            {% for phone in feeder.subscriber.phones.all %}
-                                <a class="btn btn-light p-0" href="{{ phone.get_absolute_url }}"><b>{{ phone }}</b></a>,
-                            {% endfor %}
-                        </h6>
-
-                        <hr class="p-0 m-0"  color="#00008B" >
-                        <hr class="p-0 m-0"  color="#00008B" >
-
-                        {% for person in feeder.subscriber.persons.all %}
-                        {% if person.priority < 2 %}
-                            <h6 class="px-0 mx-0">
-                                <p class="my-0 card-header p-1"><b>{{ person }}</b> | {{person.position}} |
-                                {% for phone in person.phones.all %}
-                                   <a class="btn btn-light p-0" href="{{ phone.get_absolute_url }}"><b>{{ phone }}</b></a>,
-                                {% endfor %}</p>
-                            </h6>
-                        {% endif %}
-                        {% endfor %}
-
-                        {% for person in feeder.subscriber.persons.all %}
-                        {% if person.priority != 1 %}
-                            <p class="px-0 mx-0"> {{ person }} | {{person.position}} |
-                                {% for phone in person.phones.all %}
-                                   <a class="btn btn-light p-0" href="{{ phone.get_absolute_url }}"><b>{{ phone }}</b></a>,
-                                {% endfor %}
-                            </p>
-                        {% endif %}
-                        {% endfor %}
-                        {% endcomment %}
                     </div>
                   </div>
                 </div>

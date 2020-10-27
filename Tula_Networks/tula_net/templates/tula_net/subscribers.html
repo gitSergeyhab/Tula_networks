@@ -30,9 +30,9 @@
             <a href="{{ subscriber.get_absolute_url }}" class="btn btn-dark p-1 m-3" >
                 <p class="m-1">{{ subscriber }}</p>
             </a>
-            <div class="card-body p-1"> Телефоны организации:
+            <div class="card-body p-1 text-center"> Телефоны организации:
             {% for phone in subscriber.phones.all %}
-                {{ phone }},
+                <a href="{{ phone.get_absolute_url }}" class="btn btn-light px-1 py-0 mx-1 border-secondary" >{{ phone }}</a>,
             {% endfor %}
            </div>
 
@@ -99,10 +99,20 @@
             </div>
 
 
+
            <div class="card-body p-1 text-center">
             {% for feeder in subscriber.feeders.all %}
                 {% if feeder.substation == the_substation or feeder.section == the_section and feeder.section %}
-                          <a href="{{ feeder.get_absolute_url }}" class="btn btn-outline-secondary py-0 mx-2">
+                          <a href="{{ feeder.get_absolute_url }}"
+                             {% if feeder.section.voltage.class_voltage == 6 %}
+                                         class='{{ feeder_6 }}'
+                            {% elif feeder.section.voltage.class_voltage == 10 %}
+                                         class='{{ feeder_10 }}'
+                            {% else %}
+                                         class='{{ feeder_x }}'
+                            {% endif %}
+
+                          >
                               {% include 'incl/_feeder_marker.html' %}
                           </a>
                {% endif %}

@@ -157,7 +157,7 @@ class Subscriber(models.Model):
 
 
 class Person(models.Model):
-    name = models.CharField(max_length=64, verbose_name='ФИО')
+    name = models.CharField(max_length=128, verbose_name='ФИО')
     subscriber = models.ForeignKey(Subscriber, related_name='persons', on_delete=models.CASCADE)
     position = models.CharField(max_length=64, verbose_name='должность', blank=True, null=True)
     priority = models.PositiveSmallIntegerField(blank=True, verbose_name='приоритет', null=True)
@@ -205,7 +205,7 @@ class Feeder(models.Model):
     class Meta:
         verbose_name = "фидер"
         verbose_name_plural = "фидера"
-        ordering = ['section', '-subscriber', 'name']
+        ordering = ['in_reserve', 'section',  'name']
 
 
 class Phone(models.Model):

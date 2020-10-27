@@ -5,14 +5,13 @@ body {
 .user_bar {
     z-index: 999999;
     position: fixed;
-    left: 25px;
-    top: 40px;
-    opacity: 0.4;
+    right: 5px;
+    top: 5px;
+    opacity: 0.6;
 }
 
 .user_bar:hover {
     opacity: 1;
-    border: 2px solid;
 }
 
 .side_bar_menu {
@@ -37,3 +36,6 @@ body {
  }
 .side_bar_menu li:hover { opacity: 1; }
 
+.vl-border {
+    border-width: 2px;
+}
