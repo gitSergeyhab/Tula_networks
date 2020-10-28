@@ -10,7 +10,7 @@
               <div class="row">
 
                 <div class="col-12 col-md-3 col-lg-2 d-flex align-items-center">
-                    <div class="btn-group-vertical">
+                    <div>
                         <a href="{% url 'subscriber_ps' ps.pk %}" type="button" class="btn btn-secondary border border-dark">Абоненты <br> подрбно</a>
                         <a href="{% url 'substation_f' ps.pk %}" type="button" class="btn btn-secondary border border-dark">Фидера <br> подробно</a>
                     </div>
@@ -25,7 +25,7 @@
                     <a href="{% url 'subscriber' ps.owner.pk %}" class="btn btn-dark"><h6>{{ ps.owner }}</h6></a>
                      {% endif %}
                     {% if ps.location %}
-                    <h5> <b>Расположение:</b> {{ ps.location }}</h5>
+                    <p> <b>Расположение:</b> {{ ps.location|linebreaks }}</p>
                     {% endif %}
 
           <div class="card-footer text-right">
@@ -42,9 +42,7 @@
                 </div>
           </div>
 
-                    {% if ps.description %}
-                    <h5><b>О подстанции:</b> {{ ps.description }} </h5>
-                    {% endif %}
+
 
                 </div>
               </div>
@@ -146,5 +144,13 @@
             </div>
           </div>
         </div>
+
+          <div class="card mb-4">
+            <div class="card-body px-4">
+                    {% if ps.description|linebreaks %}
+                    <p><b>О подстанции:</b> {{ ps.description|linebreaks  }} </p>
+                    {% endif %}
+            </div>
+          </div>
 
 {% endblock %}

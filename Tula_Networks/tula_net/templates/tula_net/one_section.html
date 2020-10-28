@@ -63,9 +63,7 @@
                   </div>
 
 
-                    {% if section.description %}
-                    <h5><b>Примечание:</b> {{ section.description }} </h5>
-                    {% endif %}
+
 
 
                 </div>
@@ -91,35 +89,42 @@
         </div>
       </div>
 
-      <div class="row mt-2">
-        <div class="col-12 col-lg-10 offset-lg-2 m-auto">
-                    <div class="text-center">
+<div class="row mt-2">
+    <div class="col-12 col-lg-10 offset-lg-2 m-auto">
+        <div class="text-center">
 
-                        {% if section.feeders.count %}
+                        {% if section.feeders.exists %}
                         <div class="card-footer py-0">
                         <h5>Все фидеры {{ section }}</h5>
                         </div>
                         {% for feeder in section.feeders.all %}
-                        <a href="{{ feeder.get_absolute_url }}" class="btn btn-light border-secondary py-0 px-4 my-1">
-                            {% include 'incl/_feeder_marker.html' %}
-                        </a> ,
+                            <a href="{{ feeder.get_absolute_url }}" class="btn btn-light border-secondary py-0 px-4 my-1">
+                                {% include 'incl/_feeder_marker.html' %}
+                            </a> ,
                         {% endfor %}
                         {% endif %}
 
-{% if lines.exists %}
+                        {% if lines.exists %}
                         <div class="card-footer py-0">
                         <h5>Все ВЛ {{ section }}</h5>
+                            </div>
+                                {% for line in lines %}
+                                <a href="{{ line.get_absolute_url }}" class="btn btn-dark py-0 px-4 my-1"> {{ line.name }}</a> ,
+                                {% endfor %}
+                            </div>
                         </div>
-                            {% for line in lines %}
-                            <a href="{{ line.get_absolute_url }}" class="btn btn-dark py-0 px-4 my-1"> {{ line.name }}</a> ,
-                            {% endfor %}
                         {% endif %}
 
-                    </div>
         </div>
-      </div>
+    </div>
+</div>
 
-
-
+          <div class="card mb-4">
+            <div class="card-body px-4">
+                    {% if section.description %}
+                    <p><b>Примечание:</b> {{ section.description|linebreaks }} </p>
+                    {% endif %}
+            </div>
+          </div>
 
 {% endblock %}

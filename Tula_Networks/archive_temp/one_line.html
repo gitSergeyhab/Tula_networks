@@ -78,7 +78,7 @@
                 <p>Количество опор : {{ line.number_columns }}</p>
                 {% endif %}
                 {% if line.description %}
-                <p>Примечание : {{ line.description }}</p>
+                <p>Примечание : {{ line.description|linebreaks }}</p>
                 {% endif %}
 
             </div>

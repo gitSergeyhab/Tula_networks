@@ -21,7 +21,9 @@
             {% if person.position %} | {{ person.position }} {% endif %}
             {% if person.phones.count %} |
                 {% for phone in person.phones.all %}
-                    <b>{{ phone }}</b>,
+                <a href="{{ phone.get_absolute_url }}" class="btn btn-light px-2 py-0 m-0">
+                        <b>{{ phone }}</b>,
+                </a>
                 {% endfor %}
             {% endif %}
         </div>
@@ -39,7 +41,9 @@
             {% if person.position %} | {{ person.position }} {% endif %}
             {% if person.phones.count %} |
                 {% for phone in person.phones.all %}
+            <a href="{{ phone.get_absolute_url }}" class="btn btn-light px-2 py-0 m-0">
                     <b>{{ phone }}</b>,
+            </a>
                 {% endfor %}
             {% endif %}
         </div>
@@ -62,11 +66,9 @@
               <div class="dropdown-menu">
                 <a class="dropdown-item" href="{% url 'add_person' subscriber.pk %}">добавить ответствнное лицо</a>
                 <a class="dropdown-item" href="{% url 'add_phone' subscriber.pk %}">добавить телефон организации</a>
-                <a class="dropdown-item" href="{% url 'add_feeder_from_ss' subscriber.pk %}">добавить фидер организации</a>
                 <a class="dropdown-item" href="{% url 'upd_subscriber' subscriber.pk %}">править организацию</a>
                 <a class="dropdown-item" href="{% url 'del_subscriber' subscriber.pk %}">удалить организацию</a>
-                <a class="dropdown-item" href="{% url 'add_feeder_from_ss' subscriber.pk %}">добавить фидер организации <br>
-                (добвление с СкШ и ПС работает быстрее)</a>
+                <a class="dropdown-item" href="{% url 'add_feeder_from_ss' subscriber.pk %}">(добавить фидер организации)</a>
               </div>
             </div>
       </div>
@@ -75,8 +77,33 @@
 </div>
 
         {% if subscriber.description %}
-            <p class="card-text"> Информация о потребителе: <br> {{ subscriber.description }}</p>
+            <p class="card-text"> Информация о потребителе: <br> {{ subscriber.description|linebreaks  }}</p>
         {% endif %}
+
+        {% if subscriber.substations.exists %}
+        <div class="card-footer px-3 py-1">
+
+            Абонентские ПС:
+            {% for ps in subscriber.substations.all %}
+            <a href="{{ ps.get_absolute_url }}" class="btn btn-outline-dark px-3 py-1 m-1 border-dark">
+            <b>{{ ps }}</b>
+            </a>
+            {% endfor %}
+
+        </div>
+      {% endif %}
+      {% if subscriber.lines.exists %}
+        <div class="card-footer px-3 py-1">
+
+            Абонентские ВЛ:
+            {% for vl in subscriber.lines.all %}
+            <a href="{{ vl.get_absolute_url }}" class="btn btn-outline-dark px-3 py-1 m-1 border-dark">
+            <b>{{ vl }}</b>
+            </a>
+            {% endfor %}
+
+        </div> {% endif %}
+
         <div class="card-footer">
             <a href="{% url 'subscriber_ss' subscriber.pk %}" class="btn btn-outline-dark mx-auto d-block pt-3 pb-1">
                  <h4 class="card-title">Подстанции с фидерами потребителя </h4>

@@ -28,7 +28,7 @@
   </div>
     {% if person.description %}
     <div class="card-footer">
-        {{ person.description }}
+        {{ person.description|linebreaks  }}
     </div>
     {% endif %}
 

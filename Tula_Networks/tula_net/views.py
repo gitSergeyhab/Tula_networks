@@ -60,7 +60,7 @@ class SubstationsBySubscriberView(ListView):
 
     def get_queryset(self):
         return Substation.objects.filter(feeders__subscriber__pk=self.kwargs['pk']). \
-            prefetch_related('feeders', 'feeders__subscriber')
+            prefetch_related('feeders', 'feeders__subscriber', 'feeders__section__voltage')
 
     """ context['the_subscriber'] - тот абонент для которого выводятся ПС и фидера """
 
@@ -154,7 +154,7 @@ class Section1View(DetailView):
     template_name = 'tula_net/one_section.html'
 
     def get_queryset(self):
-        return Section.objects.prefetch_related('feeders')
+        return Section.objects.prefetch_related('feeders', 'voltage', 'substation')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -177,12 +177,7 @@ class OneSubscriberView(DetailView):
     context_object_name = 'subscriber'
 
     def get_queryset(self):
-        return Subscriber.objects.prefetch_related('phones', 'persons', 'persons__phones').all()
-
-    # def get_context_data(self, *, object_list=None, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     context['context_menu'] = context_menu
-    #     return context
+        return Subscriber.objects.prefetch_related('phones', 'persons', 'persons__phones', 'substations', 'lines')
 
 
 class SubscriberListView(ListView):
@@ -202,12 +197,13 @@ class SubscribersBySectionView(ListView):
 
     def get_queryset(self):
         return Subscriber.objects.prefetch_related(
-            'phones', 'persons', 'persons__phones', 'feeders', 'feeders__substation', 'feeders__section'
+            'phones', 'persons', 'persons__phones', 'feeders',
+            'feeders__substation', 'feeders__section', 'feeders__section__voltage'
         ).filter(feeders__section__pk=self.kwargs['pk'])
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['the_section'] = Section.objects.get(pk=self.kwargs['pk'])
+        context['the_section'] = Section.objects.select_related('substation').get(pk=self.kwargs['pk'])
         return context
 
 
@@ -219,7 +215,8 @@ class SubscribersByPSView(ListView):
 
     def get_queryset(self):
         return Subscriber.objects.prefetch_related(
-            'phones', 'persons', 'persons__phones', 'feeders', 'feeders__substation', 'feeders__section'
+            'phones', 'persons', 'persons__phones', 'feeders',
+            'feeders__substation', 'feeders__section', 'feeders__section__voltage'
         ).filter(feeders__substation__pk=self.kwargs['pk'])
 
     def get_context_data(self, *, object_list=None, **kwargs):
@@ -344,6 +341,8 @@ class SearcherLinesView(ListView):
         obj_serch = self.request.GET.get('s')
         obj_serch_n = chang_search(obj_serch)
         return Line.objects.select_related('management', 'voltage', 'group').filter(
+            Q(full_name__icontains=obj_serch) |
+            Q(full_name__icontains=obj_serch.title()) |
             Q(name__icontains=obj_serch) |
             Q(name__icontains=obj_serch.title()) |
             Q(short_name__icontains=obj_serch) |
@@ -360,10 +359,12 @@ class SearcherLinesView(ListView):
         return context
 
 class FeedersView(ListView):
-    model = Feeder
     context_object_name = 'feeders'
     template_name = 'tula_net/feeder_search.html'
     paginate_by = 28
+
+    def get_queryset(self):
+        return Feeder.objects.select_related('substation', 'section', 'subscriber', 'section__voltage')
 
 class SearcherFeedersView(SearchMixin, ListView):
     context_object_name = 'feeders'

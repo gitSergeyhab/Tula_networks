@@ -38,7 +38,7 @@
     {% if phone.description %}
     <div class="card-footer">
         <b>Описание:</b>
-        {{ phone.description }}
+        {{ phone.description|linebreaks  }}
     </div>
     {% endif %}
 

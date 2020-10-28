@@ -44,7 +44,7 @@
             У {{ line }} нет тупиков
             {% endfor %}
 
-            <hr class="my-1">
+            <h6><hr class="my-1">
             {% if line.management %}
                 Управление : {{ line.management }}
                 <hr class="my-1">
@@ -58,7 +58,7 @@
             {% if line.group %}
                 {{ line.group }} участок сл ЛЭП
                 <hr class="my-1">
-            {% endif %}
+                {% endif %}</h6>
 
             {% if line.subscriber %}
              <a href="{{ line.subscriber.get_absolute_url }}" class="btn btn-outline-secondary mx-auto  py-0"> <b>Владелец: {{ line.subscriber }}</b></a>
@@ -86,7 +86,7 @@
                 <p>Количество опор : {{ line.number_columns }}</p>
                 {% endif %}
                 {% if line.description %}
-                <p>Примечание : {{ line.description }}</p>
+                <p>Примечание : {{ line.description|linebreaks  }}</p>
                 {% endif %}
 
             </div>

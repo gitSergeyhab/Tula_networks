@@ -55,10 +55,11 @@
             <h6 class="card-text">Население: {{ feeder.population }}</h6>
             <h6 class="card-text">Социалка: {{ feeder.social }}</h6>
         {% endif %}
-    </div>
         {% if feeder.reliability_category %}
-            <p class="card-text">категория надежности: {{ feeder.reliability_category }}</p>
+            <h6 class="card-text">категория надежности: {{ feeder.reliability_category }}</h6>
         {% endif %}
+    </div>
+
 
             <div class="card-footer text-right">
                 <div class="btn-group dropup">
@@ -74,7 +75,7 @@
 
 
         {% if feeder.description %}
-            <p class="card-text">Описение: {{ feeder.description }}</p>
+            <p class="card-text">Описение: {{ feeder.description|linebreaks  }}</p>
         {% endif %}
 
   </div>
