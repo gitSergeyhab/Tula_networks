@@ -148,6 +148,14 @@ def make_digits(num):
     return ''.join([n for n in num if n.isdigit()])
 
 
+def try_int(num):
+    try:
+        x = int(num)
+        return x
+    except:
+        return -1
+
+
 class Lines1ViewMixin:
     """ шаблон для  """
     context_object_name = 'lines'

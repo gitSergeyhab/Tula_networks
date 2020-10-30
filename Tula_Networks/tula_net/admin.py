@@ -5,10 +5,6 @@ from .models import Substation, Section, Feeder, Subscriber, Person, Phone, Grou
     Region, GroupLine, Line
 
 
-# автокомплит не работает:
-# from dal import autocomplete
-# from django import forms
-# from .forms import FeederFormAdd
 
 
 class SubstationAdmin(admin.ModelAdmin):

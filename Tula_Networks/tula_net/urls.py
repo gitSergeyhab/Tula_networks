@@ -6,7 +6,7 @@ from tula_net.views import MainView, PsListView, GroupPSView, VoltPSView, OnePSV
     OneSubstationView, SubscriberListView, OneSubscriberView, SubscribersBySectionView, \
     SubscribersByPSView, SubstationsBySubscriberView, SearcherSubscribersView, SearcherPSView, SearcherPersonsView, \
     AllFeedersView, OneFeedersView, OnePersonView, PersonListView, OnePhoneView, PhoneListView, AddFeederFromPSView, \
-    UpdFeederView, UpdPhoneView, SubscriberAutocompleteView, SubstationAutocompleteView, AddPersonPhoneView, \
+    UpdFeederView, UpdPhoneView, AddPersonPhoneView, \
     SearcherPhonesView, AddPSPhoneView, AddSubscriberPhoneView, PhoneDeleteView, FeederDeleteView, AddSubscriberView, \
     UpdSubscriberView, SubscriberDeleteView, AddPersonView, UpdPersonView, DelPersonView, UpdSubstationView, \
     AddFeederFromSubscriberView, AddSectionFromPSView, UpdSectionView,  AddFeederFromSecView, \
@@ -103,7 +103,7 @@ urlpatterns = [
     path('del_line/<int:pk>/', LineDeleteView.as_view(), name='del_line'),
 
     # !не работают!
-    path('subscriber_autocomplete/', SubscriberAutocompleteView.as_view(), name='subscriber_autocomplete'),
-    path('substation_autocomplete/', SubstationAutocompleteView.as_view(), name='substation_autocomplete'),
+    # path('subscriber_autocomplete/', SubscriberAutocompleteView.as_view(), name='subscriber_autocomplete'),
+    # path('substation_autocomplete/', SubstationAutocompleteView.as_view(), name='substation_autocomplete'),
 
 ]

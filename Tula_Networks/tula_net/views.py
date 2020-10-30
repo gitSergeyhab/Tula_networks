@@ -16,7 +16,8 @@ from .models import Substation, Subscriber, Section, Person, Phone, Feeder, Grou
 from dal import autocomplete
 
 from .utils import AddPhoneViewMixin, DeleteObjectMixin, SubstationsViewMixin, FeedersViewMixin, AddFeederMixin, \
-    chang_search, make_digits, Lines1ViewMixin, SearchMixin
+    chang_search, make_digits, Lines1ViewMixin, SearchMixin, try_int
+
 
 # from .data import context_menu
 
@@ -289,10 +290,12 @@ class SearcherPSView(ListView):
     paginate_by = 20
 
     def get_queryset(self):
+        name = self.request.GET.get('s')
         return Substation.objects.select_related('group', 'voltage_h', 'voltage_m', 'voltage_l').filter(
-            Q(name__icontains=self.request.GET.get('s')) |
-            Q(name__icontains=self.request.GET.get('s').title()) |
-            Q(name__icontains=self.request.GET.get('s').lower())
+            Q(name__icontains=name) |
+            Q(name__icontains=name.title()) |
+            Q(name__icontains=name.lower()) |
+            Q(number=try_int(name))
         )
 
     def get_context_data(self, *, object_list=None, **kwargs):
@@ -569,6 +572,7 @@ class SectionDeleteView(DeleteObjectMixin, View):
 
 
 # ___________________
+"""
 class SubscriberAutocompleteView(autocomplete.Select2QuerySetView):
     def get_queryset(self):
         if not self.request.user.is_authenticated():
@@ -588,7 +592,7 @@ class SubstationAutocompleteView(autocomplete.Select2QuerySetView):
             qs = qs.filter(name__istartswith=self.q)
         return qs
 
-
+"""
 # ________________________
 
 # class LinesView(LinesViewMixin, ListView):

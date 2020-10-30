@@ -64,10 +64,11 @@
                         <a href="{{ feeder.get_absolute_url }}" class="btn btn-outline-dark mx-auto px-2 py-0">
                             <b>Фидер {{ feeder.name }}</b>
                         </a>
-
+{% comment %}
                         <a href="{% url 'upd_feeder' feeder.pk %}" class="btn btn-dark mx-auto p-3 py-0">
                             <b>Фидер {{ feeder.name }}</b>
                         </a>
+{% endcomment %}
                         <a href="{{ feeder.section.get_absolute_url }}"
                             {% if feeder.section.voltage.class_voltage == 6 %}
                                 class="btn btn-outline-success mx-2 px-2 py-0"
