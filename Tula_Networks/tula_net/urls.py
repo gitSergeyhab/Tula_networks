@@ -5,7 +5,7 @@ from django.contrib.auth.views import LogoutView
 from tula_net.views import MainView, PsListView, GroupPSView, VoltPSView, OnePSView, SectionListView, OneSectionView, \
     OneSubstationView, SubscriberListView, OneSubscriberView, SubscribersBySectionView, \
     SubscribersByPSView, SubstationsBySubscriberView, SearcherSubscribersView, SearcherPSView, SearcherPersonsView, \
-    AllFeedersView, OneFeedersView, OnePersonView, PersonListView, OnePhoneView, PhoneListView, AddFeederFromPSView, \
+    AllFeedersView, OneFeederView, OnePersonView, PersonListView, OnePhoneView, PhoneListView, AddFeederFromPSView, \
     UpdFeederView, UpdPhoneView, AddPersonPhoneView, \
     SearcherPhonesView, AddPSPhoneView, AddSubscriberPhoneView, PhoneDeleteView, FeederDeleteView, AddSubscriberView, \
     UpdSubscriberView, SubscriberDeleteView, AddPersonView, UpdPersonView, DelPersonView, UpdSubstationView, \
@@ -36,7 +36,7 @@ urlpatterns = [
 
     path('sfeeders/', FeedersView.as_view(), name='sfeeders'),
     path('feeders/', AllFeedersView.as_view(), name='feeders'),
-    path('feeder/<int:pk>/', OneFeedersView.as_view(), name='feeder'),
+    path('feeder/<int:pk>/', OneFeederView.as_view(), name='feeder'),
     path('feeders/section/<int:pk>/', OneSectionView.as_view(), name='section'),
     path('feeders/substation/<int:pk>/', OneSubstationView.as_view(), name='substation_f'),
 

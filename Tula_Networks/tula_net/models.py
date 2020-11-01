@@ -183,18 +183,13 @@ class Feeder(models.Model):
                                 blank=True, null=True)
     subscriber = models.ForeignKey(Subscriber, related_name='feeders', on_delete=models.SET_NULL,
                                    verbose_name='абонент', blank=True, null=True)
-    # length = models.FloatField(verbose_name='Протяженность', blank=True, null=True)
-    # number_tp = models.PositiveSmallIntegerField(blank=True, verbose_name='Количество ТП', null=True)
-    # population = models.PositiveSmallIntegerField(blank=True, verbose_name='Население', null=True)
-    # points = models.PositiveSmallIntegerField(blank=True, verbose_name='Точки поставки', null=True)
-    # social = models.PositiveSmallIntegerField(blank=True, verbose_name='Социалка', null=True)
     attention = models.BooleanField(verbose_name='!!!', default=False)
-    reliability_category = models.PositiveSmallIntegerField(blank=True, verbose_name='категория надежности', null=True)
     in_reserve = models.BooleanField(default=False, verbose_name='Резервный')
     region = models.ForeignKey(Region, verbose_name='Участок', related_name='feeders',
                                on_delete=models.SET_NULL, blank=True, null=True)
     description = models.TextField(verbose_name='Описение', blank=True, null=True)
     # res = models.CharField(blank=True, max_length=32, verbose_name='РЭС', null=True)
+    # reliability_category = models.PositiveSmallIntegerField(blank=True, verbose_name='категория надежности', null=True)
 
     def get_absolute_url(self):
         return reverse('feeder', kwargs={'pk': self.pk})

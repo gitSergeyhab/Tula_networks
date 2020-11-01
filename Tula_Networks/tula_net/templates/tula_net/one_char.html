@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block cards1 %}
-
+<h5 class="text-center mt-4">{{ character.feeder }}</h5>
  <div class="my-3 card-footer text-center">
             {% if character.checked %}
             <h5 class="bg-success">Проверено</h5>
@@ -80,7 +80,18 @@
 
                 </tbody>
             </table>
-      </div>
-
-
+ </div>
+     {% comment %}
+<!--      </div>-->
+<!--            <div class="card-footer text-right py-0 px-5">-->
+<!--                <div class="btn-group dropup mx-5 px-1">-->
+<!--                  <button type="button" class="btn btn-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">-->
+<!--                    править БД<span class="sr-only">Toggle Dropdown</span>-->
+<!--                  </button>-->
+<!--                  <div class="dropdown-menu">-->
+<!--                      <a class="dropdown-item" href="{% url 'upd_charact' character.pk %}">изменить характеристики</a>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--            </div>-->
+{% endcomment %}
 {% endblock %}

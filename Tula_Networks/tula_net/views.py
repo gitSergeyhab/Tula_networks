@@ -124,13 +124,13 @@ class FeedersView(ListView):
         return Feeder.objects.select_related('substation', 'section', 'subscriber', 'section__voltage')
 
 
-class OneFeedersView(DetailView):
+class OneFeederView(DetailView):
     template_name = 'tula_net/feeder.html'
     context_object_name = 'feeder'
 
     def get_queryset(self):
-        return Feeder.objects.select_related('subscriber', 'section', 'substation'). \
-            prefetch_related('subscriber__phones', 'subscriber__persons__phones').all()
+        return Feeder.objects.select_related('subscriber', 'section', 'substation', 'character'). \
+            prefetch_related('subscriber__phones', 'subscriber__persons__phones')
 
 
 class AllFeedersView(FeedersViewMixin, ListView):
@@ -144,22 +144,26 @@ class OneSubstationView(FeedersViewMixin, ListView):
     the_context = 'the_substation'
 
     def get_queryset(self):
-        return Feeder.objects.select_related('substation', 'section', 'subscriber', 'section__voltage'). \
+        return Feeder.objects.select_related('substation', 'section', 'subscriber', 'section__voltage', 'character'). \
             filter(substation__pk=self.kwargs['pk'])
 
 
 #__________ харки фидеров__________
 class CharsView(ListView):
-    model = Feeder_characteristic
     context_object_name = 'chars'
     template_name = 'tula_net/chars.html'
 
+    def get_queryset(self):
+        return Feeder_characteristic.objects.select_related('feeder')
+
 
 class OneCharsView(DetailView):
-    """ карточка одной пс """
-    model = Feeder_characteristic
+    """ карточка одной х-ки """
     template_name = 'tula_net/one_char.html'
     context_object_name = 'character'
+
+    def get_queryset(self):
+        return Feeder_characteristic.objects.select_related('feeder')
 
 
 # __________ секции _____________
@@ -169,7 +173,7 @@ class OneSectionView(FeedersViewMixin, ListView):
     the_context = 'the_section'
 
     def get_queryset(self):
-        return Feeder.objects.select_related('substation', 'section', 'subscriber', 'section__voltage'). \
+        return Feeder.objects.select_related('substation', 'section', 'subscriber', 'section__voltage', 'character'). \
             filter(section__pk=self.kwargs['pk'])
 
 
@@ -466,6 +470,7 @@ class UpdCharacterFeederView(View):
     def get(self, request, pk):
         charact = Feeder_characteristic.objects.get(feeder__pk=pk)
         form = FeederCharForm(instance=charact)
+        form.fields['feeder'].queryset = Feeder.objects.filter(pk=pk)
         return render(request, 'tula_net/form_add_feeder.html', context={'form': form})
 
     def post(self, request, pk):

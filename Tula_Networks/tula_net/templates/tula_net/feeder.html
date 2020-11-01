@@ -138,13 +138,14 @@
                     <td>зима : {{ feeder.character.power_winter }} / лето: {{ feeder.character.power_summer }} МВт</td>
                 </tr>
                 {% endif %}
-
+{% comment %}
                 {% if feeder.reliability_category %}
                 <tr>
                     <td>Категория надежности:</td>
                     <td>{{ feeder.reliability_category }}</td>
                 </tr>
                 {% endif %}
+{% endcomment %}
                 </tbody>
             </table>
       </div>
