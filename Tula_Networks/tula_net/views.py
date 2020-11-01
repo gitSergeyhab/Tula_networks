@@ -9,10 +9,10 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView
 
 from .forms import FeederAddFromPSForm, FeederFormUpd, PhoneSubscriberFormAdd, PhonePersonFormAdd, PhoneFormUpd, \
     PhonePSFormAdd, SubscriberFormAdd, PersonFormAdd, SubstationFormUpd, FeederAddFromSubscriberForm, SectionAddForm, \
-    Line1Form, UserAutForm
+    Line1Form, UserAutForm, FeederCharForm
 
 from .models import Substation, Subscriber, Section, Person, Phone, Feeder, Group, Region, \
-    ClassVoltage, GroupLine, Line
+    ClassVoltage, GroupLine, Line, Feeder_characteristic
 from dal import autocomplete
 
 from .utils import AddPhoneViewMixin, DeleteObjectMixin, SubstationsViewMixin, FeedersViewMixin, AddFeederMixin, \
@@ -114,6 +114,16 @@ class SectionListView(ListView):
 
 
 # ____________фидера_____________
+class FeedersView(ListView):
+    """для поиск фидеров"""
+    context_object_name = 'feeders'
+    template_name = 'tula_net/feeder_search.html'
+    paginate_by = 28
+
+    def get_queryset(self):
+        return Feeder.objects.select_related('substation', 'section', 'subscriber', 'section__voltage')
+
+
 class OneFeedersView(DetailView):
     template_name = 'tula_net/feeder.html'
     context_object_name = 'feeder'
@@ -124,7 +134,7 @@ class OneFeedersView(DetailView):
 
 
 class AllFeedersView(FeedersViewMixin, ListView):
-    """ все фидера вообще и сразу """
+    """ все фидера """
     paginate_by = 10
 
 
@@ -136,6 +146,20 @@ class OneSubstationView(FeedersViewMixin, ListView):
     def get_queryset(self):
         return Feeder.objects.select_related('substation', 'section', 'subscriber', 'section__voltage'). \
             filter(substation__pk=self.kwargs['pk'])
+
+
+#__________ харки фидеров__________
+class CharsView(ListView):
+    model = Feeder_characteristic
+    context_object_name = 'chars'
+    template_name = 'tula_net/chars.html'
+
+
+class OneCharsView(DetailView):
+    """ карточка одной пс """
+    model = Feeder_characteristic
+    template_name = 'tula_net/one_char.html'
+    context_object_name = 'character'
 
 
 # __________ секции _____________
@@ -361,13 +385,6 @@ class SearcherLinesView(ListView):
         context['regions'] = Region.objects.filter(for_menu=True)
         return context
 
-class FeedersView(ListView):
-    context_object_name = 'feeders'
-    template_name = 'tula_net/feeder_search.html'
-    paginate_by = 28
-
-    def get_queryset(self):
-        return Feeder.objects.select_related('substation', 'section', 'subscriber', 'section__voltage')
 
 class SearcherFeedersView(SearchMixin, ListView):
     context_object_name = 'feeders'
@@ -427,9 +444,57 @@ class UpdFeederView(View):
         return render(request, 'tula_net/form_add_feeder.html', context={'form': form})
 
 
+# _________харки фидеров_________
+class AddCharacterFeederView(View):
+
+    def get(self, request, pk):
+        form = FeederCharForm()
+        form.fields['feeder'].initial = Feeder.objects.get(pk=pk)
+        form.fields['feeder'].queryset = Feeder.objects.filter(pk=pk)
+        return render(request, 'tula_net/form_add_feeder.html', context={'form': form})
+
+    def post(self, request, pk):
+        bound_form = FeederCharForm(request.POST)
+        if bound_form.is_valid():
+            charact = bound_form.save()
+            return redirect(Feeder.objects.get(pk=pk))
+        return render(request, 'tula_net/form_add_person.html', context={'form': bound_form})
+
+
+class UpdCharacterFeederView(View):
+    """ правка с фидера """
+    def get(self, request, pk):
+        charact = Feeder_characteristic.objects.get(feeder__pk=pk)
+        form = FeederCharForm(instance=charact)
+        return render(request, 'tula_net/form_add_feeder.html', context={'form': form})
+
+    def post(self, request, pk):
+        charact = Feeder_characteristic.objects.get(feeder__pk=pk)
+        bound_form = FeederCharForm(request.POST, instance=charact)
+        if bound_form.is_valid():
+            charact = bound_form.save()
+            return redirect(Feeder.objects.get(pk=pk))
+        return render(request, 'tula_net/form_add_person.html', context={'form': bound_form})
+
+
+class UpdCharacterNoFeederView(View):
+    """ правка с лиска, еогдп к фидеру не привязан """
+    def get(self, request, pk):
+        charact = Feeder_characteristic.objects.get(pk=pk)
+        form = FeederCharForm(instance=charact)
+        form.fields['feeder'].queryset = Feeder.objects.filter(substation__name=charact.substation_name)
+        return render(request, 'tula_net/form_add_feeder.html', context={'form': form})
+
+    def post(self, request, pk):
+        charact = Feeder_characteristic.objects.get(pk=pk)
+        bound_form = FeederCharForm(request.POST, instance=charact)
+        if bound_form.is_valid():
+            charact = bound_form.save()
+            return redirect(Feeder.objects.get(character__pk=pk))
+        return render(request, 'tula_net/form_add_person.html', context={'form': bound_form})
+
+
 ## __________________ телефоны ____________________
-
-
 class AddSubscriberPhoneView(AddPhoneViewMixin, View):
     """ добавление телефона организации"""
     model = Subscriber
@@ -464,9 +529,6 @@ class UpdPhoneView(View):
             new_phone = bound_form.save()
             return redirect(new_phone)
         return render(request, 'tula_net/form_add_phone.html', context={'form': bound_form})
-
-
-
 
 
 class PhoneDeleteView(DeleteObjectMixin, View):
@@ -698,3 +760,4 @@ class MyLogin(View):
             login(request, user)
             return redirect('main')
         return render(request, 'login.html', context={'form': form, })
+

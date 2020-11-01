@@ -12,7 +12,8 @@ from tula_net.views import MainView, PsListView, GroupPSView, VoltPSView, OnePSV
     AddFeederFromSubscriberView, AddSectionFromPSView, UpdSectionView,  AddFeederFromSecView, \
     AddSubstationView, LinesGroupView, LinesVoltageView, LinesRegionView, \
     UpdLineView, LineDeleteView, SectionDeleteView, SearcherLinesView, Lines1View, OneLine1View, AddLine1View, \
-    Section1View, SearcherFeedersView, FeedersView, MyLogin
+    Section1View, SearcherFeedersView, FeedersView, MyLogin, AddCharacterFeederView, UpdCharacterFeederView, CharsView,\
+    OneCharsView, UpdCharacterNoFeederView
 
 urlpatterns = [
     path('in', MyLogin.as_view(), name='in'),
@@ -101,6 +102,18 @@ urlpatterns = [
     path('add_line/', AddLine1View.as_view(), name='add_line'),
     path('upd_line/<int:pk>/', UpdLineView.as_view(), name='upd_line'),
     path('del_line/<int:pk>/', LineDeleteView.as_view(), name='del_line'),
+
+    # харки фидеров
+    path('character/<int:pk>', OneCharsView.as_view(), name='feeder_char'),
+    # лист х-к:
+    path('characters/', CharsView.as_view(), name='chars'),
+    # добавление с фидера:
+    path('add_character/<int:pk>/', AddCharacterFeederView.as_view(), name='add_charact'),
+    # для правки с листа (CharsView):
+    path('upd_character_fl/<int:pk>/', UpdCharacterNoFeederView.as_view(), name='upd_charact_fl'),
+    # для правки с фидера:
+    path('upd_character/<int:pk>/', UpdCharacterFeederView.as_view(), name='upd_charact'),
+
 
     # !не работают!
     # path('subscriber_autocomplete/', SubscriberAutocompleteView.as_view(), name='subscriber_autocomplete'),

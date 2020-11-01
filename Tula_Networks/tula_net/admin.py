@@ -2,7 +2,7 @@ from django.contrib import admin
 
 # Register your models here.
 from .models import Substation, Section, Feeder, Subscriber, Person, Phone, Group, Res, ClassVoltage, TransmissionLine,\
-    Region, GroupLine, Line
+    Region, GroupLine, Line, Feeder_characteristic
 
 
 
@@ -48,7 +48,7 @@ admin.site.register(Person, PersonAdnin)
 
 
 class FeederAdmin(admin.ModelAdmin):
-    list_display = ['pk', 'name', 'substation', 'section', 'subscriber', 'attention', 'number_tp', 'in_reserve']
+    list_display = ['pk', 'name', 'substation', 'section', 'subscriber', 'attention',  'in_reserve']
     list_display_links = ['name']
     search_fields = ['name']
     list_filter = ['substation', 'attention']
@@ -109,6 +109,8 @@ class GroupLineAdmin(admin.ModelAdmin):
     search_fields = ['name']
     list_filter = ['name', ]
 
+class Feeder_characteristicAdmin(admin.ModelAdmin):
+    list_display = ['pk', 'feeder', 'length','villages_names', 'social_names', 'power_winter', 'points' ]
 
 admin.site.register(Group, GroupAdmin)
 admin.site.register(GroupLine, GroupLineAdmin)
@@ -117,3 +119,4 @@ admin.site.register(ClassVoltage, ClassVoltageAdmin)
 admin.site.register(Region, RegionAdmin)
 admin.site.register(TransmissionLine, LineAdmin)
 admin.site.register(Line, Line1Admin)
+admin.site.register(Feeder_characteristic, Feeder_characteristicAdmin)

@@ -1,6 +1,6 @@
 import pandas as pd
 
-from .models import Subscriber, Substation, Group, Section, Feeder
+from .models import Subscriber, Substation, Group, Section, Feeder, Feeder_characteristic
 
 pstula = pd.read_csv('tula_net/data_lists/for_subscribers.csv')
 only_subsribers = pstula.subscriber.unique()
@@ -76,6 +76,54 @@ def adder_feed(feeds):
                     print(f.name_feeder_T, f['name'])
                 print(f.name_feeder_T)
                 repeat.append(f['Unnamed: 0'])
+
+
+f5 = pd.read_excel('tula_net/data_lists/f7.xlsx')
+
+
+def feeder_plus(feeders):
+    repeat = []
+    for i, f in feeders.iterrows():
+        if i not in repeat:
+            # print(f['name_f'],f['name_ps'], f['long'] )
+            try:
+                charac = Feeder_characteristic.objects.create(
+                    feeder_name=f['name_f'],
+                    substation_name=f['name_ps'],
+                    # feeder=Feeder.objects.filter(name=f['name_f'], substation__name=f['name_ps'])[0],
+                    length=f['long'],
+                    tp_our_num=f['tp_te'],
+                    tp_alien_num=f['tp_al'],
+                    villages_num=f['vil_num'],
+                    villages_names=f['vil_name'],
+                    power_winter=f['pow_win'],
+                    power_summer=f['pow_sum'],
+                    population=f['peop_num'],
+                    points=f['points'],
+                    social_num=f['szo_num'],
+                    social_names=f['szo_name'],
+                )
+            except:
+                print(f['name_f'], f['name_ps'], '!!!')
+            print(i, f['name_f'], f['name_ps'], "+")
+            repeat.append(i)
+
+
+'''
+    feeder = models.OneToOneField(Feeder, related_name="character", on_delete=models.CASCADE)
+    length = models.FloatField(verbose_name='Протяженность', blank=True, null=True)
+    tp_our_num = models.PositiveSmallIntegerField(blank=True, verbose_name='ТП наши: количество', null=True)
+    tp_alien_num = models.PositiveSmallIntegerField(blank=True, verbose_name='ТП чужие: количество', null=True)
+    villages_num = models.PositiveSmallIntegerField(blank=True, verbose_name='НП количество', null=True)
+    villages_names = models.TextField(blank=True, verbose_name='НП названия', null=True)
+    power_winter = models.FloatField(verbose_name='Зима МВт', blank=True, null=True)
+    power_summer = models.FloatField(verbose_name='Лето МВт', blank=True, null=True)
+    population = models.PositiveSmallIntegerField(blank=True, verbose_name='Население', null=True)
+    points = models.PositiveSmallIntegerField(blank=True, verbose_name='Точки поставки', null=True)
+    social_num = models.PositiveSmallIntegerField(blank=True, verbose_name='Социалка кол-во', null=True)
+    social_names = models.TextField(blank=True, verbose_name='Социалка тип', null=True)
+
+'''
 
 # name = models.CharField(max_length=32, verbose_name='Название фидера')
 # substation = models.ForeignKey(Substation, related_name='feeders', on_delete=models.CASCADE, verbose_name='ПС')

@@ -48,26 +48,120 @@
           {% endif %}
         {% endfor %}</div>
 
-    <div class="my-3 card-footer">
-        {% if feeder.subscriber.ours %}
-            <h6 class="card-text">ТП: {{ feeder.number_tp }}</h6>
-            <h6 class="card-text">Протяженность: {{ feeder.length }} </h6>
-            <h6 class="card-text">Население: {{ feeder.population }}</h6>
-            <h6 class="card-text">Социалка: {{ feeder.social }}</h6>
-        {% endif %}
-        {% if feeder.reliability_category %}
-            <h6 class="card-text">категория надежности: {{ feeder.reliability_category }}</h6>
-        {% endif %}
-    </div>
+<!--          feeder_name = models.CharField(max_length=64, verbose_name='Название фидера')-->
+<!--    substation_name = models.CharField(max_length=64, verbose_name='Название ПС')-->
+<!--    feeder = models.OneToOneField(Feeder, related_name="character", on_delete=models.SET_NULL,-->
+<!--                                  null=True, blank=True, verbose_name='фидер')-->
+
+<!--    points = models.PositiveSmallIntegerField(blank=True, verbose_name='Точки поставки', null=True)-->
+
+<!--    checked = models.BooleanField(verbose_name='соответствует', default=False)-->
 
 
-            <div class="card-footer text-right">
-                <div class="btn-group dropup">
+
+        <div class="my-3 card-footer text-center">
+            {{ feeder.character.feeder }}
+            {% if feeder.character.checked %}
+            <h5 class="bg-success">Проверено</h5>
+            {% else %}
+            <h5 class="bg-warning">Нужно проверить</h5>
+            {% endif %}
+            <style type="text/css">
+                table {
+                    border-collapse: collapse;
+                }
+                table th,
+                table td {
+                    padding: 0 3px;
+                }
+                table tr  {
+                    border-top: 1px solid #000;
+                    border-bottom: 1px solid #000;
+                }
+
+                table tr td:last-child {
+                    text-align: center;
+                }
+                table tbody {
+                    border-top: 1px solid #000;
+                    border-bottom: 1px solid #000;
+                }
+            </style>
+            <table class="m-auto">
+
+                <thead>
+                <tr>
+                    <th>характеристики</th>
+                    <th>значения</th>
+                </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>ТП наши</td>
+                        <td>{{ feeder.character.tp_our_num }}</td>
+                    </tr>
+                    <tr>
+                        <td>ТП чужие</td>
+                        <td>{{ feeder.character.tp_alien_num }}</td>
+                    </tr>
+                    <tr>
+                        <td>НП</td>
+                        <td><b>{{ feeder.character.villages_num }}</b> | {{ feeder.character.villages_names }} </td>
+                    </tr>
+
+                    <tr>
+                        <td>Население</td>
+                        <td> {{ feeder.character.population }}</td>
+                    </tr>
+                    <tr>
+                        <td>Протяженность</td>
+                        <td>{{ feeder.character.length }}</td>
+                    </tr>
+
+                    <tr>
+                        <td>Социалка</td>
+                        {% if feeder.character.social_num %}
+                        <td><b>{{ feeder.character.social_num }} </b>| {{ feeder.character.social_names }}</td>
+                        {% else %}
+                        <td>Социалки нет </td>
+                        {% endif %}
+                    </tr>
+
+                <tr>
+                    <td>Точки поставки</td>
+                    <td>{{ feeder.character.points }}</td>
+                </tr>
+
+                {% if feeder.character.power_winter %}
+                <tr>
+                    <td>Потребление</td>
+                    <td>зима : {{ feeder.character.power_winter }} / лето: {{ feeder.character.power_summer }} МВт</td>
+                </tr>
+                {% endif %}
+
+                {% if feeder.reliability_category %}
+                <tr>
+                    <td>Категория надежности:</td>
+                    <td>{{ feeder.reliability_category }}</td>
+                </tr>
+                {% endif %}
+                </tbody>
+            </table>
+      </div>
+
+
+            <div class="card-footer text-right py-0 px-5">
+                <div class="btn-group dropup mx-5 px-1">
                   <button type="button" class="btn btn-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     править БД<span class="sr-only">Toggle Dropdown</span>
                   </button>
                   <div class="dropdown-menu">
-                    <a class="dropdown-item" href="{% url 'upd_feeder' feeder.pk %}">изменить</a>
+                      {% if feeder.character %}
+                      <a class="dropdown-item" href="{% url 'upd_charact' feeder.pk %}">изменить характеристики</a>
+                      {% else %}
+                      <a class="dropdown-item" href="{% url 'add_charact' feeder.pk %}">добасить характеристики</a>
+                      {% endif %}
+                    <a class="dropdown-item" href="{% url 'upd_feeder' feeder.pk %}">править фидер</a>
                     <a class="dropdown-item" href="{% url 'del_feeder' feeder.pk %}">удалить</a>
                   </div>
                 </div>

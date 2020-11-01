@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from django.forms import TextInput, SelectDateWidget
 
-from .models import Feeder, Subscriber, Substation, Section, Phone, Person, Line
+from .models import Feeder, Subscriber, Substation, Section, Phone, Person, Line, Feeder_characteristic
 from dal import autocomplete
 
 from django.core.exceptions import ValidationError
@@ -47,6 +47,14 @@ class FeederFormUpd(BaseCrispyForms, forms.ModelForm):
         model = Feeder
         # fields = '__all__'
         fields = ['name', 'substation', 'section', 'subscriber', 'in_reserve', 'attention', 'description']
+
+
+class FeederCharForm(BaseCrispyForms, forms.ModelForm):
+
+    class Meta:
+        model = Feeder_characteristic
+        fields = '__all__'
+
 
 
 # __________________ форма добавления телефона для организации _______________________

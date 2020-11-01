@@ -88,14 +88,39 @@
                         <hr class="p-0 mt-1 mb-0"  color="#00008B" >
                         <hr class="p-0 m-0"  color="#00008B" >
 
-                        <div class="card-body mt-0 py-0">
-                            {% if feeder.number_tp %} Количество ТП: <b>{{ feeder.number_tp }}</b> , {% endif %}
-                             {% if feeder.population %} Население: <b>{{ feeder.number_tp }} чел</b> , {% endif %}
-                             {% if feeder.points %} Точки поставки: <b>{{ feeder.points }}</b> , {% endif %}
-                             {% if feeder.social %} Количество соц объектов: <b>{{ feeder.social }}</b> , {% endif %}
-                            {% if feeder.length %} Протяженность: <b>{{ feeder.length }} км </b> {% endif %}
-                            {% if feeder.reliability_category %} Категория надежности: <b>{{ feeder.reliability_category }} </b> {% endif %}
+                    {% if feeder.subscriber.ours %}
+                        {% if feeder.character.checked %}
+                        <div class="card-body mt-0 py-0 bg-success">
+                        {% else %}
+                        <div class="card-body mt-0 py-0 bg-warning">
+                        {% endif %}
+
+                            {% if feeder.character.tp_our_num or feeder.character.tp_alien_num %}
+                                Количество ТП наши/чужие: <b>{{ feeder.character.tp_our_num }} / {{ feeder.character.tp_alien_num }} </b> ,
+                            {% endif %}
+                            {% if feeder.character.population %}
+                                Население: <b>{{ feeder.character.population }} чел</b> ,
+                            {% endif %}
+                            {% if feeder.character.social_num %}Социалка:
+                                <b>{{ feeder.character.social_num }} </b>( {{ feeder.character.social_names }} )
+                            {% else %}
+                                <b>Социалки нет </b>
+                            {% endif %}
+                            {% if feeder.character.length %} Протяженность: <b>{{ feeder.character.length }} км </b> {% endif %}
                         </div>
+                    {% endif %}
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

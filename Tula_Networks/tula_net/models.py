@@ -4,7 +4,7 @@ from django.urls import reverse
 
 class Region(models.Model):
     name = models.CharField(max_length=128, verbose_name='Регион', unique=True)
-    for_menu = models.BooleanField(default=False, verbose_name='Добавить в меню',)
+    for_menu = models.BooleanField(default=False, verbose_name='Добавить в меню', )
 
     class Meta:
         verbose_name = "Регион"
@@ -60,7 +60,6 @@ class GroupLine(models.Model):
         verbose_name = "Участок сл ВЛ"
         verbose_name_plural = "Участки сл ВЛ"
         ordering = ['-ours', 'name']
-
 
 
 class Res(models.Model):
@@ -162,6 +161,7 @@ class Person(models.Model):
     position = models.CharField(max_length=64, verbose_name='должность', blank=True, null=True)
     priority = models.PositiveSmallIntegerField(blank=True, verbose_name='приоритет', null=True)
     description = models.TextField(verbose_name='Описение', blank=True)
+
     # mail = models.EmailField(max_length=32, verbose_name='электронка', blank=True)
 
     def get_absolute_url(self):
@@ -183,18 +183,18 @@ class Feeder(models.Model):
                                 blank=True, null=True)
     subscriber = models.ForeignKey(Subscriber, related_name='feeders', on_delete=models.SET_NULL,
                                    verbose_name='абонент', blank=True, null=True)
-    length = models.FloatField(verbose_name='Протяженность', blank=True, null=True)
-    number_tp = models.PositiveSmallIntegerField(blank=True, verbose_name='Количество ТП', null=True)
-    population = models.PositiveSmallIntegerField(blank=True, verbose_name='Население', null=True)
-    points = models.PositiveSmallIntegerField(blank=True, verbose_name='Точки поставки', null=True)
-    social = models.PositiveSmallIntegerField(blank=True, verbose_name='Социалка', null=True)
+    # length = models.FloatField(verbose_name='Протяженность', blank=True, null=True)
+    # number_tp = models.PositiveSmallIntegerField(blank=True, verbose_name='Количество ТП', null=True)
+    # population = models.PositiveSmallIntegerField(blank=True, verbose_name='Население', null=True)
+    # points = models.PositiveSmallIntegerField(blank=True, verbose_name='Точки поставки', null=True)
+    # social = models.PositiveSmallIntegerField(blank=True, verbose_name='Социалка', null=True)
     attention = models.BooleanField(verbose_name='!!!', default=False)
     reliability_category = models.PositiveSmallIntegerField(blank=True, verbose_name='категория надежности', null=True)
     in_reserve = models.BooleanField(default=False, verbose_name='Резервный')
     region = models.ForeignKey(Region, verbose_name='Участок', related_name='feeders',
                                on_delete=models.SET_NULL, blank=True, null=True)
     description = models.TextField(verbose_name='Описение', blank=True, null=True)
-    res = models.CharField(blank=True, max_length=32, verbose_name='РЭС', null=True)
+    # res = models.CharField(blank=True, max_length=32, verbose_name='РЭС', null=True)
 
     def get_absolute_url(self):
         return reverse('feeder', kwargs={'pk': self.pk})
@@ -205,7 +205,7 @@ class Feeder(models.Model):
     class Meta:
         verbose_name = "фидер"
         verbose_name_plural = "фидера"
-        ordering = ['in_reserve', 'section',  'name']
+        ordering = ['in_reserve', 'section', 'name']
 
 
 class Phone(models.Model):
@@ -237,7 +237,8 @@ class TransmissionLine(models.Model):
     full_name = models.CharField(max_length=128, verbose_name='Полное название', blank=True, null=True)
     short_name = models.CharField(max_length=32, verbose_name='Цифровое название', blank=True, default='')
     section = models.ManyToManyField(Section, verbose_name='Секция', related_name='lines0')
-    voltage = models.ForeignKey(ClassVoltage, verbose_name='Напряжение', related_name='lines0', on_delete=models.PROTECT)
+    voltage = models.ForeignKey(ClassVoltage, verbose_name='Напряжение', related_name='lines0',
+                                on_delete=models.PROTECT)
     management = models.ForeignKey(Region, verbose_name='Управление', related_name='lines_upr0',
                                    on_delete=models.CASCADE, default=2)
     maintenance = models.ManyToManyField(Region, verbose_name='Ведение', related_name='lines_ved0', blank=True)
@@ -260,7 +261,6 @@ class TransmissionLine(models.Model):
         verbose_name = "Линия - МОДЕЛЬ ЗАМЕНЕНА"
         verbose_name_plural = "Линии - МОДЕЛЬ ЗАМЕНЕНА"
         ordering = ['voltage', 'short_name']
-
 
 
 class Line(models.Model):
@@ -304,10 +304,61 @@ class Line(models.Model):
         ordering = ['voltage', 'short_name']
 
 
+class Feeder_characteristic(models.Model):
+    feeder_name = models.CharField(max_length=64, verbose_name='Название фидера')
+    substation_name = models.CharField(max_length=64, verbose_name='Название ПС')
+    feeder = models.OneToOneField(Feeder, related_name="character", on_delete=models.SET_NULL,
+                                  null=True, blank=True, verbose_name='фидер')
+    length = models.FloatField(verbose_name='Протяженность', blank=True, null=True)
+    tp_our_num = models.PositiveSmallIntegerField(blank=True, verbose_name='ТП наши: количество', null=True)
+    tp_alien_num = models.PositiveSmallIntegerField(blank=True, verbose_name='ТП чужие: количество', null=True)
+    villages_num = models.PositiveSmallIntegerField(blank=True, verbose_name='НП количество', null=True)
+    villages_names = models.TextField(blank=True, verbose_name='НП названия', null=True)
+    power_winter = models.FloatField(verbose_name='Зима МВт', blank=True, null=True)
+    power_summer = models.FloatField(verbose_name='Лето МВт', blank=True, null=True)
+    population = models.PositiveSmallIntegerField(blank=True, verbose_name='Население', null=True)
+    points = models.PositiveSmallIntegerField(blank=True, verbose_name='Точки поставки', null=True)
+    social_num = models.PositiveSmallIntegerField(blank=True, verbose_name='Социалка кол-во', null=True)
+    social_names = models.TextField(blank=True, verbose_name='Социалка тип', null=True)
+    checked = models.BooleanField(verbose_name='соответствует', default=False)
+
+    def get_absolute_url(self):
+        return reverse('feeder_char', kwargs={'pk': self.pk})
+
+    def get_upd_url(self):
+        return reverse('upd_charact_fl', kwargs={'pk': self.pk})
+
+
+    def __str__(self):
+        return ' '.join(('ПС', self.substation_name, 'фид', self.feeder_name))
+
+    class Meta:
+        unique_together = ('feeder_name', 'substation_name')
+        verbose_name = "характеристика фидера"
+        verbose_name_plural = "х-ки фидеров"
+
 import pandas as pd
-from .data_script import only_pst, adder_ps, adder_subsriber, only_subsribers, only_sec, adder_sec, feeds, adder_feed
+from .data_script import only_pst, adder_ps, adder_subsriber, only_subsribers, only_sec, adder_sec, feeds, adder_feed, \
+    feeder_plus, f5
 
 # adder_subsriber(only_subsribers)
 # adder_ps(only_pst)
 # adder_sec(only_sec)
 # adder_feed(feeds)
+# feeder_plus(f5)
+# c = 1
+# for i in Feeder_characteristic.objects.all():
+#     x = Feeder_characteristic.objects.filter(pk=c)
+#     c += 1
+#
+#     x.update(feeder=Feeder.objects.filter(name=i.feeder_name, substation__name=i.substation_name))
+
+# try:
+#     1
+# except
+
+# Price.objects.filter(pk=price.pk).update(
+#     upper1000="○",
+#     from500to1000="○",
+#     under500="○"
+# )
