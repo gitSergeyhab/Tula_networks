@@ -21,3 +21,4 @@ urlpatterns = [
     path('', include('tula_net.urls')),
     # path('silk/', include('silk.urls', namespace='silk')),
 ]
+
