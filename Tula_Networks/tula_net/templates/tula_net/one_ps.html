@@ -1,8 +1,6 @@
 {% extends 'base.html' %}
 
  {% block first_section %}
-
-
       <div class="row mt-5">
         <div class="col-12 col-lg-10 offset-lg-2 m-auto">
           <div class="card mb-4">
@@ -144,6 +142,84 @@
             </div>
           </div>
         </div>
+
+          <div class="card mb-4">
+            <div class="card-body px-4">
+                <h5 class="text-center">Сумма по ПС - работает, если данные по фидерам забиты верно</h5>
+
+
+
+        <div class="my-3 card-footer text-center">
+            <style type="text/css">
+                table {
+                    border-collapse: collapse;
+                }
+                table th,
+                table td {
+                    padding: 0 3px;
+                }
+                table tr  {
+                    border-top: 1px solid #000;
+                    border-bottom: 1px solid #000;
+                }
+
+                table tr td:last-child {
+                    text-align: center;
+                }
+                table tbody {
+                    border-top: 1px solid #000;
+                    border-bottom: 1px solid #000;
+                }
+            </style>
+            <table class="m-auto">
+               <thead>
+                <tr>
+                    <th>характеристики</th>
+                    <th>значения</th>
+                </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>ТП наши</td>
+                        <td>{{ ps.tp_ours_sum }}</td>
+                    </tr>
+                    <tr>
+                        <td>ТП чужие</td>
+                        <td>{{ ps.tp_alien_sum }}</td>
+                    </tr>
+                    <tr>
+                        <td>НП</td>
+                        <td>{{ ps.villages_sum }}</td>
+                    </tr>
+
+                    <tr>
+                        <td>Население</td>
+                        <td> {{ ps.population_sum }}</td>
+                    </tr>
+                    <tr>
+                        <td>Протяженность</td>
+                        <td>{{ ps.length_sum|floatformat:3 }} км</td>
+                    </tr>
+
+                    <tr>
+                        <td>Социалка</td>
+                        <td>{{ ps.social_sum }} </td>
+
+                    </tr>
+
+                    <tr>
+                        <td>Точки поставки</td>
+                        <td>{{ ps.points_sum }}</td>
+                    </tr>
+
+                    <tr>
+                        <td>Потребление</td>
+                        <td>зима : {{ ps.power_winter_sum|floatformat:3 }} / лето: {{ ps.power_summer_sum|floatformat:3 }} МВт</td>
+                    </tr>
+                </tbody>
+            </table>
+            </div>
+          </div>
 
           <div class="card mb-4">
             <div class="card-body px-4">

@@ -4,6 +4,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views import View
 from django import forms
+from django.db.models import Count, Min, Sum, Avg
 
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
 
@@ -75,6 +76,19 @@ class ResPS(ListView):
     pass
 
 
+"""
+                    length = models.FloatField(verbose_name='Протяженность', blank=True, null=True)
+    tp_our_num = models.PositiveSmallIntegerField(blank=True, verbose_name='ТП наши: количество', null=True)
+    tp_alien_num = models.PositiveSmallIntegerField(blank=True, verbose_name='ТП чужие: количество', null=True)
+    villages_num = models.PositiveSmallIntegerField(blank=True, verbose_name='НП количество', null=True)
+    power_winter = models.FloatField(verbose_name='Зима МВт', blank=True, null=True)
+    power_summer = models.FloatField(verbose_name='Лето МВт', blank=True, null=True)
+    population = models.PositiveSmallIntegerField(blank=True, verbose_name='Население', null=True)
+    points = models.PositiveSmallIntegerField(blank=True, verbose_name='Точки поставки', null=True)
+    social_num = models.PositiveSmallIntegerField(blank=True, verbose_name='Социалка кол-во', null=True)
+"""
+
+
 class OnePSView(DetailView):
     """ карточка одной пс """
 
@@ -82,7 +96,18 @@ class OnePSView(DetailView):
     context_object_name = 'ps'
 
     def get_queryset(self):
-        return Substation.objects.select_related('group', 'voltage_h', 'voltage_m', 'voltage_l'). \
+        return Substation.objects.annotate(
+            tp_ours_sum=Sum('feeders__character__tp_our_num'),
+            tp_alien_sum=Sum('feeders__character__tp_alien_num'),
+            length_sum=Sum('feeders__character__length'),
+            villages_sum=Sum('feeders__character__villages_num'),
+            power_winter_sum=Sum('feeders__character__power_winter'),
+            power_summer_sum=Sum('feeders__character__power_summer'),
+            population_sum=Sum('feeders__character__population'),
+            points_sum=Sum('feeders__character__points'),
+            social_sum=Sum('feeders__character__social_num'),
+        )\
+            .select_related('group', 'voltage_h', 'voltage_m', 'voltage_l'). \
             prefetch_related('sections', 'feeders', 'sections__voltage', 'phones', 'sections__feeders')
 
     def get_context_data(self, *, object_list=None, **kwargs):
