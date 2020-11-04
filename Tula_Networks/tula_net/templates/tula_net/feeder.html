@@ -1,5 +1,9 @@
 {% extends 'base.html' %}
 
+{% block title %}
+{{ block.super }} | ПС {{ feeder.substation }} фидер {{ feeder.name }}
+{% endblock %}
+
 {% block cards1 %}
 
 <div class="card">

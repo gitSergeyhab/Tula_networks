@@ -1,5 +1,9 @@
 {% extends 'base.html' %}
 
+{% block title %}
+{{ block.super }} | {% if the_section %} {{ the_section }}
+{% elif the_substation %} ПС {{ the_substation }} {% endif %}| Абоненты с фидерами
+{% endblock %}
 
 
 {% block cards1 %}
@@ -11,7 +15,7 @@
             {% elif the_substation %}
             Все абоненты <a class="btn btn-light p-0 py-0 m-0" href="{{ the_substation.get_absolute_url }}"><h5><b>ПС {{ the_substation }}</b></h5></a>
             {% endif %}
-            | все фидеры :
+
         </b></span></h5>
 
         <div class="text-right">

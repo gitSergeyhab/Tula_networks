@@ -51,7 +51,7 @@ class VoltPSView(SubstationsViewMixin, ListView):
 
     def get_queryset(self):
         return Substation.objects.select_related('group', 'voltage_h', 'voltage_m', 'voltage_l'). \
-            filter(voltage_h__class_voltage=self.kwargs['pk'])
+            filter(voltage_h__pk=self.kwargs['pk'])
 
 
 class SubstationsBySubscriberView(ListView):
@@ -74,19 +74,6 @@ class SubstationsBySubscriberView(ListView):
 
 class ResPS(ListView):
     pass
-
-
-"""
-                    length = models.FloatField(verbose_name='Протяженность', blank=True, null=True)
-    tp_our_num = models.PositiveSmallIntegerField(blank=True, verbose_name='ТП наши: количество', null=True)
-    tp_alien_num = models.PositiveSmallIntegerField(blank=True, verbose_name='ТП чужие: количество', null=True)
-    villages_num = models.PositiveSmallIntegerField(blank=True, verbose_name='НП количество', null=True)
-    power_winter = models.FloatField(verbose_name='Зима МВт', blank=True, null=True)
-    power_summer = models.FloatField(verbose_name='Лето МВт', blank=True, null=True)
-    population = models.PositiveSmallIntegerField(blank=True, verbose_name='Население', null=True)
-    points = models.PositiveSmallIntegerField(blank=True, verbose_name='Точки поставки', null=True)
-    social_num = models.PositiveSmallIntegerField(blank=True, verbose_name='Социалка кол-во', null=True)
-"""
 
 
 class OnePSView(DetailView):
@@ -131,11 +118,6 @@ class SectionListView(ListView):
 
     def get_queryset(self):
         return Section.objects.prefetch_related('feeders').select_related('voltage', 'substation').all()
-
-    # def get_context_data(self, *, object_list=None, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     # context['context_menu'] = context_menu
-    #     return context
 
 
 # ____________фидера_____________

@@ -1,5 +1,9 @@
 {% extends 'base.html' %}
 
+{% block title %}
+{{ block.super }} | Фидеры {% if the_section %} {{ the_section }}{% elif the_substation %} ПС {{ the_substation }} {% endif %}
+{% endblock %}
+
 {% block cards1 %}
 
     <div class="card">
@@ -10,7 +14,6 @@
             {% elif the_substation %}
             <a class="btn btn-light p-0 py-0 m-0" href="{{ the_substation.get_absolute_url }}"><h5><b>ПС {{ the_substation }}</b></h5></a>
             {% endif %}
-            | все фидеры :
         </b></span></h5>
 
 
@@ -26,7 +29,6 @@
 
     <div class="card-body">
     {% for feeder in feeders %}
-        {{feeder.try_number_name}}
           <div class="row mt-1">
             <div class="col-12 col-lg-11 offset-lg-2 m-auto">
               <div class="card mb-4">

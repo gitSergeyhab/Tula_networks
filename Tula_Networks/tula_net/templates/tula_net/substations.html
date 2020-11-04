@@ -1,5 +1,12 @@
 {% extends 'base.html' %}
 
+{% block title %}
+{{ block.super }} | Подстанции
+
+{% if flag_voltages %} {{ substations.0.voltage_h }}
+{% elif flag_group %} | {{ substations.0.group }} группа {% endif %}
+{% endblock %}
+
 {% block search %}
     {% if not flag_group and not flag_voltages %}
         <div class="mb-5">
@@ -28,29 +35,30 @@
   </button>
 
   <div class="collapse navbar-collapse justify-content-between" id="navbarNav1">
-    <ul class="navbar-nav col-10 mt-1">
+    <ul class="navbar-nav col-10">
         {% for group in groups %}
-      <li class="nav-item">
-          {% if group.ours %}
-          <a
-              {% if group.pk|stringformat:"i" == logik_group and logik_volt != logik_kostyl %}
-                class="btn btn-secondary"
+         {% if group.ours %}
+          <li class="nav-item">
+              {% if group.get_absolute_url == request.path %}
+              <a class="btn btn-dark py-0" href="{% url 'group' group.pk %}"><b>{{ group }}</b></a>
               {% else %}
-                class="nav-link"
+              <a class="btn btn-light py-0" href="{% url 'group' group.pk %}"><b>{{ group }}</b></a>
               {% endif %}
-          href="{% url 'group' group.pk %}"><b>{{ group }}</b></a>
-          {% else %}
-          <a
-              {% if group.pk|stringformat:"i" == logik_group and logik_volt != logik_kostyl %}
-                class="btn btn-secondary"
-              {% else %}
-                class="nav-link"
-              {% endif %}
-              href="{% url 'group' group.pk %}">{{ group }}</a>
-          {% endif %}
-      </li>
+          </li>
+        {% endif %}
         {% endfor %}
 
+        {% for group in groups %}
+         {% if not group.ours %}
+          <li class="nav-item">
+            {% if group.get_absolute_url == request.path %}
+              <a class="btn btn-secondary py-0" href="{% url 'group' group.pk %}">{{ group }}</a>
+              {% else %}
+              <a class="btn btn-light py-0" href="{% url 'group' group.pk %}">{{ group }}</a>
+              {% endif %}
+          </li>
+        {% endif %}
+        {% endfor %}
 
     </ul>
   </div>
@@ -66,21 +74,15 @@
   </button>
 
   <div class="collapse navbar-collapse justify-content-between" id="navbarNav2">
-    <ul class="navbar-nav col-10 mt-1">
+    <ul class="navbar-nav col-10">
         {% for volt in voltages %}
           <li class="nav-item">
-              <a
-                    {% if  volt|stringformat:"i" == logik_volt or volt|stringformat:"i" == logik_volt2 %}
-                      class="btn btn-secondary"
-                    {% else %}
-                      class="nav-link"
-                    {% endif %}
-                    href="{% url 'voltage' volt %}">
-                  <b>{{ volt }} кВ
-
-                  </b>
-              </a>
-          </li>
+              {% if volt.get_absolute_url == request.path %}
+              <a class="btn btn-dark py-0 mx-3" href="{% url 'voltage' volt.pk %}"><b>{{ volt }}</b></a>
+              {% else %}
+              <a class="btn btn-light py-0 mx-3" href="{% url 'voltage' volt.pk %}"><b>{{ volt }}</b></a>
+              {% endif %}
+         </li>
         {% endfor %}
 
     </ul>

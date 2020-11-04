@@ -1,20 +1,24 @@
 {% extends 'base.html' %}
 
+{% block title %}
+{{ block.super }} | {{ the_subscriber }} | Подстанции с фидерами
+{% endblock %}
+
 {% block cards1 %}
 
-<h2>{{ the_subscriber }}</h2>
+<h2 class="text-center m-1">{{ the_subscriber }}</h2>
 
 
 {% for ps in substations.distinct %}
 
 <div class="card">
-  <div class="card-header">
+  <div class="mx-auto py-1">
       <a href="{{ ps.get_absolute_url }}" class="btn btn-dark">{{ ps }}</a>
 
   </div>
   <div class="card-body">
 
-      <p class="card-text"><b>Фидеры</b>
+      <p class="card-text text-center m-0">
         {% for feeder in ps.feeders.all %}
 
         {% if feeder.subscriber == the_subscriber %}
@@ -29,7 +33,7 @@
            {% endif %}
 
 
-        >{{ feeder.name }}</a> ,
+        >{{ feeder.name }}</a>
 
         {% endif %}
 

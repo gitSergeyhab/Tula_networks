@@ -1,5 +1,23 @@
 from datetime import datetime
 
+# def just_titles(request):
+#     return {
+#         'tit_substations': 'Подстанции',
+#         'tit_subscribers': 'Организации',
+#         'tit_phones': 'Телефоны',
+#         'tit_persons': 'Ответственные лица',
+#         'tit_sections': 'Секции',
+#         'tit_lines': 'Линии',
+#         'tit_feeders': 'Фидеры',
+#         'tit_substation': 'Подстанция',
+#         'tit_subscriber': 'Организация',
+#         'tit_phone': 'Телефон',
+#         'tit_person': 'Ответственныо лицо',
+#         'tit_section': 'Секция',
+#         'tit_line': 'Линия',
+#         'tit_feeder': 'Фидер',
+#     }
+
 
 def add_titles(request):
     return {
@@ -14,16 +32,13 @@ def add_titles(request):
         'title_person': 'лицо',
         'title_section': 'секцию',
         'title_line': 'линию',
+        'title_char': 'характеристики фидера',
     }
 
 
 def logik(request):
     return {
         'current_year': datetime.now().year,
-        'logik_kostyl': '/35',
-        'logik_volt2': request.path[-3:-1],
-        'logik_volt': request.path[-4:-1],
-        'logik_group': request.path[-2:-1],
         'logik_metod': request.path[1:5],
         'logik_obj': request.path[4:10],
         'logik_add': 'add_',
@@ -36,6 +51,7 @@ def logik(request):
         'logik_person': '_perso',
         'logik_section': '_secti',
         'logik_line': '_line/',
+        'logik_char': '_chara'
     }
 
 

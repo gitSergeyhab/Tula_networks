@@ -1,5 +1,11 @@
 {% extends 'base.html' %}
 
+
+
+{% block title %}
+{{ block.super }} | {{ line.name }}
+{% endblock %}
+
 {% block cards1 %}
 
 <div class="card">

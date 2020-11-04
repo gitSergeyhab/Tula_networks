@@ -4,7 +4,10 @@ from django.urls import reverse
 
 class Region(models.Model):
     name = models.CharField(max_length=128, verbose_name='Регион', unique=True)
-    for_menu = models.BooleanField(default=False, verbose_name='Добавить в меню', )
+    for_menu = models.BooleanField(default=False, verbose_name='Добавить в меню')
+
+    def get_line_url(self):
+        return reverse('line_region', kwargs={'pk': self.pk})
 
     class Meta:
         verbose_name = "Регион"
@@ -16,6 +19,12 @@ class Region(models.Model):
 
 class ClassVoltage(models.Model):
     class_voltage = models.SmallIntegerField(verbose_name='Класс напряжения')
+
+    def get_absolute_url(self):
+        return reverse('voltage', kwargs={'pk': self.pk})
+
+    def get_line_url(self):
+        return reverse('line_voltage', kwargs={'pk': self.pk})
 
     class Meta:
         verbose_name = "напряжение"
@@ -51,7 +60,7 @@ class GroupLine(models.Model):
     ours = models.BooleanField(verbose_name='наши', blank=True, null=True)
 
     def get_absolute_url(self):
-        return reverse('group', kwargs={'pk': self.pk})
+        return reverse('line_group', kwargs={'pk': self.pk})
 
     def __str__(self):
         return self.name

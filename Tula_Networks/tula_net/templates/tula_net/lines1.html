@@ -1,6 +1,12 @@
 {% extends 'base.html' %}
 
+{% block title %}
+{{ block.super }} | ВЛ
 
+{% if flag_voltages %} {{ lines.0.voltage }}
+{% elif flag_group %} | {{ lines.0.group }} участок
+{% elif flag_region %} | Управление : {{ lines.0.management }} {% endif %}
+{% endblock %}
 
 {% block menu %}
 <nav class="navbar navbar-expand-lg navbar-light bg-light border-left border-right border-dark py-0">
@@ -15,7 +21,11 @@
         {% for group in groups %}
       <li class="nav-item">
 
-          <a class="btn btn-light" href="{% url 'line_group' group.pk %}"><b>{{ group }}</b></a>
+              {% if group.get_absolute_url == request.path %}
+              <a class="btn btn-dark py-0 mx-3" href="{{ group.get_absolute_url }}"><b>{{ group }}</b></a>
+              {% else %}
+              <a class="btn btn-light py-0 mx-3" href="{{ group.get_absolute_url }}"><b>{{ group }}</b></a>
+              {% endif %}
 
       </li>
         {% endfor %}
@@ -38,9 +48,11 @@
   <div class="collapse navbar-collapse justify-content-between" id="navbarNav2">
     <ul class="navbar-nav col-10 mt-0 ">
         {% for volt in voltages %}
-          <li class="nav-item">
-              <a class="btn btn-light" href="{% url 'line_voltage' volt.pk %}"> {{ volt }} </a>
-         </li>
+              {% if volt.get_line_url == request.path %}
+              <a class="btn btn-dark py-0 mx-3" href="{{ volt.get_line_url }}"><b>{{ volt }}</b></a>
+              {% else %}
+              <a class="btn btn-light py-0 mx-3" href="{{ volt.get_line_url }}"><b>{{ volt }}</b></a>
+              {% endif %}
         {% endfor %}
 
     </ul>
@@ -59,9 +71,11 @@
   <div class="collapse navbar-collapse justify-content-between" id="navbarNav3">
     <ul class="navbar-nav col-10 mt-0">
         {% for region in regions %}
-          <li class="nav-item">
-              <a class="btn btn-light" href="{% url 'line_region' region.pk %}"> {{ region }} </a>
-          </li>
+              {% if region.get_line_url == request.path %}
+              <a class="btn btn-dark py-0 mx-3" href="{{ region.get_line_url }}"><b>{{ region }}</b></a>
+              {% else %}
+              <a class="btn btn-light py-0 mx-3" href="{{ region.get_line_url }}"><b>{{ region }}</b></a>
+              {% endif %}
         {% endfor %}
     </ul>
   </div>
@@ -83,13 +97,6 @@
         </div>
     {% endif %}
 {% endblock %}
-
-
-
-
-
-
-
 
 {% block cards1 %}
     <section class="my-3 py-3">

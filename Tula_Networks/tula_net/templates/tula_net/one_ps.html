@@ -1,5 +1,9 @@
 {% extends 'base.html' %}
 
+{% block title %}
+{{ block.super }} | ПС {{ ps }}
+{% endblock %}
+
  {% block first_section %}
       <div class="row mt-5">
         <div class="col-12 col-lg-10 offset-lg-2 m-auto">

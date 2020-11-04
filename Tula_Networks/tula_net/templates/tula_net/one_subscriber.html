@@ -1,5 +1,9 @@
 {% extends 'base.html' %}
 
+{% block title %}
+{{ block.super }} | {{ subscriber }}
+{% endblock %}
+
 {% block cards1 %}
 <div class="card">
     <p class="card-header"><span class="px-5"><b>{{ subscriber }}</b></span>
