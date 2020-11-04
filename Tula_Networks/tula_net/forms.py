@@ -166,7 +166,7 @@ class Line1Form(BaseCrispyForms, forms.ModelForm):
             'sec_m4': forms.NumberInput(attrs={'class': 'form-control'}),
             'length': forms.NumberInput(attrs={'class': 'form-control'}),
             'number_columns': forms.NumberInput(attrs={'class': 'form-control'}),
-            'description': forms.TextInput(attrs={'class': 'form-control'}),
+            'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
             # 'kvl': forms.BooleanField(),
         }
 

@@ -98,9 +98,9 @@
                         <h5>Все фидеры {{ section }}</h5>
                         </div>
                         {% for feeder in section.feeders.all %}
-                            <a href="{{ feeder.get_absolute_url }}" class="btn btn-light border-secondary py-0 px-4 my-1">
+                            <a href="{{ feeder.get_absolute_url }}" class="btn btn-light border-secondary py-0 px-4 m-1">
                                 {% include 'incl/_feeder_marker.html' %}
-                            </a> ,
+                            </a>
                         {% endfor %}
                         {% endif %}
 
@@ -118,6 +118,85 @@
         </div>
     </div>
 </div>
+
+              {% if not section.substation.alien and section.feeders.exists %}
+            <div class="card-body px-4">
+
+
+                <h5 class="text-center">Сумма по секции - работает, если данные по фидерам забиты верно</h5>
+
+                <div class="my-3 card-footer text-center">
+            <style type="text/css">
+                table {
+                    border-collapse: collapse;
+                }
+                table th,
+                table td {
+                    padding: 0 3px;
+                }
+                table tr  {
+                    border-top: 1px solid #000;
+                    border-bottom: 1px solid #000;
+                }
+
+                table tr td:last-child {
+                    text-align: center;
+                }
+                table tbody {
+                    border-top: 1px solid #000;
+                    border-bottom: 1px solid #000;
+                }
+            </style>
+            <table class="m-auto">
+               <thead>
+                <tr>
+                    <th>характеристики</th>
+                    <th>значения</th>
+                </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>ТП наши</td>
+                        <td> наши {{ section.tp_ours_sum }}
+                            / <span class="text-secondary">чужие {{ section.tp_alien_sum }}</span></td>
+                    </tr>
+                    <tr>
+                        <td>НП</td>
+                        <td>{{ section.villages_sum }}</td>
+                    </tr>
+
+                    <tr>
+                        <td>Население</td>
+                        <td> {{ section.population_sum }}</td>
+                    </tr>
+
+                    <tr>
+                        <td>Точки поставки</td>
+                        <td>{{ section.points_sum }}</td>
+                    </tr>
+
+                    <tr>
+                        <td>Протяженность</td>
+                        <td>{{ section.length_sum|floatformat:3 }} км</td>
+                    </tr>
+
+                    <tr>
+                        <td>Социалка</td>
+                        <td>{{ section.social_sum }} </td>
+
+                    </tr>
+
+                    <tr>
+                        <td>Потребление</td>
+                        <td><span class="bg-primary">зима : {{ section.power_winter_sum|floatformat:3 }}</span> /
+                            <span class="bg-warning">лето: {{ section.power_summer_sum|floatformat:3 }}</span> МВт</td>
+                    </tr>
+                </tbody>
+            </table>
+            </div>
+
+            </div>
+              {% endif %}
 
           <div class="card mb-4">
             <div class="card-body px-4">

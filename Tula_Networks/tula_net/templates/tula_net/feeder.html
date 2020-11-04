@@ -97,13 +97,11 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td>ТП наши</td>
-                        <td>{{ feeder.character.tp_our_num }}</td>
+                        <td>ТП</td>
+                        <td> наши : {{ feeder.character.tp_our_num }} /
+                            <span class="text-secondary">чужие : {{ feeder.character.tp_alien_num }}</span></td>
                     </tr>
-                    <tr>
-                        <td>ТП чужие</td>
-                        <td>{{ feeder.character.tp_alien_num }}</td>
-                    </tr>
+
                     <tr>
                         <td>НП</td>
                         <td><b>{{ feeder.character.villages_num }}</b> | {{ feeder.character.villages_names }} </td>
@@ -113,9 +111,14 @@
                         <td>Население</td>
                         <td> {{ feeder.character.population }}</td>
                     </tr>
+
+                    <tr>
+                        <td>Точки поставки</td>
+                        <td>{{ feeder.character.points }}</td>
+                    </tr>
                     <tr>
                         <td>Протяженность</td>
-                        <td>{{ feeder.character.length }}</td>
+                        <td>{{ feeder.character.length }} км</td>
                     </tr>
 
                     <tr>
@@ -127,15 +130,13 @@
                         {% endif %}
                     </tr>
 
-                <tr>
-                    <td>Точки поставки</td>
-                    <td>{{ feeder.character.points }}</td>
-                </tr>
+
 
                 {% if feeder.character.power_winter %}
                 <tr>
                     <td>Потребление</td>
-                    <td>зима : {{ feeder.character.power_winter }} / лето: {{ feeder.character.power_summer }} МВт</td>
+                    <td> <span class="bg-primary">зима : {{ feeder.character.power_winter }}</span> /
+                        <span class="bg-warning">лето: {{ feeder.character.power_summer }}</span> МВт</td>
                 </tr>
                 {% endif %}
 {% comment %}

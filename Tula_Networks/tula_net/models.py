@@ -92,7 +92,7 @@ class Substation(models.Model):
     voltage_l = models.ForeignKey(
         ClassVoltage, verbose_name='напряжение низкое', related_name='ps_volt_l',
         blank=True, null=True, on_delete=models.PROTECT)
-    alien = models.BooleanField(verbose_name='абонентская?')
+    alien = models.BooleanField(verbose_name='чужая?')
     owner = models.ForeignKey('Subscriber', related_name='substations', verbose_name='Владелец',
                               on_delete=models.SET_NULL, blank=True, null=True)
     group = models.ForeignKey(Group, related_name='substations', verbose_name='Группа',
@@ -111,6 +111,7 @@ class Substation(models.Model):
     class Meta:
         verbose_name = "Подстанция"
         verbose_name_plural = "Подстанции"
+        # ordering = ['-voltage_h', 'name']
         ordering = ['number']
 
 

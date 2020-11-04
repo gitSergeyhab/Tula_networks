@@ -208,7 +208,17 @@ class Section1View(DetailView):
     template_name = 'tula_net/one_section.html'
 
     def get_queryset(self):
-        return Section.objects.prefetch_related('feeders', 'voltage', 'substation')
+        return Section.objects.annotate(
+            tp_ours_sum=Sum('feeders__character__tp_our_num'),
+            tp_alien_sum=Sum('feeders__character__tp_alien_num'),
+            length_sum=Sum('feeders__character__length'),
+            villages_sum=Sum('feeders__character__villages_num'),
+            power_winter_sum=Sum('feeders__character__power_winter'),
+            power_summer_sum=Sum('feeders__character__power_summer'),
+            population_sum=Sum('feeders__character__population'),
+            points_sum=Sum('feeders__character__points'),
+            social_sum=Sum('feeders__character__social_num'),
+        ).prefetch_related('feeders', 'voltage', 'substation')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

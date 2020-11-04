@@ -56,8 +56,8 @@ def class_volt(request):
         'feeder_6': "btn btn-light border-success px-3 py-0 mx-1",
         'feeder_10': "btn btn-light border-primary px-3 py-0 mx-1",
         'feeder_x': "btn btn-secondary px-3 py-0 mx-1",
-        'line_35': "border-danger btn btn-dark py-0 px-4 my-1 vl-border",
-        'line_110': 'border-warning btn btn-dark py-0 px-4 my-1 vl-border',
-        'line_x': 'btn btn-secondary py-0 px-4 my-1',
+        'line_35': "border-danger btn btn-dark py-0 px-4 m-1 vl-border",
+        'line_110': 'border-warning btn btn-dark py-0 px-4 m-1 vl-border',
+        'line_x': 'btn btn-secondary py-0 px-4 m-1',
 
     }
