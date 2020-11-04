@@ -1,5 +1,6 @@
 from datetime import datetime
 
+
 # def just_titles(request):
 #     return {
 #         'tit_substations': 'Подстанции',
@@ -66,6 +67,7 @@ def signs(request):
             'phones': 'Телефоны',
         }
     }
+
 
 def class_volt(request):
     return {
