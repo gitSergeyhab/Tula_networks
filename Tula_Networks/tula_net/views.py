@@ -17,7 +17,7 @@ from .models import Substation, Subscriber, Section, Person, Phone, Feeder, Grou
 from dal import autocomplete
 
 from .utils import AddPhoneViewMixin, DeleteObjectMixin, SubstationsViewMixin, FeedersViewMixin, AddFeederMixin, \
-    chang_search, make_digits, Lines1ViewMixin, SearchMixin, try_int
+    chang_search, make_digits, Lines1ViewMixin, SearchMixin, try_int, try_number_feeder
 
 
 # from .data import context_menu
@@ -469,6 +469,7 @@ class UpdFeederView(View):
     def get(self, request, pk):
         feeder = Feeder.objects.get(pk=pk)
         form = FeederFormUpd(instance=feeder)
+        form.fields['try_number_name'].widget = forms.HiddenInput()
         form.fields['section'].queryset = Section.objects.\
             filter(substation__feeders__pk=pk, voltage__class_voltage__lt=11)
         form.fields['substation'].queryset = Substation.objects.filter(feeders__pk=pk)
@@ -478,7 +479,10 @@ class UpdFeederView(View):
         feeder = Feeder.objects.get(pk=pk)
         form = FeederFormUpd(request.POST, instance=feeder)
         if form.is_valid():
-            feeder = form.save()
+            feeder = form.save(commit=False)
+            try_num = form.cleaned_data['name']
+            feeder.try_number_name = try_number_feeder(try_num)
+            feeder.save()
             return redirect(feeder)
         return render(request, 'tula_net/form_add_feeder.html', context={'form': form})
 

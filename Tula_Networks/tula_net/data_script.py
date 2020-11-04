@@ -109,35 +109,7 @@ def feeder_plus(feeders):
             repeat.append(i)
 
 
-'''
-    feeder = models.OneToOneField(Feeder, related_name="character", on_delete=models.CASCADE)
-    length = models.FloatField(verbose_name='Протяженность', blank=True, null=True)
-    tp_our_num = models.PositiveSmallIntegerField(blank=True, verbose_name='ТП наши: количество', null=True)
-    tp_alien_num = models.PositiveSmallIntegerField(blank=True, verbose_name='ТП чужие: количество', null=True)
-    villages_num = models.PositiveSmallIntegerField(blank=True, verbose_name='НП количество', null=True)
-    villages_names = models.TextField(blank=True, verbose_name='НП названия', null=True)
-    power_winter = models.FloatField(verbose_name='Зима МВт', blank=True, null=True)
-    power_summer = models.FloatField(verbose_name='Лето МВт', blank=True, null=True)
-    population = models.PositiveSmallIntegerField(blank=True, verbose_name='Население', null=True)
-    points = models.PositiveSmallIntegerField(blank=True, verbose_name='Точки поставки', null=True)
-    social_num = models.PositiveSmallIntegerField(blank=True, verbose_name='Социалка кол-во', null=True)
-    social_names = models.TextField(blank=True, verbose_name='Социалка тип', null=True)
+def numeric_feeder_maker():
+    for f in Feeder.objects.all():
+        print(f.try_number_name)
 
-'''
-
-# name = models.CharField(max_length=32, verbose_name='Название фидера')
-# substation = models.ForeignKey(Substation, related_name='feeders', on_delete=models.CASCADE, verbose_name='ПС')
-# section = models.ForeignKey(Section, related_name='feeders', on_delete=models.CASCADE, verbose_name='СкШ')
-# subscriber = models.ForeignKey(Subscriber, related_name='feeders', on_delete=models.SET_NULL,
-#                                verbose_name='абонент', blank=True, null=True)
-# length = models.PositiveSmallIntegerField(blank=True, verbose_name='Протяженность', null=True)
-# number_tp = models.PositiveSmallIntegerField(blank=True, verbose_name='Количество ТП', null=True)
-# population = models.PositiveSmallIntegerField(blank=True, verbose_name='Население', null=True)
-# social = models.PositiveSmallIntegerField(blank=True, verbose_name='Социалка', null=True)
-# res = models.ForeignKey(Res, related_name='feeders', verbose_name='РЭС или еще кто',
-#                         on_delete=models.SET_NULL, blank=True, null=True)
-# attention = models.BooleanField(verbose_name='!!!')
-# reliability_category = models.PositiveSmallIntegerField(blank=True, verbose_name='категория надежности', null=True)
-# in_reserve = models.BooleanField(default=False, verbose_name='Резервный')
-# region = models.CharField(blank=True, max_length=32, verbose_name='Участок', null=True)
-# description = models.TextField(verbose_name='Описение', blank=True, null=True)

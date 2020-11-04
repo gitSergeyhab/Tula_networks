@@ -179,6 +179,7 @@ class Person(models.Model):
 
 class Feeder(models.Model):
     name = models.CharField(max_length=128, verbose_name='Название фидера')
+    try_number_name = models.SmallIntegerField(blank=True, null=True)
     substation = models.ForeignKey(Substation, related_name='feeders', on_delete=models.CASCADE, verbose_name='ПС')
     section = models.ForeignKey(Section, related_name='feeders', on_delete=models.CASCADE, verbose_name='СкШ',
                                 blank=True, null=True)
@@ -201,7 +202,7 @@ class Feeder(models.Model):
     class Meta:
         verbose_name = "фидер"
         verbose_name_plural = "фидера"
-        ordering = ['in_reserve', 'section', 'name']
+        ordering = ['in_reserve', 'section', 'try_number_name', 'name']
 
 
 class Phone(models.Model):

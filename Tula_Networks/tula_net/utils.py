@@ -110,6 +110,25 @@ class FeedersViewMixin:
         return context
 
 
+def try_number_feeder(x):
+    if x.isdigit():
+        return int(x)
+    return 0
+
+
+class FeederFormMixin(BaseCrispyForms):
+
+    def clean_search_number(self):
+        raw_number = self.cleaned_data['name']
+        print(raw_number)
+        # for i in raw_number:
+        #     if i.isalpha():
+        #         raise ValueError('хм, а у Вас в номере буквы, например...', i)
+        try_number_name = ''.join([sign for sign in raw_number if sign.isdigit()])
+        return try_number_name
+
+
+
 class AddFeederMixin:
     """ шаблон для добавления фидера c ... """
     form_feeder = None
@@ -119,6 +138,7 @@ class AddFeederMixin:
 
     def get(self, request, pk):
         form = self.form_feeder()
+        form.fields['try_number_name'].widget = forms.HiddenInput()
         form.fields[self.first_field].queryset = self.first_model.objects.filter(pk=pk)
         if self.second_field and self.second_field == 'section':
             form.fields[self.second_field].queryset = Section.objects.filter(substation__pk=pk,
@@ -130,10 +150,28 @@ class AddFeederMixin:
     def post(self, request, pk):
         bound_form = self.form_feeder(request.POST)
         if bound_form.is_valid():
-            new_feeder = bound_form.save()
+            # new_feeder = bound_form.save()
+            new_feeder = bound_form.save(commit=False)
+            try_num = bound_form.cleaned_data['name']
+            new_feeder.try_number_name = try_number_feeder(try_num)
+            new_feeder.save()
             return redirect(new_feeder)
         return render(request, 'tula_net/form_add_feeder.html', context={'form': bound_form})
 
+"""
+    form = ProfileForm(request.POST)
+    if form.is_valid():
+        profile = form.save(commit=False)
+
+
+        #Retrieve the city code and add it to the profile
+        location = Location.objects.get(pk=form.cleaned_data['city'])
+
+
+
+        profile.city = location.code
+        profile.save()
+"""
 
 def chang_search(obs):
     if '-' in obs:
