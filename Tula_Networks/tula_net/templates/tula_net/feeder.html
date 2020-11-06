@@ -52,17 +52,6 @@
           {% endif %}
         {% endfor %}</div>
 
-<!--          feeder_name = models.CharField(max_length=64, verbose_name='Название фидера')-->
-<!--    substation_name = models.CharField(max_length=64, verbose_name='Название ПС')-->
-<!--    feeder = models.OneToOneField(Feeder, related_name="character", on_delete=models.SET_NULL,-->
-<!--                                  null=True, blank=True, verbose_name='фидер')-->
-
-<!--    points = models.PositiveSmallIntegerField(blank=True, verbose_name='Точки поставки', null=True)-->
-
-<!--    checked = models.BooleanField(verbose_name='соответствует', default=False)-->
-
-
-
         <div class="my-3 card-footer text-center">
             {{ feeder.character.feeder }}
             {% if feeder.character.checked %}
@@ -158,14 +147,14 @@
 
             <div class="card-footer text-right py-0 px-5">
                 <div class="btn-group dropup mx-5 px-1">
-                  <button type="button" class="btn btn-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     править БД<span class="sr-only">Toggle Dropdown</span>
                   </button>
                   <div class="dropdown-menu">
                       {% if feeder.character %}
                       <a class="dropdown-item" href="{% url 'upd_charact' feeder.pk %}">изменить характеристики</a>
                       {% else %}
-                      <a class="dropdown-item" href="{% url 'add_charact' feeder.pk %}">добасить характеристики</a>
+                      <a class="dropdown-item" href="{% url 'add_charact' feeder.pk %}">добавить характеристики</a>
                       {% endif %}
                     <a class="dropdown-item" href="{% url 'upd_feeder' feeder.pk %}">править фидер</a>
                     <a class="dropdown-item" href="{% url 'del_feeder' feeder.pk %}">удалить</a>

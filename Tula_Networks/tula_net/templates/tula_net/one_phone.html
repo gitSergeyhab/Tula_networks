@@ -49,12 +49,12 @@
     <div class="card-footer my-0 py-0 pr-5">
       <div class="text-right my-0 mx-5 py-0 pr-5">
         <div class="btn-group dropup">
-          <button type="button" class="btn btn-secondary dropdown-toggle dropdown-toggle-split m-0 p-0" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             править БД<span class="sr-only">Toggle Dropdown</span>
           </button>
           <div class="dropdown-menu">
-            <a class="dropdown-item" href="{% url 'upd_phone' phone.pk %}">править телефон {{ phone }} </a>
-            <a class="dropdown-item" href="{% url 'del_phone' phone.pk %}">удалить телефон {{ phone }} </a>
+            <a class="dropdown-item" href="{% url 'upd_phone' phone.pk %}">править телефон</a>
+            <a class="dropdown-item" href="{% url 'del_phone' phone.pk %}">удалить телефон</a>
           </div>
         </div>
       </div>

@@ -10,21 +10,21 @@
 
 {% block menu %}
 <nav class="navbar navbar-expand-lg navbar-light bg-light border-left border-right border-dark py-0">
-  <p class="navbar-brand mr-4 font-weight-bold py-0 my-0">Участки: </p>
+  <p class="navbar-brand mr-4 font-weight-bold py-0 my-0 pr-5">Участки: </p>
 
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav1" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
   <span class="navbar-toggler-icon"></span>
   </button>
 
   <div class="collapse navbar-collapse justify-content-between" id="navbarNav1">
-    <ul class="navbar-nav col-10 mt-0">
+    <ul class="navbar-nav col-12 mt-0">
         {% for group in groups %}
       <li class="nav-item">
 
               {% if group.get_absolute_url == request.path %}
-              <a class="btn btn-dark py-0 mx-3" href="{{ group.get_absolute_url }}"><b>{{ group }}</b></a>
+              <a class="btn btn-dark py-0" href="{{ group.get_absolute_url }}"><b>{{ group }}</b></a>
               {% else %}
-              <a class="btn btn-light py-0 mx-3" href="{{ group.get_absolute_url }}"><b>{{ group }}</b></a>
+              <a class="btn btn-light py-0" href="{{ group.get_absolute_url }}"><b>{{ group }}</b></a>
               {% endif %}
 
       </li>
@@ -46,13 +46,15 @@
   </button>
 
   <div class="collapse navbar-collapse justify-content-between" id="navbarNav2">
-    <ul class="navbar-nav col-10 mt-0 ">
+    <ul class="navbar-nav col-12 mt-0">
         {% for volt in voltages %}
+            <li class="nav-item">
               {% if volt.get_line_url == request.path %}
-              <a class="btn btn-dark py-0 mx-3" href="{{ volt.get_line_url }}"><b>{{ volt }}</b></a>
+              <a class="btn btn-dark py-0" href="{{ volt.get_line_url }}"><b>{{ volt }}</b></a>
               {% else %}
-              <a class="btn btn-light py-0 mx-3" href="{{ volt.get_line_url }}"><b>{{ volt }}</b></a>
+              <a class="btn btn-light py-0" href="{{ volt.get_line_url }}"><b>{{ volt }}</b></a>
               {% endif %}
+            </li>
         {% endfor %}
 
     </ul>
@@ -62,20 +64,22 @@
 
 {% block menu3 %}
 <nav class="navbar navbar-expand-lg navbar-light bg-light border-left border-right border-bottom border-dark py-0">
-  <p class="navbar-brand mr-4 font-weight-bold py-0 my-0">Управление: </p>
+  <p class="navbar-brand mr-4 font-weight-bold py-0 my-0 pr-2">Управление: </p>
 
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav3" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
   <span class="navbar-toggler-icon"></span>
   </button>
 
   <div class="collapse navbar-collapse justify-content-between" id="navbarNav3">
-    <ul class="navbar-nav col-10 mt-0">
+    <ul class="navbar-nav col-12 mt-0 ">
         {% for region in regions %}
+        <li class="nav-item">
               {% if region.get_line_url == request.path %}
-              <a class="btn btn-dark py-0 mx-3" href="{{ region.get_line_url }}"><b>{{ region }}</b></a>
+              <a class="btn btn-dark py-0" href="{{ region.get_line_url }}"><b>{{ region }}</b></a>
               {% else %}
-              <a class="btn btn-light py-0 mx-3" href="{{ region.get_line_url }}"><b>{{ region }}</b></a>
+              <a class="btn btn-light py-0" href="{{ region.get_line_url }}"><b>{{ region }}</b></a>
               {% endif %}
+        </li>
         {% endfor %}
     </ul>
   </div>
@@ -99,28 +103,33 @@
 {% endblock %}
 
 {% block cards1 %}
-    <section class="my-3 py-3">
+    <section class="my-2 py-2">
       <div class="row mb-0 mx-2">
+          <div class="my-2 row col-12">
+              <div class="col-sm-12 col-md-12 col-xl-6 btn btn-outline-dark border-success">ВЛ</div>
+              <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3 btn btn-outline-dark border-dark">В управлении</div>
+              <div class="col-sm-12 col-md-6 col-lg-6 col-xl-3 btn btn-outline-dark border-secondary">Участок сл ЛЭП</div>
+
+
+
+          </div>
         {% for line in lines %}
-        <div class="m-2">
-        <a href="{{ line.get_absolute_url }}"
+<div class="mt-2 mb-3 row col-12">
+          <a href="{{ line.get_absolute_url }}"
+             {% if line.voltage.class_voltage == 220 %}
+             class="col-sm-12 col-md-12 col-xl-6 btn btn-outline-dark border-primary"
+             {% elif line.voltage.class_voltage == 110 %}
+             class="col-sm-12 col-md-12 col-xl-6 btn btn-outline-dark border-warning"
+             {% elif line.voltage.class_voltage == 35 %}
+             class="col-sm-12 col-md-12 col-xl-6 btn btn-outline-dark border-danger"
+              {% endif %}
+          ><div ><b>{{ line.short_name }} | {{ line.name }}</b></div></a>
+            <a href="{{ line.management.get_line_url }}" class="col-sm-12 col-md-6 col-lg-6 col-xl-3 btn btn-outline-dark py-1" >{{ line.management }}</a>
+          <a href="{{ line.group.get_absolute_url }}" class="col-sm-12 col-md-6 col-lg-6 col-xl-3 btn btn-outline-secondary py-1" >{{ line.group }} </a>
 
-            {% if line.voltage.class_voltage == 220 %}
-            class="btn btn-outline-dark py-1 border-primary"
-            {% elif line.voltage.class_voltage == 110 %}
-            class="btn btn-outline-dark py-1 border-warning"
-            {% elif line.voltage.class_voltage == 35 %}
-            class="btn btn-outline-dark py-1 border-danger"
-            {% endif %}>
 
-            {% comment %}  {% endcomment %}
-            <b>{{ line.short_name }} | {{ line.name }}</b>
-        </a>
-         | <a href="{% url 'line_group' line.group.pk %}" class="btn btn-outline-secondary py-1" >{{ line.group }} участок сл ЛЭП </a>
+</div>
 
-         | <a href="{% url 'line_region' line.management.pk %}" class="btn btn-light py-1" > Управление : {{ line.management }}</a>
-
-        </div>
         {% endfor %}
       </div>
     </section>

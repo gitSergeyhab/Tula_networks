@@ -11,20 +11,18 @@
             <div class="card-body px-4">
               <div class="row">
 
-                <div class="col-12 col-md-3 col-lg-2 d-flex align-items-center">
-                    <div>
-                        <a href="{% url 'subscriber_ps' ps.pk %}" type="button" class="btn btn-secondary border border-dark">Абоненты <br> подрбно</a>
-                        <a href="{% url 'substation_f' ps.pk %}" type="button" class="btn btn-secondary border border-dark">Фидера <br> подробно</a>
-                    </div>
+                <div class="col-12 col-md-3 col-lg-3 col-lx-2 d-flex row m-auto">
+                    <a href="{% url 'subscriber_ps' ps.pk %}" type="button" class="col-6 col-md-12 btn btn-secondary border border-dark">Абоненты <br> подрбно</a>
+                    <a href="{% url 'substation_f' ps.pk %}" type="button" class="col-6 col-md-12 btn btn-secondary border border-dark">Фидеры <br> подробно</a>
                 </div>
 
-                <div class="col-12 col-md-9 col-lg-10">
+                <div class="col-12 col-md-9 col-lg-9 col-lx-10">
                     <h4 class="bg-light text-center">
                         ПС № {{ ps.number }} {{ ps }} {% include 'incl/_voltage_full.html' %} кВ
                     </h4>
-                    <a href="{% url 'group' ps.group.pk %}" class="btn btn-dark"><h6> <b>Группа:</b> {{ ps.group }}</h6></a>
+                    <a href="{% url 'group' ps.group.pk %}" class="btn btn-dark m-1"><h6> <b>Группа:</b> {{ ps.group }}</h6></a>
                     {% if ps.alien and ps.owner %}
-                    <a href="{% url 'subscriber' ps.owner.pk %}" class="btn btn-dark"><h6>{{ ps.owner }}</h6></a>
+                    <a href="{% url 'subscriber' ps.owner.pk %}" class="btn btn-dark m-1"><h6>Организация: {{ ps.owner }}</h6></a>
                      {% endif %}
                     {% if ps.location %}
                     <p> <b>Расположение:</b> {{ ps.location|linebreaks }}</p>
@@ -32,7 +30,7 @@
 
           <div class="card-footer text-right">
                 <div class="btn-group dropup">
-                  <button type="button" class="btn btn-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     править БД<span class="sr-only">Toggle Dropdown</span>
                   </button>
                   <div class="dropdown-menu">

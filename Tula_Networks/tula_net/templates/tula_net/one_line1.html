@@ -24,57 +24,58 @@
         >
         {% if line.full_name %} {{ line.full_name }} <br> {% endif %}
         </h4>
-        <div class="card-body mx-5 px-5">
-        <h5>Питающие / транзитные ПС : СкШ:</h5>
-
+        <div class="card-body mx-auto px-5">
+        <h5 class="text-center">Питающие / транзитные ПС, СкШ:</h5>
+<div class="col-12 col-sm-12 col-md-10 row mx-auto">
             {% for pl in plus %}
-                <a href="{{ pl.substation.get_absolute_url }}" class="btn btn-outline-dark mx-auto px-5 mx-5 py-0 my-1">
+                <a href="{{ pl.substation.get_absolute_url }}" class="btn btn-outline-dark col-6 my-1">
                     <b>{{ pl.substation }}</b>
-                </a> :
-                <a href="{{ pl.get_absolute_url }}" class="btn btn-dark mx-auto px-5 mx-5 py-0 my-1">
+                </a>
+                <a href="{{ pl.get_absolute_url }}" class="btn btn-dark col-6 my-1">
                     <b> {{ pl.name }}</b>
                 </a><br>
             {% endfor %}
+</div>
 
-
-            <h5 class="mt-2">Тупиковые  ПС : СкШ:</h5>
-
+            <h5 class="text-center mt-2">Тупиковые  ПС, СкШ:</h5>
+<div class="col-12 col-sm-12 col-md-10 row mx-auto">
             {% for min in minus %}
-                <a href="{{ min.substation.get_absolute_url }}" class="btn btn-outline-dark mx-auto px-5 mx-5 py-0 my-1">
+                <a href="{{ min.substation.get_absolute_url }}" class="btn btn-outline-dark col-6 my-1">
                     <b>{{ min.substation }}</b>
-                </a> :
-                <a href="{{ min.get_absolute_url }}" class="btn btn-dark mx-auto px-5 mx-5 py-0 my-1">
+                </a>
+                <a href="{{ min.get_absolute_url }}" class="btn btn-dark col-6 my-1">
                     <b> {{ min.name }}</b>
                 </a><br>
             {% empty %}
             У {{ line }} нет тупиков
             {% endfor %}
+</div>
 
-            <h6><hr class="my-1">
+            <h6><hr class="my-2">
             {% if line.management %}
                 Управление : {{ line.management }}
-                <hr class="my-1">
+                <hr class="my-2">
             {% endif %}
 
             {% if line.maintenance.count %} Ведение :
                 {% for m in line.maintenance.all %} {{ m }} , {% endfor %}
-                <hr class="my-1">
+                <hr class="my-2">
             {% endif %}
 
             {% if line.group %}
                 {{ line.group }} участок сл ЛЭП
-                <hr class="my-1">
+                <hr class="my-2">
                 {% endif %}</h6>
 
             {% if line.subscriber %}
-             <a href="{{ line.subscriber.get_absolute_url }}" class="btn btn-outline-secondary mx-auto  py-0"> <b>Владелец: {{ line.subscriber }}</b></a>
+             <a href="{{ line.subscriber.get_absolute_url }}" class="btn btn-outline-secondary mx-auto  py-0 my-1"> <b>Владелец: {{ line.subscriber }}</b></a>
             {% endif %}
 
 </b>
 
             <div class="card-footer text-right py-0">
                 <div class="btn-group dropup">
-                  <button type="button" class="btn btn-secondary dropdown-toggle dropdown-toggle-split py-0 my-0" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     править БД<span class="sr-only">Toggle Dropdown</span>
                   </button>
                   <div class="dropdown-menu">

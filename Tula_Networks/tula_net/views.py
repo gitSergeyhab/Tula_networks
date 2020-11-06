@@ -328,10 +328,8 @@ class SearcherSubscribersView(SearchMixin, ListView):
         )
 
 
-class SearcherPSView(ListView):
+class SearcherPSView(SubstationsViewMixin, ListView):
     """ Поиск по подстанциям """
-    context_object_name = 'substations'
-    template_name = 'tula_net/substations.html'
     paginate_by = 20
 
     def get_queryset(self):
@@ -347,8 +345,6 @@ class SearcherPSView(ListView):
         context = super().get_context_data(**kwargs)
         context['s'] = f"s={self.request.GET.get('s')}&"
         context['flag_search'] = self.request.GET.get('s')
-        context['groups'] = Group.objects.all()
-        context['voltages'] = [35, 110, 220]
         return context
 
 
@@ -688,12 +684,12 @@ class SubstationAutocompleteView(autocomplete.Select2QuerySetView):
 
 
 class Lines1View(Lines1ViewMixin, ListView):
-    paginate_by = 12
+    paginate_by = 15
 
 
 class LinesGroupView(Lines1ViewMixin, ListView):
     flag = 'flag_group'
-    paginate_by = 12
+    paginate_by = 15
 
     def get_queryset(self):
         return Line.objects.select_related('management', 'voltage', 'group'). \
@@ -702,7 +698,7 @@ class LinesGroupView(Lines1ViewMixin, ListView):
 
 class LinesVoltageView(Lines1ViewMixin, ListView):
     flag = 'flag_voltages'
-    paginate_by = 12
+    paginate_by = 15
 
     def get_queryset(self):
         return Line.objects.select_related('management', 'voltage', 'group'). \
@@ -711,7 +707,7 @@ class LinesVoltageView(Lines1ViewMixin, ListView):
 
 class LinesRegionView(Lines1ViewMixin, ListView):
     flag = 'flag_region'
-    paginate_by = 12
+    paginate_by = 15
 
     def get_queryset(self):
         return Line.objects.select_related('management', 'voltage', 'group'). \
