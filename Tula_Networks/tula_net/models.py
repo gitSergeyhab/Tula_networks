@@ -172,8 +172,6 @@ class Person(models.Model):
     priority = models.PositiveSmallIntegerField(blank=True, verbose_name='приоритет', null=True)
     description = models.TextField(verbose_name='Описение', blank=True)
 
-    # mail = models.EmailField(max_length=32, verbose_name='электронка', blank=True)
-
     def get_absolute_url(self):
         return reverse('person', kwargs={'pk': self.pk})
 
@@ -343,9 +341,10 @@ class Feeder_characteristic(models.Model):
         verbose_name = "характеристика фидера"
         verbose_name_plural = "х-ки фидеров"
 
-import pandas as pd
-from .data_script import only_pst, adder_ps, adder_subsriber, only_subsribers, only_sec, adder_sec, feeds, adder_feed, \
-    feeder_plus, f5
+
+# import pandas as pd
+# from .data_script import only_pst, adder_ps, adder_subsriber, only_subsribers, only_sec, adder_sec, feeds, adder_feed, \
+#     feeder_plus, f5
 
 # adder_subsriber(only_subsribers)
 # adder_ps(only_pst)
@@ -368,3 +367,4 @@ from .data_script import only_pst, adder_ps, adder_subsriber, only_subsribers, o
 #     from500to1000="○",
 #     under500="○"
 # )
+

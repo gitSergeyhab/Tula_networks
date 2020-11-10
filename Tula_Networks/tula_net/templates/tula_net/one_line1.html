@@ -24,9 +24,9 @@
         >
         {% if line.full_name %} {{ line.full_name }} <br> {% endif %}
         </h4>
-        <div class="card-body mx-auto px-5">
+        <div class="card-body col-12 col-lg-8 mx-auto px-5">
         <h5 class="text-center">Питающие / транзитные ПС, СкШ:</h5>
-<div class="col-12 col-sm-12 col-md-10 row mx-auto">
+            <div class="col-12 col-sm-12 col-md-10 row mx-auto">
             {% for pl in plus %}
                 <a href="{{ pl.substation.get_absolute_url }}" class="btn btn-outline-dark col-6 my-1">
                     <b>{{ pl.substation }}</b>

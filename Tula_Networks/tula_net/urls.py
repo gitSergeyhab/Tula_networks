@@ -114,7 +114,6 @@ urlpatterns = [
     # для правки с фидера:
     path('upd_character/<int:pk>/', UpdCharacterFeederView.as_view(), name='upd_charact'),
 
-
     # !не работают!
     # path('subscriber_autocomplete/', SubscriberAutocompleteView.as_view(), name='subscriber_autocomplete'),
     # path('substation_autocomplete/', SubstationAutocompleteView.as_view(), name='substation_autocomplete'),
