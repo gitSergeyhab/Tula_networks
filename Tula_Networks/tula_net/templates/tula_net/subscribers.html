@@ -22,7 +22,8 @@
             {% if the_substation %}
                 <h3><a class="btn btn-outline-dark px-5 py-0 m-1" href="{% url 'substation_f' the_substation.pk %}">Разбить по фидерам </a></h3>
             {% elif the_section %}
-                <h3><a class="btn btn-outline-dark px-5 py-0 m-1" href="{% url 'section' the_section.pk %}">Подробно </a></h3>
+                <h3><a class="btn btn-outline-primary px-5 py-0 m-1 pointEarth" href="#">Искать землю</a>
+                    <a class="btn btn-outline-dark px-5 py-0 m-1" href="{% url 'section' the_section.pk %}">Подробно</a></h3>
             {% endif %}
         </div>
 
@@ -119,11 +120,11 @@
                 {% if feeder.substation == the_substation or feeder.section == the_section and feeder.section %}
                           <a href="{{ feeder.get_absolute_url }}"
                              {% if feeder.section.voltage.class_voltage == 6 %}
-                                         class='{{ feeder_6 }}'
+                                         class='{{ feeder_6 }} earthFeeder'
                             {% elif feeder.section.voltage.class_voltage == 10 %}
-                                         class='{{ feeder_10 }}'
+                                         class='{{ feeder_10 }} earthFeeder'
                             {% else %}
-                                         class='{{ feeder_x }}'
+                                         class='{{ feeder_x }} earthFeeder'
                             {% endif %}
 
                           >
@@ -138,8 +139,13 @@
 
     </div>
     </div>
-
+{% load static %}
+<script src="{% static 'scripts/earth.js' %}"></script>
 {% endblock %}
+
+
+
+
 
 
 

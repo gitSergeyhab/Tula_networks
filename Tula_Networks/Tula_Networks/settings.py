@@ -38,8 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # 'silk',
-    'crispy_forms',
     'import_export',
+    'crispy_forms',
     'tula_net.apps.TulaNetConfig',
 
 ]
@@ -84,21 +84,10 @@ WSGI_APPLICATION = 'Tula_Networks.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'tula_net_db',
-        'USER': 'root',
-        'PASSWORD': '12345',
-        'HOST': 'localhost',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -120,6 +109,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
+
 IMPORT_EXPORT_USE_TRANSACTIONS = True
 
 LANGUAGE_CODE = 'ru'
