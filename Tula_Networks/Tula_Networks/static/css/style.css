@@ -39,3 +39,17 @@ body {
 .vl-border {
     border-width: 2px;
 }
+
+
+.phone_bar {
+    z-index: 99999;
+    position: fixed;
+    left: 5px;
+    top: 45px;
+    width: 350px;
+
+}
+
+a.display_none {
+    display: none !important
+}
