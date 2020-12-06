@@ -152,6 +152,8 @@ class Subscriber(models.Model):
     ours = models.BooleanField(verbose_name='наши')
     year_update = models.PositiveSmallIntegerField(verbose_name='Списки обновлены', blank=True, null=True)
     description = models.TextField(verbose_name='Описение', blank=True)
+    region = models.ForeignKey(
+        Region, verbose_name='участок', default=2, blank=True, null=True, on_delete=models.SET_NULL)
 
     def get_absolute_url(self):
         return reverse('subscriber', kwargs={'pk': self.pk})

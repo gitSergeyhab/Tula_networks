@@ -31,8 +31,9 @@
 
     {% for subscriber in subscribers.all %}
          <a href="{{ subscriber.get_absolute_url }}" type="button"
-
-            {% if not subscriber.year_update %}
+            {% if subscriber.region.pk != 2 %}
+            class="m-1 btn btn-warning"
+            {% elif not subscriber.year_update %}
             class="m-1 btn btn-secondary"
             {% elif current_year == subscriber.year_update %}
             class="m-1 btn btn-light border border-success"
