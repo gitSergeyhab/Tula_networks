@@ -1,0 +1,144 @@
+{% extends 'base.html' %}
+
+{% block title %}
+ {{ block.super }} | {% include 'incl/_logik_titles_form.html' %}
+{% endblock %}
+
+{% block title2 %}
+<div class="contain text-center my-4">
+ <h2>
+  {% include 'incl/_logik_titles_form.html' %}
+ </h2>
+</div>
+{% endblock %}
+
+
+{% block first_section %}
+
+<form action="" method="post">
+
+ {% csrf_token %}
+
+ <div class="container col-12">
+
+  <div class="col-10 row text-right">
+   <div class="col-4"><label class="mb-2 text-dark" for="{{ form.name.id_for_label }}"><b>{{ form.name.label }}</b></label></div>
+    <div class="col-8">{{ form.name }}</div>
+    <div class="invalid-feedback">
+    {{ form.name.errors}}
+    </div>
+  </div>
+
+   <div class="col-10 row text-right">
+    <div class="col-4"><label class="mb-2 text-dark" for="{{ form.full_name.id_for_label }}">{{ form.full_name.label }}</label></div>
+    <div class="col-8">{{ form.full_name }}</div>
+    <div class="invalid-feedback">
+    {{ form.full_name.errors}}
+    </div>
+  </div>
+
+  <div class="col-10 row text-right">
+    <div class="col-4"><label class="mb-2 text-dark" for="{{ form.short_name.id_for_label }}">{{ form.short_name.label }}</label></div>
+    <div class="col-8">{{ form.short_name }}</div>
+    <div class="invalid-feedback">
+    {{ form.short_name.errors}}
+    </div>
+  </div>
+
+  </div>
+  <div class="col-12 row mt-2">
+   <div class="col-12 my-2 text-center"><b> Питающие/транзитные ПС и СШ: </b></div>
+   <div class="col-2 text-right px-1"><label class="mb-2 text-dark" for="{{ form.ps_p1.id_for_label }}"><b>{{ form.ps_p1.label }}</b></label></div>
+     <div class="col-1 p-0">{{ form.ps_p1 }}</div>
+     <div class="invalid-feedback">{{ form.ps_p1.errors}}</div>
+   <div class="col-2 text-right px-1"><label class="mb-2 text-dark" for="{{ form.sec_p1.id_for_label }}"><b>{{ form.sec_p1.label }}</b></label></div>
+     <div class="col-1 p-0">{{ form.sec_p1 }}</div>
+     <div class="invalid-feedback">{{ form.sec_p1.errors}}</div>
+
+     <div class="col-2 text-right px-1"><label class="mb-2 text-dark" for="{{ form.ps_p2.id_for_label }}">{{ form.ps_p2.label }}</label></div>
+     <div class="col-1 p-0">{{ form.ps_p2 }}</div>
+     <div class="invalid-feedback">{{ form.ps_p2.errors}}</div>
+     <div class="col-2 text-right px-1"><label class="mb-2 text-dark" for="{{ form.sec_p2.id_for_label }}">{{ form.sec_p2.label }}</label></div>
+     <div class="col-1 p-0">{{ form.sec_p2 }}</div>
+     <div class="invalid-feedback">{{ form.sec_p2.errors}}</div>
+
+   <div class="col-12 my-2 text-center "><b> Тупиковые ПС и СШ: </b></div>
+
+     <div class="col-2 text-right px-1"><label class="mb-2 text-dark" for="{{ form.ps_m1.id_for_label }}">{{ form.ps_m1.label }}</label></div>
+     <div class="col-1 p-0">{{ form.ps_m1 }}</div>
+     <div class="invalid-feedback">{{ form.ps_m1.errors}}</div>
+     <div class="col-2 text-right px-1"><label class="mb-2 text-dark" for="{{ form.sec_m1.id_for_label }}">{{ form.sec_m1.label }}</label></div>
+     <div class="col-1 p-0">{{ form.sec_m1 }}</div>
+     <div class="invalid-feedback">{{ form.sec_m1.errors}}</div>
+
+     <div class="col-2 text-right px-1"><label class="mb-2 text-dark" for="{{ form.ps_m2.id_for_label }}">{{ form.ps_m2.label }}</label></div>
+     <div class="col-1 p-0">{{ form.ps_m2 }}</div>
+     <div class="invalid-feedback">{{ form.ps_m2.errors}}</div>
+     <div class="col-2 text-right px-1"><label class="mb-2 text-dark" for="{{ form.sec_m2.id_for_label }}">{{ form.sec_m2.label }}</label></div>
+     <div class="col-1 p-0">{{ form.sec_m2 }}</div>
+     <div class="invalid-feedback">{{ form.sec_m2.errors}}</div>
+
+     <div class="col-2 text-right px-1"><label class="mb-2 text-dark" for="{{ form.ps_m3.id_for_label }}">{{ form.ps_m3.label }}</label></div>
+     <div class="col-1 p-0">{{ form.ps_m3 }}</div>
+     <div class="invalid-feedback">{{ form.ps_m3.errors}}</div>
+     <div class="col-2 text-right px-1"><label class="mb-2 text-dark" for="{{ form.sec_m3.id_for_label }}">{{ form.sec_m3.label }}</label></div>
+     <div class="col-1 p-0">{{ form.sec_m3 }}</div>
+     <div class="invalid-feedback">{{ form.sec_m3.errors}}</div>
+
+     <div class="col-2 text-right px-1"><label class="mb-2 text-dark" for="{{ form.ps_m4.id_for_label }}">{{ form.ps_m4.label }}</label></div>
+     <div class="col-1 p-0">{{ form.ps_m4 }}</div>
+     <div class="invalid-feedback">{{ form.ps_m4.errors}}</div>
+     <div class="col-2 text-right px-1"><label class="mb-2 text-dark" for="{{ form.sec_m4.id_for_label }}">{{ form.sec_m4.label }}</label></div>
+     <div class="col-1 p-0">{{ form.sec_m4 }}</div>
+     <div class="invalid-feedback">{{ form.sec_m4.errors}}</div>
+
+    <div class="col-12 mt-2"></div>
+
+   <div class="col-3 text-right"><label class="mb-2 text-dark" for="{{ form.management.id_for_label }}"><b>{{ form.management.label }}</b></label></div>
+     <div class="col-3 pl-0">{{ form.management }}</div>
+     <div class="invalid-feedback">{{ form.management.errors}}</div>
+     <div class="col-3 text-right"><label class="mb-2 text-dark" for="{{ form.maintenance.id_for_label }}">{{ form.maintenance.label }}</label></div>
+     <div class="col-3 pl-0">{{ form.maintenance }}</div>
+     <div class="invalid-feedback">{{ form.maintenance.errors}}</div>
+
+    <div class="col-12 mt-2"></div>
+
+   <div class="col-3 text-right"><label class="mb-2 text-dark" for="{{ form.voltage.id_for_label }}"><b>{{ form.voltage.label }}</b></label></div>
+     <div class="col-3 pl-0">{{ form.voltage }}</div>
+     <div class="invalid-feedback">{{ form.voltage.errors}}</div>
+   <div class="col-3 text-right"><label class="mb-2 text-dark" for="{{ form.group.id_for_label }}"><b>{{ form.group.label }}</b></label></div>
+     <div class="col-3 pl-0">{{ form.group }}</div>
+     <div class="invalid-feedback">{{ form.group.errors}}</div>
+
+       <div class="col-12 mt-2"></div>
+
+     <div class="col-3 text-right"><label class="mb-2 text-dark" for="{{ form.subscriber.id_for_label }}">{{ form.subscriber.label }}</label></div>
+     <div class="col-3 pl-0">{{ form.subscriber }}</div>
+     <div class="invalid-feedback">{{ form.subscriber.errors}}</div>
+     <div class="col-3 text-right"><label class="mb-2 text-dark" for="{{ form.kvl.id_for_label }}">{{ form.kvl.label }}</label></div>
+     <div class="col-3 pl-0">{{ form.kvl }}</div>
+     <div class="invalid-feedback">{{ form.kvl.errors}}</div>
+
+     <div class="col-3 text-right"><label class="mb-2 text-dark" for="{{ form.length.id_for_label }}">{{ form.length.label }}</label></div>
+     <div class="col-3 pl-0">{{ form.length }}</div>
+     <div class="invalid-feedback">{{ form.length.errors}}</div>
+     <div class="col-3 text-right"><label class="mb-2 text-dark" for="{{ form.number_columns.id_for_label }}">{{ form.number_columns.label }}</label></div>
+     <div class="col-3 pl-0">{{ form.number_columns }}</div>
+   <div class="invalid-feedback">{{ form.number_columns.errors}}</div>
+  </div>
+     <div class="col-12 text-center"><label class="mb-1 mt-3 text-dark" for="{{ form.description.id_for_label }}">{{ form.description.label }}</label></div>
+     <div class="col-10 m-auto">{{ form.description }}</div>
+   <div class="invalid-feedback">{{ form.description.errors}}</div>
+
+
+
+
+
+
+                <div class="form-group text-center my-2">
+                    <button type="submit" class="btn btn-info">Сохранить</button>
+                </div>
+</form>
+
+
+{% endblock %}

@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{{ block.super }} | {{ person }}
+{% endblock %}
+
+{% block cards1 %}
+
+<div class="card text-center">
+  <div class="card-header">
+      <h4><b>{{ person }}</b>  {% if person.position %} | {{ person.position }} {% endif %}</h4>
+  </div>
+  <div class="card-body">
+      <h5 class="card-title"><b>Организация:</b>
+          <a class="btn btn-secondary p-1" href="{{ person.subscriber.get_absolute_url }}">
+              {{ person.subscriber }}
+          </a>
+      </h5>
+      {% if person.phones.count %}
+    <h3 class="card-text">
+        {% for phone in person.phones.all %}
+        <a class="btn btn-light p-0" href="{{ phone.get_absolute_url }}">{{ phone }}</a>,
+         {% endfor %}
+    </h3>
+      {% else %}
+      <p class="card-text"> <b>{{ person }}</b> не предоставил номер своего телефона. <br> Это телефоны организации <b>"{{ person.subscriber }}"</b>:<br>
+          {% for phone in person.subscriber.phones.all %}
+          <a class="btn btn-light p-0" href="{{ phone.get_absolute_url }}"><b>{{ phone }}</b></a>,
+          {% endfor %}</p>
+    </b>
+      {% endif %}
+  </div>
+    {% if person.description %}
+    <div class="card-footer">
+        {{ person.description|linebreaks  }}
+    </div>
+    {% endif %}
+
+          <div class="card-footer text-right mx-5 my-0 py-0 pr-5">
+            <div class="btn-group dropup">
+                  <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    править БД<span class="sr-only">Toggle Dropdown</span>
+                  </button>
+              <div class="dropdown-menu">
+                <a class="dropdown-item" href="{% url 'add_phone_p' person.pk %}">добавить телефон</a>
+                <a class="dropdown-item" href="{% url 'upd_person' person.pk %}">править лицо</a>
+                <a class="dropdown-item" href="{% url 'del_person' person.pk %}">удалить лицо</a>
+
+              </div>
+            </div>
+      </div>
+
+
+
+</div>
+
+{% endblock %}

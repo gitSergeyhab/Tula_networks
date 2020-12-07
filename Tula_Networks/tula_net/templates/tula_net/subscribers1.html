@@ -22,8 +22,7 @@
             {% if the_substation %}
                 <h3><a class="btn btn-outline-dark px-5 py-0 m-1" href="{% url 'substation_f' the_substation.pk %}">Разбить по фидерам </a></h3>
             {% elif the_section %}
-                <h3><a class="btn btn-outline-primary px-5 py-0 m-1 pointEarth" href="#">Искать землю</a>
-                    <a class="btn btn-outline-dark px-5 py-0 m-1" href="{% url 'section' the_section.pk %}">Подробно</a></h3>
+                <h3><a class="btn btn-outline-dark px-5 py-0 m-1" href="{% url 'section' the_section.pk %}">Подробно </a></h3>
             {% endif %}
         </div>
 
@@ -48,27 +47,24 @@
                   <div class="panel-heading">
                     <h4 class="panel-title text-center">
                       <a data-toggle="collapse" class="btn btn-outline-dark btn-lg btn-block py-0"  href="#{{ subscriber.pk }}">
-					{% if subscriber.year_update > 1 %}
+
                         <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-chevron-double-down" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                           <path fill-rule="evenodd" d="M1.646 6.646a.5.5 0 0 1 .708 0L8 12.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
                           <path fill-rule="evenodd" d="M1.646 2.646a.5.5 0 0 1 .708 0L8 8.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
                         </svg>
-					{% endif %}
-						{% if subscriber.year_update == 1 %}
-						<span class='text-danger'>списка лиц нет совсем</span>
-						{% else %}
+
+
                           список лиц {% if subscriber.year_update %}
                           на {{ subscriber.year_update }} год
                           {% else %}
-                          <span class="text-warning">год не указан</span>
+                          <span class="text-danger">год не указан</span>
                           {% endif %}
-                    	{% endif %}
-					{% if subscriber.year_update > 1 %}
+
                         <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-chevron-double-down" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                           <path fill-rule="evenodd" d="M1.646 6.646a.5.5 0 0 1 .708 0L8 12.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
                           <path fill-rule="evenodd" d="M1.646 2.646a.5.5 0 0 1 .708 0L8 8.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
                         </svg>
-					{% endif %}
+
                       </a>
                     </h4>
                   </div>
@@ -82,14 +78,10 @@
                             {% if person.priority == 1 %}
                                 <div class=" col-6 col-md-6 col-lg-4 px-1 my-2">
                                     <a href="{{ person.get_absolute_url }}" class="btn btn-light py-0 mx-auto d-block" >
-                                        <b>{{ person }}</b> 
-                                        <br>
-                                        {% if person.position %} <span class='text-secondary'> {{person.position}} </span>{% endif %}
-                                    </a> 
-                                        
+                                        {{ person }} </a>
                                     <div class="text-center">
                                     {% for phone in person.phones.all %}
-                                    <b>{{ phone }}</b>,
+                                    {{ phone }},
                                     {% endfor %}
                                     </div>
                                 </div>
@@ -98,7 +90,7 @@
                        </div>
                       </li>
 
-                       <li class="list-group-item list-group-item-secondary py-0">
+                       <li class="list-group-item list-group-item-secondary">
                            <p class="px-1 py-0 my-0">
                            {% for person in subscriber.persons.all %}
                               {% if not person.priority or person.priority > 1 %}
@@ -127,11 +119,11 @@
                 {% if feeder.substation == the_substation or feeder.section == the_section and feeder.section %}
                           <a href="{{ feeder.get_absolute_url }}"
                              {% if feeder.section.voltage.class_voltage == 6 %}
-                                         class='{{ feeder_6 }} earthFeeder'
+                                         class='{{ feeder_6 }}'
                             {% elif feeder.section.voltage.class_voltage == 10 %}
-                                         class='{{ feeder_10 }} earthFeeder'
+                                         class='{{ feeder_10 }}'
                             {% else %}
-                                         class='{{ feeder_x }} earthFeeder'
+                                         class='{{ feeder_x }}'
                             {% endif %}
 
                           >
@@ -146,13 +138,8 @@
 
     </div>
     </div>
-{% load static %}
-<script src="{% static 'scripts/earth2.js' %}"></script>
+
 {% endblock %}
-
-
-
-
 
 
 

@@ -31,27 +31,18 @@
 
     {% for subscriber in subscribers.all %}
          <a href="{{ subscriber.get_absolute_url }}" type="button"
-
-            {% if subscriber.pk == 201 %}
-            class="m-1 btn btn-outline-primary"
-            {% elif subscriber.region.pk != 2 %}
-            class="m-1 btn btn-light text-warning"
-            {% elif subscriber.year_update == 1 %}
-            class="m-1 btn btn-dark text-danger"
+            {% if subscriber.region.pk != 2 %}
+            class="m-1 btn btn-warning"
             {% elif not subscriber.year_update %}
             class="m-1 btn btn-secondary"
-            {% elif current_year < subscriber.year_update %}
-            class="m-1 btn btn-light border border-success text-success"
             {% elif current_year == subscriber.year_update %}
             class="m-1 btn btn-light border border-success"
             {% elif current_year|add:-1 == subscriber.year_update %}
             class="m-1 btn btn-light border border-danger"
-            {% elif current_year|add:-2 == subscriber.year_update %}
+            {% elif current_year|add:-1 > subscriber.year_update %}
              class="m-1 btn btn-light border border-danger text-danger"
-            {% elif current_year|add:-2 > subscriber.year_update %}
-             class="m-1 btn btn-danger"
             {% endif %}
->{{ subscriber }} {% if subscriber.year_update %} {% if subscriber.year_update != 1 %} | {{ subscriber.year_update }} {% endif %} {% endif %}</a>
+>{{ subscriber }} {% if subscriber.year_update %} | {{ subscriber.year_update }} {% endif %}</a>
     {% endfor %}
 
 {% endblock %}

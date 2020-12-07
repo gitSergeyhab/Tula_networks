@@ -1,0 +1,145 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{{ block.super }} | Фидеры {% if the_section %} {{ the_section }}{% elif the_substation %} ПС {{ the_substation }} {% endif %}
+{% endblock %}
+
+{% block cards1 %}
+
+    <div class="card">
+        <h5 class="card-header text-center"><span class="px-5"><b>
+            {% if the_section %}
+            {{ the_section.name }}
+            <a class="btn btn-light p-0 py-0 m-0" href="{{ the_section.substation.get_absolute_url }}"><h5><b>{{ the_section.substation }}</b></h5></a>
+            {% elif the_substation %}
+            <a class="btn btn-light p-0 py-0 m-0" href="{{ the_substation.get_absolute_url }}"><h5><b>ПС {{ the_substation }}</b></h5></a>
+            {% endif %}
+        </b></span></h5>
+
+
+
+        <div class="text-right">
+            {% if the_substation %}
+                <h3 class="m-0"><a class="btn btn-outline-dark px-5 py-0 m-0" href="{% url 'subscriber_ps' the_substation.pk %}">Разбить по абонентам </a></h3>
+            {% elif the_section %}
+                <h3 class="m-0"><a class="btn btn-outline-dark px-5 py-0 m-0" href="{% url 'subscriber_sec' the_section.pk %}">Разбить по абонентам </a></h3>
+            {% endif %}
+        </div>
+
+
+    <div class="card-body">
+    {% for feeder in feeders %}
+          <div class="row mt-1">
+            <div class="col-12 col-lg-11 offset-lg-2 m-auto">
+              <div class="card mb-4">
+                <div class="card-body px-4 py-2">
+                  <div class="row">
+                    <div class="col-12 col-md-3 col-lg-2 align-items-center">
+                          <div class="card pt-0 text-center p-0 mt-0">
+                            <div class="btn btn-dark">
+                                {% if feeder.name|length > 13 %} {{ feeder.name|truncatechars:12 }} {% else %} {{ feeder.name }} {% endif %}
+
+                            </div>
+                            <div class="btn btn-secondary">
+                                {% if feeder.subscriber.short_name %}
+                                {{ feeder.subscriber.short_name }}
+                                {% else %}
+                                {{ feeder.subscriber.name|truncatechars:15 }}
+                                {% endif %}
+                            </div>
+                            {% if feeder.attention %}
+                            <div class="btn btn-dark py-0">
+                                <span class="badge badge-danger">описание!!!</span>
+                            </div>
+                            {% endif %}
+                            {% if feeder.in_reserve %}
+                            <div class="btn btn-dark py-0">
+                                <span class="badge badge-light">резервный</span>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-md-9 col-lg-9">
+                        <a href="{{ feeder.subscriber.get_absolute_url }}" class="btn btn-light mx-auto  p-0 mb-1">
+                            <p class="my-0">{{ feeder.subscriber.name }}</p>
+                        </a> <br>
+                        <a href="{{ feeder.get_absolute_url }}" class="btn btn-outline-dark mx-auto px-2 py-0">
+                            <b>Фидер {{ feeder.name }}</b>
+                        </a>
+{% comment %}
+                        <a href="{% url 'upd_feeder' feeder.pk %}" class="btn btn-dark mx-auto p-3 py-0">
+                            <b>Фидер {{ feeder.name }}</b>
+                        </a>
+{% endcomment %}
+                        <a href="{{ feeder.section.get_absolute_url }}"
+                            {% if feeder.section.voltage.class_voltage == 6 %}
+                                class="btn btn-outline-success mx-2 px-2 py-0"
+                            {% elif feeder.section.voltage.class_voltage == 10 %}
+                                class="btn btn-outline-primary mx-2 px-2 py-0"
+                           {% else %}
+                                class="btn btn-outline-dark mx-2  px-2 py-0"
+                           {% endif %}
+                            >
+
+
+                            <b>{{ feeder.section.name }}</b>
+                        </a>
+                        <a href="{{ feeder.substation.get_absolute_url }}" class="btn btn-outline-dark mx-auto px-2 py-0">
+                            <b>ПС {{ feeder.substation.name }}</b>
+                        </a>
+                        <hr class="p-0 mt-1 mb-0"  color="#00008B" >
+                        <hr class="p-0 m-0"  color="#00008B" >
+
+                    {% if feeder.subscriber.ours %}
+                        {% if feeder.character.checked %}
+                        <div class="card-body mt-0 py-0 bg-success">
+                        {% else %}
+                        <div class="card-body mt-0 py-0 bg-warning">
+                        {% endif %}
+
+                            {% if feeder.character.tp_our_num or feeder.character.tp_alien_num %}
+                                Количество ТП наши/чужие: <b>{{ feeder.character.tp_our_num }} / {{ feeder.character.tp_alien_num }} </b> ,
+                            {% endif %}
+                            {% if feeder.character.population %}
+                                Население: <b>{{ feeder.character.population }} чел</b> ,
+                            {% endif %}
+                            {% if feeder.character.social_num %}Социалка:
+                                <b>{{ feeder.character.social_num }} </b>( {{ feeder.character.social_names }} )
+                            {% else %}
+                                <b>Социалки нет </b>
+                            {% endif %}
+                            {% if feeder.character.length %} Протяженность: <b>{{ feeder.character.length }} км </b> {% endif %}
+                        </div>
+                    {% endif %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+    {% endfor %}
+
+    </div>
+    </div>
+{% endblock %}
+
+{% block paginator %}
+{% include 'incl/_block_paginator_long.html' %}
+{% endblock %}
+
