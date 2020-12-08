@@ -42,18 +42,27 @@ body {
 
 
 .phone_bar {
-    z-index: 99999;
+    z-index: 99;
     position: fixed;
     left: 5px;
     top: 45px;
-    width: 350px;
+    width: 270px;
 
 }
 
-a.display_none {
+big-phone-parent {
+    width: 100%;
+}
+
+.display_none {
     display: none !important
 }
 
 .test {
     color: red;
+}
+
+.border-phones {
+    border: 5px solid;
+
 }

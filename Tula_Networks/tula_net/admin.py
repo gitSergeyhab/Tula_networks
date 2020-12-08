@@ -174,7 +174,7 @@ admin.site.register(Feeder_characteristic, Feeder_characteristicAdmin)
 
 
 class PhoneResourse(resources.ModelResource):
-    subscriber = fields.Field(attribute='subscriber', widget=ForeignKeyWidget(Subscriber, 'mame'))
+    subscriber = fields.Field(attribute='subscriber', widget=ForeignKeyWidget(Subscriber, 'name'))
     person = fields.Field(attribute='person', widget=ForeignKeyWidget(Person, 'name'))
     substation = fields.Field(attribute='substation', widget=ForeignKeyWidget(Substation, 'name'))
 

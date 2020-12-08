@@ -54,8 +54,30 @@
 >{{ subscriber }} {% if subscriber.year_update %} {% if subscriber.year_update != 1 %} | {{ subscriber.year_update }} {% endif %} {% endif %}</a>
     {% endfor %}
 
+
+
+
+
+
+
+
 {% endblock %}
 
 {% block paginator %}
 {% include 'incl/_block_paginator_long.html' %}
 {% endblock %}
+
+    {% for subscriber in subscribers.all %}
+         <a href="{{ subscriber.get_absolute_url }}" type="button"
+
+            {% if not subscriber.year_update %}
+            class="m-1 btn btn-secondary"
+            {% elif current_year == subscriber.year_update %}
+            class="m-1 btn btn-light border border-success"
+            {% elif current_year|add:-1 == subscriber.year_update %}
+            class="m-1 btn btn-light border border-danger"
+            {% elif current_year|add:-1 > subscriber.year_update %}
+             class="m-1 btn btn-light border border-danger text-danger"
+            {% endif %}
+>{{ subscriber }} {% if subscriber.year_update %} | {{ subscriber.year_update }} {% endif %}</a>
+    {% endfor %}

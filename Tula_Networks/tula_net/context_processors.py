@@ -52,7 +52,8 @@ def logik(request):
         'logik_person': '_perso',
         'logik_section': '_secti',
         'logik_line': '_line/',
-        'logik_char': '_chara'
+        'logik_char': '_chara',
+        'phones_bar': list(range(10))
     }
 
 

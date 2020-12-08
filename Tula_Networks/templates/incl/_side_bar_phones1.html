@@ -1,34 +1,10 @@
-{% extends 'base.html' %}
 
-{% block title %}
-{{ block.super }} | Номера телефонов | поиск
-{% endblock %}
+<div class="row mr-1 phone_bar">
 
 
-{% block search %}
-    <div class="mb-5">
 
-    {% include 'incl/_searcher_phones.html' %}
-
-
-<h3 class="text-center">Телефоны</h3>
-{% if flag_search %}
-            {% if phones.count %}
-                <h3 class="text-center">Вы искали: <span class="text-warning">{{ flag_search }}</span>, и я нашел {{ page_obj.paginator.count }}:</h3>
-            {% else %}
-                <h3 class="text-center">Вы хотели: <span class="text-warning">{{ flag_search }}</span>, но у меня нету :((</h3>
-            {% endif %}
-{% endif %}
-
-    </div>
-{% endblock %}
-
-{% block cards1 %}
-    <section class="my-5 py-3">
-      <div class="row mb-0 papa">
-        {% for phone in phones %}
-
-            <div draggable="true" class="col-6 col-md-6 col-lg-3 mb-2 big-phone-parent">
+    {% for num in phones_bar %}
+<div draggable="true" class="col-12 mb-2 phone_in_bar display_none">
                 <div class="card pt-0 text-center p-0 m-0">
 
                     <div class="card-body p-0 m-0 d-flex justify-content-around">
@@ -48,7 +24,8 @@
                         </a>
 
                         <a href="{{ phone.get_absolute_url }}" class="btn btn-light mx-auto">
-                            <span class="card-text mb-0 text-left"><b>{{ phone }}</b></span>
+                            <b><span class="card-text mb-0 text-left phone_add" id="side-phone-{{ num }}">{% if num < 6 %}
+                                1111-11-11-11-11{% endif %}</span></b>
                         </a>
 
                         <a href="#" class="p-1 btn_up display_none btn btn-outline-secondary">
@@ -65,45 +42,22 @@
                         <a class="p-1 del-when-add"></a>
                     </div>
 
-                    {% if phone.subscriber %}
+
                     <div class="card-body p-0 m-0 ">
-                        <a href="{{ phone.subscriber.get_absolute_url }}" class="btn btn-outline-dark mx-auto d-block py-0 my-0">
-                            <p class="card-text subscriber_add">
-                            {% if phone.subscriber.short_name %}
-                            {{ phone.subscriber.short_name }}
-                            {% else %}
-                            {{ phone.subscriber }}
-                            {% endif %}
+                        <a href="{{ phone.person.get_absolute_url }}" class="btn btn-secondary mx-auto d-block py-0 my-0">
+                            <p class="card-text person_add" id="side-person-{{ num }}">
+                                {% if num < 6 %}
+                                namename mamename
+                                {% endif %}
                             </p>
                         </a>
                     </div>
-                    {% endif %}
-                    {% if phone.person %}
-                    <div class="card-body p-0 m-0 ">
-                        <a href="{{ phone.person.get_absolute_url }}" class="btn btn-secondary mx-auto d-block py-0 my-0">
-                            <p class="card-text person_add">{{ phone.person }}</p>
-                        </a>
-                    </div>
-                    {% endif %}
-                    {% if phone.substation %}
-                    <div class="card-body p-0 m-0 ">
-                        <a href="{{ phone.substation.get_absolute_url }}" class="btn btn-dark mx-auto d-block py-0 my-0">
-                            <p class="card-text substation_add">ПС {{ phone.substation.number }} {{ phone.substation }}</p>
-                        </a>
-                    </div>
-                    {% endif %}
+
+
                 </div>
             </div>
-
     {% endfor %}
-      </div>
-    </section>
+
+</div>
 
 
-{% endblock %}
-
-{% block paginator %}
-{% include 'incl/_block_paginator_long.html' %}
-{% load static %}
-<script src="{% static 'scripts/1.js' %}"></script>
-{% endblock %}

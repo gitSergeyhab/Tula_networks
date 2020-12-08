@@ -322,9 +322,7 @@ class SearcherSubscribersView(SearchMixin, ListView):
     def get_queryset(self):
         return Subscriber.objects.filter(
             Q(name__icontains=self.request.GET.get('s')) |
-            Q(short_name__icontains=self.request.GET.get('s')) |
-            Q(name__icontains=self.request.GET.get('s').title()) |
-            Q(short_name__icontains=self.request.GET.get('s').title().upper())
+            Q(short_name__icontains=self.request.GET.get('s'))
         )
 
 
@@ -336,8 +334,6 @@ class SearcherPSView(SubstationsViewMixin, ListView):
         name = self.request.GET.get('s')
         return Substation.objects.select_related('group', 'voltage_h', 'voltage_m', 'voltage_l').filter(
             Q(name__icontains=name) |
-            Q(name__icontains=name.title()) |
-            Q(name__icontains=name.lower()) |
             Q(number=try_int(name))
         )
 
@@ -355,11 +351,7 @@ class SearcherPersonsView(SearchMixin, ListView):
     paginate_by = 18
 
     def get_queryset(self):
-        return Person.objects.select_related('subscriber').filter(
-            Q(name__icontains=self.request.GET.get('s')) |
-            Q(name__icontains=self.request.GET.get('s').title()) |
-            Q(name__icontains=self.request.GET.get('s').lower())
-        )
+        return Person.objects.select_related('subscriber').filter(Q(name__icontains=self.request.GET.get('s')))
 
 
 class SearcherPhonesView(SearchMixin, ListView):
@@ -386,9 +378,7 @@ class SearcherLinesView(ListView):
         obj_serch_n = chang_search(obj_serch)
         return Line.objects.select_related('management', 'voltage', 'group').filter(
             Q(full_name__icontains=obj_serch) |
-            Q(full_name__icontains=obj_serch.title()) |
             Q(name__icontains=obj_serch) |
-            Q(name__icontains=obj_serch.title()) |
             Q(short_name__icontains=obj_serch) |
             Q(short_name__icontains=obj_serch_n)
         )
@@ -409,11 +399,8 @@ class SearcherFeedersView(SearchMixin, ListView):
     paginate_by = 20
 
     def get_queryset(self):
-        return Feeder.objects.filter(
-            Q(name__icontains=self.request.GET.get('s')) |
-            Q(name__icontains=self.request.GET.get('s').title()) |
-            Q(name__icontains=self.request.GET.get('s').lower())
-        ).select_related('substation', 'subscriber')
+        return Feeder.objects.filter(Q(name__icontains=self.request.GET.get('s'))).\
+            select_related('substation', 'subscriber')
 
 
 # ___________________ ФОРМЫ ____________________

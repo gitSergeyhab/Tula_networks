@@ -1,25 +1,19 @@
 //let phones = document.querySelectorAll('.big-phone-parent');
-let phones = document.querySelector('.papa').children;
+function makePapa(selector) {
+    return document.querySelector('.papa').children;
+    }
+//let phones = document.querySelector('.papa').children;
 //console.log(phones)
 
-
+let phones = makePapa('.papa')
 for (let i=0; i<phones.length; i++) {
-//    console.log(phones[i]);
+    phones = makePapa('.papa');
     let btn = phones[i].querySelector('.btn_add');
 
     btn.addEventListener('click', (evt) => {
         evt.preventDefault()
-//        console.log(phones[i], i, phones[i-1], i-1)
-        phones[i].insertAdjacentElement('afterend', phones[i-1])
-        phones = document.querySelector('.papa').children;
+        console.log(i)
+        phones[i].insertAdjacentElement('afterend', phones[i-2])
+
     })
 }
-//phones.forEach((item, i) => {
-//    let btn = item.querySelector('.btn_add');
-////    console.log(btn);
-//    btn.addEventListener('click', (evt) => {
-//        evt.preventDefault()
-////        console.log(phones[i], i, phones[i-1], i-1)
-//        phones[i].insertAdjacentElement('afterend', phones[i-1])
-//    })
-//})

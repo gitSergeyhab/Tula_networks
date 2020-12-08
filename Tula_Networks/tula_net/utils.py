@@ -157,7 +157,6 @@ def chang_search(obs):
     if '-' in obs:
         list_obs = obs.split('-')
         obs_n = ' - '.join([word.strip() for word in list_obs])
-        print(obs_n)
         return obs_n
     return obs
 
