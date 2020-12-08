@@ -53,3 +53,7 @@ body {
 a.display_none {
     display: none !important
 }
+
+.test {
+    color: red;
+}

@@ -12,36 +12,95 @@ function copyPhone(btn) {
     let aAdd = dublParent.querySelector('.btn_add');
     let btnUp = dublParent.querySelector('.btn_up');
     let btnDown = dublParent.querySelector('.btn_down');
+    let delWhenAdd = dublParent.querySelector('.del-when-add');
+    btnUp.classList.remove('display_none');
+    btnDown.classList.remove('display_none');
     aRemove.classList.remove('display_none');
     aAdd.classList.add('display_none');
-//    phoneBar.appendChild(dublParent);
-//    listPhones = phoneBar.children;
-//    console.log(listPhones.length, phoneBar.length);
+    delWhenAdd.classList.add('display_none');
     return dublParent;
 }
 
 
-function removePhoneFromBar(btns) {
-    btns.forEach(item => {
-        item.addEventListener('click', function(evt) {
-            evt.preventDefault();
-            let removeFromBar = item.parentElement.parentElement.parentElement;
-            removeFromBar.remove();
-        })
+function removePhoneFromBar(btn) {
+    btn.addEventListener('click', function(evt) {
+        evt.preventDefault();
+        let removeFromBar = btn.parentElement.parentElement.parentElement;
+        removeFromBar.remove();
     })
 }
 
 
+function upAndDown(pars) {
+    console.log(pars )
+    for (let i=0; i<pars.length; i++) {
+//        console.log(i, pars[i]);
+        let up = pars[i].querySelector('.btn_up');
+        let down = pars[i].querySelector('.btn_down');
+
+        up.addEventListener('click', (evt) => {
+            evt.preventDefault()
+            if (i) {
+                pars[i].insertAdjacentElement('afterend', pars[i-1])
+                console.log(i, i-1);
+//                pars[i].parentNode.insertBefore(pars[i], pars[i-1]);
+
+            }
+        })
+
+        down.addEventListener('click', (evt) => {
+            evt.preventDefault()
+            if (i < pars.length-1) {
+//                console.log(i+1, i);
+//                pars[i+1].parentNode.insertBefore(pars[i+1], pars[i]);
+//                pars[i].parentNode.insertBefore(pars[i], pars[i+1].nextSibling);
+            }
+        })
+
+
+    }
+//    pars.forEach((item, i) => {
+//        let up = item.querySelector('.btn_up');
+//        let down = item.querySelector('.btn_down');
+//
+//        up.addEventListener('click', (evt) => {
+//            evt.preventDefault()
+//            if (i) pars[i].parentNode.insertBefore(childNode[i], childNode[i-1]);
+//        })
+//
+//        down.addEventListener('click', (evt) => {
+//            evt.preventDefault()
+//            if (i < pars.length-1) pars[i].parentNode.insertBefore(childNode[i], childNode[i+1]);
+//        })
+//    })
+}
+
+
+
+//function up(btn) {
+//    btn.addEventListener('click', function(evt) {
+//        evt.preventDefault();
+//        let phones = btn.parentElement.parentElement.parentElement.parentElement.children;
+//        console.log(phones);
+//    })
+//
+//}
+
+
+console.log('removeBtn2');
 btnAdds.forEach(item => {
     item.addEventListener('click', function(evt) {
         evt.preventDefault();
         let phoneForBar = copyPhone(item);
-        phoneBar.appendChild(phoneForBar)
+        let removeBtn = phoneForBar.querySelector('.btn_remove');
+
+//        console.log(1, phones.length)
+        removePhoneFromBar(removeBtn);
+
+        phoneBar.appendChild(phoneForBar);
+        let phones = phoneBar.children;
+//        console.log(phones.length)
+        upAndDown(phones);
         })
 })
 
-//console.log(listPhones);
-//console.log(phoneBar.children);
-//console.log(phoneBar.parentElement);
-//console.log(phoneBar.parentElement.children);
-//console.log(phoneBar.parentElement.children[2]);
