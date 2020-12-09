@@ -81,7 +81,7 @@
                           {% for person in subscriber.persons.all %}
                             {% if person.priority == 1 %}
                                 <div class=" col-6 col-md-6 col-lg-4 px-1 my-2">
-                                    <a href="{{ person.get_absolute_url }}" class="btn btn-light py-0 mx-auto d-block" >
+                                    <a href="{{ person.get_absolute_url }}" class="btn btn-light py-0 mx-auto d-block color-man" >
                                         <b>{{ person }}</b> 
                                         <br>
                                         {% if person.position %} <span class='text-secondary'> {{person.position}} </span>{% endif %}
@@ -102,11 +102,18 @@
                            <p class="px-1 py-0 my-0">
                            {% for person in subscriber.persons.all %}
                               {% if not person.priority or person.priority > 1 %}
-                                        {{ person }} {% if person.position %} ({{person.position}}) {% endif %}
 
-                                        {% for phone in person.phones.all %}
-                                            {{ phone }},
-                                        {% endfor %};
+                                   <a href="{{ person.get_absolute_url }}" class="btn btn-light py-0 my-1 color-man" >
+                                        <b>{{ person }}</b>
+                                        {% if person.position %} <span class='text-secondary'> ({{person.position}}) </span>{% endif %}
+
+                                    {% for phone in person.phones.all %}
+                                    <b>{{ phone }}</b>,
+                                    {% endfor %}
+                                   </a>
+
+
+
 
                               {% endif %}
                             {% endfor %}
@@ -147,7 +154,7 @@
     </div>
     </div>
 {% load static %}
-<script src="{% static 'scripts/earth2.js' %}"></script>
+<script src="{% static 'scripts/earth3.js' %}"></script>
 {% endblock %}
 
 
