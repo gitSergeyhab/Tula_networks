@@ -37,7 +37,7 @@
             </a>
             <div class="card-body p-1 text-center"> Телефоны организации:
             {% for phone in subscriber.phones.all %}
-                <a href="{{ phone.get_absolute_url }}" class="btn btn-light px-1 py-0 mx-1 border-secondary" >{{ phone }}</a>,
+                <a href="{{ phone.get_absolute_url }}" class="color-man btn btn-light px-1 py-0 mx-1 border-secondary" >{{ phone }}</a>,
             {% endfor %}
            </div>
 
@@ -82,14 +82,16 @@
                             {% if person.priority == 1 %}
                                 <div class=" col-6 col-md-6 col-lg-4 px-1 my-2">
                                     <a href="{{ person.get_absolute_url }}" class="btn btn-light py-0 mx-auto d-block color-man" >
-                                        <b>{{ person }}</b> 
+                                        <b>{{ person }}</b>
                                         <br>
                                         {% if person.position %} <span class='text-secondary'> {{person.position}} </span>{% endif %}
-                                    </a> 
-                                        
+                                    </a>
+
                                     <div class="text-center">
                                     {% for phone in person.phones.all %}
-                                    <b>{{ phone }}</b>,
+	                                    <a href="{{ phone.get_absolute_url }}" class="btn btn-light py-0 my-1 mr-1 color-man" >
+	                                    <b>{{ phone }}</b>
+	                                    </a>,
                                     {% endfor %}
                                     </div>
                                 </div>
@@ -106,14 +108,13 @@
                                    <a href="{{ person.get_absolute_url }}" class="btn btn-light py-0 my-1 color-man" >
                                         <b>{{ person }}</b>
                                         {% if person.position %} <span class='text-secondary'> ({{person.position}}) </span>{% endif %}
+									</a>
 
                                     {% for phone in person.phones.all %}
-                                    <b>{{ phone }}</b>,
+                                    <a href="{{ phone.get_absolute_url }}" class="btn btn-light py-0 my-1 mr-1 color-man" >
+                                    <b>{{ phone }}</b>
+                                    </a>,
                                     {% endfor %}
-                                   </a>
-
-
-
 
                               {% endif %}
                             {% endfor %}
