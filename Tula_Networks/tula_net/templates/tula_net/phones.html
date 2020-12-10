@@ -24,6 +24,7 @@
 {% endblock %}
 
 {% block cards1 %}
+<button class="reset btn-dark">reset</button>
     <section class="my-5 py-3">
       <div class="row mb-0 papa">
         {% for phone in phones %}
@@ -48,7 +49,7 @@
                         </a>
 
                         <a href="{{ phone.get_absolute_url }}" class="btn btn-light mx-auto">
-                            <span class="card-text mb-0 text-left"><b>{{ phone }}</b></span>
+                            <span class="card-text mb-0 text-left phone"><b>{{ phone }}</b></span>
                         </a>
 
                         <a href="#" class="p-1 btn_up display_none btn btn-outline-secondary">
@@ -67,7 +68,7 @@
 
                     {% if phone.subscriber %}
                     <div class="card-body p-0 m-0 ">
-                        <a href="{{ phone.subscriber.get_absolute_url }}" class="btn btn-outline-dark mx-auto d-block py-0 my-0">
+                        <a href="{{ phone.subscriber.get_absolute_url }}" class="btn btn-outline-dark mx-auto d-block py-0 my-0 subscriber">
                             <p class="card-text subscriber_add">
                             {% if phone.subscriber.short_name %}
                             {{ phone.subscriber.short_name }}
@@ -80,14 +81,14 @@
                     {% endif %}
                     {% if phone.person %}
                     <div class="card-body p-0 m-0 ">
-                        <a href="{{ phone.person.get_absolute_url }}" class="btn btn-secondary mx-auto d-block py-0 my-0">
+                        <a href="{{ phone.person.get_absolute_url }}" class="btn btn-secondary mx-auto d-block py-0 my-0 person">
                             <p class="card-text person_add">{{ phone.person }}</p>
                         </a>
                     </div>
                     {% endif %}
                     {% if phone.substation %}
                     <div class="card-body p-0 m-0 ">
-                        <a href="{{ phone.substation.get_absolute_url }}" class="btn btn-dark mx-auto d-block py-0 my-0">
+                        <a href="{{ phone.substation.get_absolute_url }}" class="btn btn-dark mx-auto d-block py-0 my-0 substation">
                             <p class="card-text substation_add">ПС {{ phone.substation.number }} {{ phone.substation }}</p>
                         </a>
                     </div>

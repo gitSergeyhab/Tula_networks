@@ -1,7 +1,9 @@
 let btnAdds = document.querySelectorAll('.btn_add');
 let btnRemoves = document.querySelectorAll('.btn_remove');
 let phoneBar = document.querySelector('.phone_bar');
+let pb = JSON.stringify(phoneBarFunc(phoneBar));
 //let listPhones = 'xz';
+
 
 function copyPhone(btn) {
     let bigParent = btn.parentElement.parentElement.parentElement;
@@ -31,38 +33,6 @@ function removePhoneFromBar(btn) {
 }
 
 
-//function upAndDown(pars) {
-//    console.log(pars )
-//    for (let i=0; i<pars.length; i++) {
-//        console.log(i, pars[i]);
-//        let up = pars[i].querySelector('.btn_up');
-//        let down = pars[i].querySelector('.btn_down');
-//
-//        up.addEventListener('click', (evt) => {
-//            evt.preventDefault()
-//            if (i) {
-//                pars[i].insertAdjacentElement('afterend', pars[i-1])
-//                console.log(i, i-1);
-//                pars[i].parentNode.insertBefore(pars[i], pars[i-1]);
-//
-//            }
-//        })
-//
-//        down.addEventListener('click', (evt) => {
-//            evt.preventDefault()
-//            if (i < pars.length-1) {
-//                console.log(i+1, i);
-//                pars[i+1].parentNode.insertBefore(pars[i+1], pars[i]);
-//                pars[i].parentNode.insertBefore(pars[i], pars[i+1].nextSibling);
-//            }
-//        })
-//
-//
-//    }
-
-
-
-
 function phoneBarFunc(bar) {
     btnAdds.forEach(item => {
         item.addEventListener('click', function(evt) {
@@ -71,15 +41,15 @@ function phoneBarFunc(bar) {
             let removeBtn = phoneForBar.querySelector('.btn_remove');
             removePhoneFromBar(removeBtn);
             phoneBar.appendChild(phoneForBar);
-            let phones = phoneBar.children;
+
             })
         })
         return phoneBar;
     }
 
-//let pb = phoneBarFunc(phoneBar);
-console.log('removeBtn1');
-localStorage.setItem('phoneBar', phoneBarFunc(phoneBar))
+//let pb = JSON.stringify(phoneBarFunc(phoneBar));
+console.log('removeBtn4');
+localStorage.setItem('phoneBar', pb)
 
 localStorage.getItem('phoneBar')
 

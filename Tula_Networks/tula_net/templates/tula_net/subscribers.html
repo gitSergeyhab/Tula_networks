@@ -105,17 +105,19 @@
                            {% for person in subscriber.persons.all %}
                               {% if not person.priority or person.priority > 1 %}
 
-                                   <a href="{{ person.get_absolute_url }}" class="btn btn-light py-0 my-1 color-man" >
-                                        <b>{{ person }}</b>
+                                   <a href="{{ person.get_absolute_url }}" class="btn btn-light py-0 my-1 mx-0 color-man" >
+                                        <b>{{ person }}</b></a>
+                                        <a href="#" class="btn btn-light py-0 my-1 mx-0 color-man" >
                                         {% if person.position %} <span class='text-secondary'> ({{person.position}}) </span>{% endif %}
 									</a>
 
                                     {% for phone in person.phones.all %}
-                                    <a href="{{ phone.get_absolute_url }}" class="btn btn-light py-0 my-1 mr-1 color-man" >
+                                    <a href="{{ phone.get_absolute_url }}" class="btn btn-light py-0 my-1 ml-0 color-man" >
                                     <b>{{ phone }}</b>
-                                    </a>,
-                                    {% endfor %}
+                                    </a>
 
+                                    {% endfor %}
+                               <span class='mx-2'>|</span>
                               {% endif %}
                             {% endfor %}
 
