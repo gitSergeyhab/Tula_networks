@@ -1,15 +1,29 @@
 
 let phoneBar = document.querySelector('.phone_bar');
+let allPhones = phoneBar.children
 let templatePhone = document.querySelector('#template-side-phone').content;
 
-console.log(templatePhone)
-console.log(16)
+console.log(allPhones)
+console.log(20)
+
 let reset = document.querySelector('.reset');
+let kill = document.querySelector('.kill');
 reset.onclick = () => {
 //   localStorage.clear();
    localStorage.removeItem('phonesData');
    console.log(reset);
    storList = [];
+}
+
+function killThemAll() {
+    let len = allPhones.length-1;
+    for (let i=len; i>-1; i--) {
+        allPhones[i].remove();
+        }
+}
+
+kill.onclick = () => {
+    killThemAll()
 }
 
 
@@ -31,54 +45,82 @@ btnsAdd.forEach(btn => {
         evt.preventDefault();
         let fullPhone = btn.parentElement.parentElement.parentElement;
         let phone = fullPhone.querySelector('.phone');
+        let phoneHref = phone.parentElement.href;
+        let subscriberHref = ''; let personHref = ''; let substationHref = '';
         if (phone) phone = phone.textContent.trim();
         let subscriber = fullPhone.querySelector('.subscriber');
-        if (subscriber) subscriber = subscriber.textContent.trim();
+        if (subscriber) {
+            subscriberHref = subscriber.href;
+            subscriber = subscriber.textContent.trim();
+        }
         let person = fullPhone.querySelector('.person');
-        if (person) person = person.textContent.trim();
+        if (person) {
+            personHref = person.href;
+            person = person.textContent.trim();
+        }
         let substation = fullPhone.querySelector('.substation');
-        if (substation) substation = substation.textContent.trim();
+        if (substation) {
+            substationHref = substation.href;
+            substation = substation.textContent.trim();
+        }
         let objPhone = {
             'phone': phone,
+            'phoneHref': phoneHref,
             'subscriber': subscriber,
+            'subscriberHref':subscriberHref,
             'person': person,
+            'personHref': personHref,
             'substation': substation,
+            'substationHref': substationHref,
         };
         storList.push(objPhone)
-        console.log(storList);
         localStorage.setItem('phonesData', JSON.stringify(storList));
     })
 })
 
-storList.forEach((item, i) => {
-
-    let onePhone = templatePhone.cloneNode(true);
-    console.log(i, onePhone);
-    let phoneAdd = onePhone.querySelector('.phone_add');
-    let personAdd = onePhone.querySelector('.person_add');
-    let subscriberAdd = onePhone.querySelector('.subscriber_add');
-    let substationAdd = onePhone.querySelector('.substation_add');
-    phoneAdd.textContent = item['phone'];
-    if (item['person']) {
-        personAdd.parentElement.parentElement.classList.remove('display_none');
-        personAdd.textContent = item['person'];
-        console.log(personAdd.parentElement.parentElement);
+function addNumberAndHref(obj, whatAdd, field) {
+    if (obj[field]) {
+        whatAdd.parentElement.parentElement.classList.remove('display_none');
+        whatAdd.textContent = obj[field];
+        whatAdd.parentElement.href = obj[`${field}Href`];
     }
+}
 
-    if (item['subscriber']) {
-        subscriberAdd.parentElement.parentElement.classList.remove('display_none');
-        subscriberAdd.textContent = item['subscriber'];
-        console.log(subscriberAdd.parentElement.parentElement);
-    }
+function removeFromStorage(btn, phone) {
+    let phoneNum = phone.textContent;
+    btn.addEventListener('dblclick', () => {
+        console.log(storList);
+        for (let i=0; i<storList.length; i++) {
+            if (storList[i]['phone'] == phoneNum) {
+                storList.splice(i, 1);
+                localStorage.setItem('phonesData', JSON.stringify(storList));
+                break;
+            }
+        }
+    console.log(storList);
+    })
+}
 
-    if (item['substation']) {
-        substationAdd.parentElement.parentElement.classList.remove('display_none');
-        substationAdd.textContent = item['substation'];
-    }
+function addNewPhone() {
 
-     phoneBar.appendChild(onePhone);
-})
+    storList.forEach((item, i) => {
+        let onePhone = templatePhone.cloneNode(true);
+        let phoneAdd = onePhone.querySelector('.phone_add');
+        let personAdd = onePhone.querySelector('.person_add');
+        let subscriberAdd = onePhone.querySelector('.subscriber_add');
+        let substationAdd = onePhone.querySelector('.substation_add');
+
+        phoneAdd.textContent = item['phone'];
+        phoneAdd.parentElement.parentElement.href=item['phoneHref'];
+        addNumberAndHref(item, personAdd, 'person');
+        addNumberAndHref(item, subscriberAdd, 'subscriber');
+        addNumberAndHref(item, substationAdd, 'substation');
+        btnRemove = onePhone.querySelector('.btn_remove');
+        removeFromStorage(btnRemove, phoneAdd)
+        phoneBar.appendChild(onePhone);
+    })
+}
 
 
+addNewPhone()
 
-console.log(storList, storList.length)
