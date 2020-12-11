@@ -1,33 +1,9 @@
-
 let phoneBar = document.querySelector('.phone_bar');
 let allPhones = phoneBar.children
 let templatePhone = document.querySelector('#template-side-phone').content;
-
-console.log(allPhones)
-console.log(20)
-
-let reset = document.querySelector('.reset');
-let kill = document.querySelector('.kill');
-reset.onclick = () => {
-//   localStorage.clear();
-   localStorage.removeItem('phonesData');
-   console.log(reset);
-   storList = [];
-}
-
-function killThemAll() {
-    let len = allPhones.length-1;
-    for (let i=len; i>-1; i--) {
-        allPhones[i].remove();
-        }
-}
-
-kill.onclick = () => {
-    killThemAll()
-}
-
-
 let storList = [];
+
+console.log(3);
 
 if (localStorage.getItem('phonesData')) {
     storList = JSON.parse(localStorage.getItem('phonesData'))
@@ -35,10 +11,32 @@ if (localStorage.getItem('phonesData')) {
     storList = [];
     }
 
+function clearStorageAndList() {
+   localStorage.removeItem('phonesData');
+   storList = [];
+}
+
+let reset = document.querySelector('.reset');
+reset.onclick = () => {clearStorageAndList();}
+
+
+function clearPhoneBarNow() {
+    phoneBar.innerHTML = '';
+}
+
+let kill = document.querySelector('.kill');
+kill.onclick = () => {clearPhoneBarNow();}
 
 
 let btnsAdd = document.querySelectorAll('.btn_add');
-//console.log(btnsAdd)
+
+function addFieldsToObj(fieldName, fieldNameHref) {
+    if (fieldName) {
+        fieldNameHref = fieldName.href;
+        fieldName = fieldName.textContent.trim();
+    }
+    return [fieldName, fieldNameHref]
+}
 
 btnsAdd.forEach(btn => {
     btn.addEventListener('click', (evt) => {
@@ -46,23 +44,16 @@ btnsAdd.forEach(btn => {
         let fullPhone = btn.parentElement.parentElement.parentElement;
         let phone = fullPhone.querySelector('.phone');
         let phoneHref = phone.parentElement.href;
-        let subscriberHref = ''; let personHref = ''; let substationHref = '';
         if (phone) phone = phone.textContent.trim();
+
+        let subscriberHref = ''; let personHref = ''; let substationHref = '';
         let subscriber = fullPhone.querySelector('.subscriber');
-        if (subscriber) {
-            subscriberHref = subscriber.href;
-            subscriber = subscriber.textContent.trim();
-        }
+        [subscriber, subscriberHref] = addFieldsToObj(subscriber, subscriberHref);
         let person = fullPhone.querySelector('.person');
-        if (person) {
-            personHref = person.href;
-            person = person.textContent.trim();
-        }
+        [person, personHref] = addFieldsToObj(person, personHref);
         let substation = fullPhone.querySelector('.substation');
-        if (substation) {
-            substationHref = substation.href;
-            substation = substation.textContent.trim();
-        }
+        [substation, substationHref] = addFieldsToObj(substation, substationHref);
+
         let objPhone = {
             'phone': phone,
             'phoneHref': phoneHref,
@@ -75,6 +66,8 @@ btnsAdd.forEach(btn => {
         };
         storList.push(objPhone)
         localStorage.setItem('phonesData', JSON.stringify(storList));
+        clearPhoneBarNow();
+        addPhonesFromList();
     })
 })
 
@@ -86,9 +79,32 @@ function addNumberAndHref(obj, whatAdd, field) {
     }
 }
 
-function removeFromStorage(btn, phone) {
+function btnMarkerOnClick(btn, phone) {
     let phoneNum = phone.textContent;
-    btn.addEventListener('dblclick', () => {
+    btn.addEventListener('click', (evt) => {
+        evt.preventDefault();
+        let aroundPhone = btn.parentElement;
+        aroundPhone.classList.toggle('btn-warning');
+        for (let i=0; i<storList.length; i++) {
+            if (storList[i]['phone'] == phoneNum) {
+                if (aroundPhone.classList.contains('btn-warning')) {
+                    storList[i]['color'] = 1;
+                } else {
+                    storList[i]['color'] = 0;
+                }
+                console.log(storList);
+                localStorage.setItem('phonesData', JSON.stringify(storList));
+                break;
+            }
+        }
+    })
+}
+
+
+function removeFromStorageOnClick(btn, phone) {
+    let phoneNum = phone.textContent;
+    btn.addEventListener('click', (evt) => {
+        evt.preventDefault();
         console.log(storList);
         for (let i=0; i<storList.length; i++) {
             if (storList[i]['phone'] == phoneNum) {
@@ -97,11 +113,12 @@ function removeFromStorage(btn, phone) {
                 break;
             }
         }
-    console.log(storList);
+    clearPhoneBarNow();
+    addPhonesFromList();
     })
 }
 
-function addNewPhone() {
+function addPhonesFromList() {
 
     storList.forEach((item, i) => {
         let onePhone = templatePhone.cloneNode(true);
@@ -115,12 +132,17 @@ function addNewPhone() {
         addNumberAndHref(item, personAdd, 'person');
         addNumberAndHref(item, subscriberAdd, 'subscriber');
         addNumberAndHref(item, substationAdd, 'substation');
+
+        if (item['color']) {
+            phoneAdd.parentElement.parentElement.parentElement.classList.add('btn-warning');
+        }
+
         btnRemove = onePhone.querySelector('.btn_remove');
-        removeFromStorage(btnRemove, phoneAdd)
+        removeFromStorageOnClick(btnRemove, phoneAdd);
+        btnMarkerColor = onePhone.querySelector('.marker_color');
+        btnMarkerOnClick(btnMarkerColor, phoneAdd);
         phoneBar.appendChild(onePhone);
     })
 }
 
-
-addNewPhone()
-
+addPhonesFromList()
