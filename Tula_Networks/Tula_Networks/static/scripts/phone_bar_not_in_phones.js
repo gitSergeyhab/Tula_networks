@@ -24,9 +24,8 @@ if(!phonesFlag) {
         }
 
     function removeBtnRemove() {
-        if (storList.length < 1) {
+        if (storList.length < 2) {
             reset.classList.add('display_none');
-            console.log(storList.length)
             } else {console.log(storList.length)}
     }
     removeBtnRemove()
