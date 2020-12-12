@@ -5,17 +5,20 @@ let storList = [];
 
 console.log(3);
 
+//создаем список storList из localStorage или пустой
 if (localStorage.getItem('phonesData')) {
     storList = JSON.parse(localStorage.getItem('phonesData'))
     } else {
     storList = [];
     }
 
+//чистит storList и localStorage
 function clearStorageAndList() {
    localStorage.removeItem('phonesData');
    storList = [];
 }
 
+//кнопка стерающая все телефоны из видимого phoneBar и вообще ото всюду: localStorage, storList
 let reset = document.querySelector('.reset');
 reset.ondblclick = () => {
     clearStorageAndList();
@@ -23,6 +26,7 @@ reset.ondblclick = () => {
     removeBtnRemove();
 }
 
+//если в storList (а значит и видимом phoneBar) < 2 телефонов, скрывает кнопку reset
 function removeBtnRemove() {
     if (storList.length < 2) {
         reset.classList.add('display_none');
@@ -30,12 +34,14 @@ function removeBtnRemove() {
 }
 removeBtnRemove();
 
+//очищает видимый phoneBar, но не localStorage или storList
 function clearPhoneBarNow() {
     phoneBar.innerHTML = '';
 }
 
 let btnsAdd = document.querySelectorAll('.btn_add');
 
+//добавляет в объект поле и ссылку
 function addFieldsToObj(fieldName, fieldNameHref) {
     if (fieldName) {
         fieldNameHref = fieldName.href;
@@ -44,6 +50,11 @@ function addFieldsToObj(fieldName, fieldNameHref) {
     return [fieldName, fieldNameHref]
 }
 
+//обработчик событий на все кнопки btnsAdd (+) на странице (кроме phoneBar) -
+//для каждого телефона создает объект с 8 свойствами
+//добавляет объект в storList и localStorage
+//в конце очищвет видимый phoneBar
+//и запускает addPhonesFromList(), создающий phoneBar из storList
 btnsAdd.forEach(btn => {
     btn.addEventListener('click', (evt) => {
         evt.preventDefault();
@@ -77,6 +88,7 @@ btnsAdd.forEach(btn => {
     })
 })
 
+//добфвляет поля из объекта в телефон, если свойства объекта не 0, делает поле видимым, прописывает значение и ссылку
 function addNumberAndHref(obj, whatAdd, field) {
     if (obj[field]) {
         whatAdd.parentElement.parentElement.classList.remove('display_none');
@@ -85,6 +97,8 @@ function addNumberAndHref(obj, whatAdd, field) {
     }
 }
 
+//обработчик, добавляющий/удаляющий при нажатии на btn (v) цвет телефону в phoneBar и маркер о цвете в объект
+//в конце перезаписывает  localStorage
 function btnMarkerOnClick(btn, phone) {
     let phoneNum = phone.textContent;
     btn.addEventListener('click', (evt) => {
@@ -98,7 +112,6 @@ function btnMarkerOnClick(btn, phone) {
                 } else {
                     storList[i]['color'] = 0;
                 }
-                console.log(storList);
                 localStorage.setItem('phonesData', JSON.stringify(storList));
                 break;
             }
@@ -106,7 +119,8 @@ function btnMarkerOnClick(btn, phone) {
     })
 }
 
-
+//обработчик, удаляющий телефон при нажатии на btn (x)
+//в конце чистит видимый phoneBar, пересоздает его и при необходимости удаляет кнопку ресет
 function removeFromStorageOnClick(btn, phone) {
     let phoneNum = phone.textContent;
     btn.addEventListener('click', (evt) => {
@@ -124,6 +138,14 @@ function removeFromStorageOnClick(btn, phone) {
     removeBtnRemove();
     })
 }
+
+//создает phoneBar из storList:
+//1. находит поля телефона/абонента... (8шт) в элементе, склонированном из templatePhone
+//2. записывает в них значения (если они != 0) из storList
+//3. добавляет цвет телефону, если он есть в объекте
+//4. вешает обаботчики удаления и маркировки
+//5. добавляет элемент в phoneBar
+//6. при необходимости удаляет кнопку ресет
 
 function addPhonesFromList() {
 

@@ -3,8 +3,6 @@ if(!phonesFlag) {
     let phoneBar = document.querySelector('.phone_bar');
     let templatePhone = document.querySelector('#template-side-phone').content;
 
-
-
     function clearStorageAndList() {
        localStorage.removeItem('phonesData');
        storList = [];
@@ -32,7 +30,6 @@ if(!phonesFlag) {
             } else {console.log(storList.length)}
     }
     removeBtnRemove()
-
 
     function addNumberAndHref(obj, whatAdd, field) {
         if (obj[field]) {
@@ -63,13 +60,10 @@ if(!phonesFlag) {
         })
     }
 
-
-
     function removeFromStorageOnClick(btn, phone) {
         let phoneNum = phone.textContent;
         btn.addEventListener('click', (evt) => {
             evt.preventDefault();
-//            console.log(storList);
             for (let i=0; i<storList.length; i++) {
                 if (storList[i]['phone'] == phoneNum) {
                     storList.splice(i, 1);
@@ -102,7 +96,6 @@ if(!phonesFlag) {
             if (item['color']) {
                 phoneAdd.parentElement.parentElement.parentElement.classList.add('btn-warning');
             }
-
             btnRemove = onePhone.querySelector('.btn_remove');
             removeFromStorageOnClick(btnRemove, phoneAdd);
             btnMarkerColor = onePhone.querySelector('.marker_color');
@@ -110,11 +103,5 @@ if(!phonesFlag) {
             phoneBar.appendChild(onePhone);
             })
     }
-
-
-
-    console.log('phone_bar_not_in_phones.js');
-
-
     addPhonesFromList();
     }

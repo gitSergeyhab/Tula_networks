@@ -13,7 +13,7 @@ from tula_net.views import MainView, PsListView, GroupPSView, VoltPSView, OnePSV
     AddSubstationView, LinesGroupView, LinesVoltageView, LinesRegionView, \
     UpdLineView, LineDeleteView, SectionDeleteView, SearcherLinesView, Lines1View, OneLine1View, AddLine1View, \
     Section1View, SearcherFeedersView, FeedersView, MyLogin, AddCharacterFeederView, UpdCharacterFeederView, CharsView,\
-    OneCharsView, UpdCharacterNoFeederView
+    OneCharsView, UpdCharacterNoFeederView, SearcherPhonesToNamesView
 
 urlpatterns = [
     path('in', MyLogin.as_view(), name='in'),
@@ -68,6 +68,7 @@ urlpatterns = [
     path('searcher_substations/', SearcherPSView.as_view(), name='searcher_substations'),
     path('searcher_persons/', SearcherPersonsView.as_view(), name='searcher_persons'),
     path('searcher_phones/', SearcherPhonesView.as_view(), name='searcher_phones'),
+    path('searcher_phones_alt/', SearcherPhonesToNamesView.as_view(), name='searcher_phones_alt'),
     path('searcher_lines/', SearcherLinesView.as_view(), name='searcher_lines'),
     path('searcher_feeders/', SearcherFeedersView.as_view(), name='searcher_feeders'),
     # формы

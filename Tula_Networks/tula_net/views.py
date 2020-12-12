@@ -351,7 +351,7 @@ class SearcherPersonsView(SearchMixin, ListView):
     paginate_by = 18
 
     def get_queryset(self):
-        return Person.objects.select_related('subscriber').filter(Q(name__icontains=self.request.GET.get('s')))
+        return Person.objects.select_related('subscriber').filter(name__icontains=self.request.GET.get('s'))
 
 
 class SearcherPhonesView(SearchMixin, ListView):
@@ -367,6 +367,22 @@ class SearcherPhonesView(SearchMixin, ListView):
             Q(search_number__icontains=digits)
         )
 
+
+class SearcherPhonesToNamesView(SearchMixin, ListView):
+    """ Поиск по телефонам """
+    context_object_name = 'phones'
+    template_name = 'tula_net/phones.html'
+    paginate_by = 20
+
+    def get_queryset(self):
+        name = self.request.GET.get('s2')
+        return Phone.objects.select_related('subscriber', 'substation', 'person').filter(
+            Q(subscriber__short_name__icontains=name) |
+            Q(subscriber__name__icontains=name) |
+            Q(substation__name__icontains=name) |
+            Q(substation__number=try_int(name)) |
+            Q(person__name__icontains=name)
+        )
 
 class SearcherLinesView(ListView):
     """ Поиск по линиям """
