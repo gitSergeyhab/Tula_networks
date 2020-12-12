@@ -45,7 +45,7 @@ body {
     z-index: 99;
     position: fixed;
     left: 5px;
-    top: 45px;
+    top: 95px;
     width: 330px;
 
 }
@@ -63,6 +63,15 @@ big-phone-parent {
 }
 
 .border-phones {
-    border: 5px solid;
+    border-radius: 12px;
+    border: 5px solid #000066;
 
+}
+
+.reset-everybody {
+    z-index: 100;
+    position: fixed;
+    left: 5px;
+    top: 50px;
+    width: 300px;
 }

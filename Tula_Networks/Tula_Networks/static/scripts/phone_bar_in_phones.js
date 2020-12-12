@@ -17,16 +17,22 @@ function clearStorageAndList() {
 }
 
 let reset = document.querySelector('.reset');
-reset.onclick = () => {clearStorageAndList();}
+reset.ondblclick = () => {
+    clearStorageAndList();
+    phoneBar.innerHTML = '';
+    removeBtnRemove();
+}
 
+function removeBtnRemove() {
+    if (storList.length < 2) {
+        reset.classList.add('display_none');
+        } else {reset.classList.remove('display_none');}
+}
+removeBtnRemove();
 
 function clearPhoneBarNow() {
     phoneBar.innerHTML = '';
 }
-
-let kill = document.querySelector('.kill');
-kill.onclick = () => {clearPhoneBarNow();}
-
 
 let btnsAdd = document.querySelectorAll('.btn_add');
 
@@ -115,6 +121,7 @@ function removeFromStorageOnClick(btn, phone) {
         }
     clearPhoneBarNow();
     addPhonesFromList();
+    removeBtnRemove();
     })
 }
 
@@ -142,6 +149,7 @@ function addPhonesFromList() {
         btnMarkerColor = onePhone.querySelector('.marker_color');
         btnMarkerOnClick(btnMarkerColor, phoneAdd);
         phoneBar.appendChild(onePhone);
+        removeBtnRemove();
     })
 }
 

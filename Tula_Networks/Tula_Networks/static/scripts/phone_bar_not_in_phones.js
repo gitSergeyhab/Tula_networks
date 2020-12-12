@@ -3,12 +3,36 @@ if(!phonesFlag) {
     let phoneBar = document.querySelector('.phone_bar');
     let templatePhone = document.querySelector('#template-side-phone').content;
 
+
+
+    function clearStorageAndList() {
+       localStorage.removeItem('phonesData');
+       storList = [];
+    }
+
+    let reset = document.querySelector('.reset');
+
+    reset.ondblclick = () => {
+        clearStorageAndList();
+        phoneBar.innerHTML = '';
+        removeBtnRemove();
+        }
+
     let storList = [];
     if (localStorage.getItem('phonesData')) {
         storList = JSON.parse(localStorage.getItem('phonesData'))
         } else {
         storList = [];
         }
+
+    function removeBtnRemove() {
+        if (storList.length < 1) {
+            reset.classList.add('display_none');
+            console.log(storList.length)
+            } else {console.log(storList.length)}
+    }
+    removeBtnRemove()
+
 
     function addNumberAndHref(obj, whatAdd, field) {
         if (obj[field]) {
@@ -55,6 +79,7 @@ if(!phonesFlag) {
             }
         phoneBar.innerHTML = '';
         addPhonesFromList();
+        removeBtnRemove();
         })
         }
 
