@@ -46,7 +46,7 @@ body {
     position: fixed;
     left: 5px;
     top: 95px;
-    width: 330px;
+    width: 300px;
 
 }
 
@@ -73,5 +73,27 @@ big-phone-parent {
     position: fixed;
     left: 5px;
     top: 50px;
-    width: 300px;
+    width: 270px;
+}
+
+@media screen and (max-width: 1700px) {
+    .phone_bar {
+		width: 270px;
+    }
+
+    .reset-everybody {
+		width: 240px;
+    }
+}
+
+@media screen and (max-width: 1600px) {
+    .phone_bar {
+        visibility: hidden;
+        display: none;
+    }
+
+    .reset-everybody {
+        visibility: hidden;
+        display: none;
+    }
 }
