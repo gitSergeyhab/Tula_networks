@@ -1,0 +1,63 @@
+{% load static %}
+
+
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <meta charset="UTF-8">
+  <title>{% block title %}{{ title }}{% endblock %}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+<body>
+
+  <main class="container mt-3">
+      {% if request.user.is_authenticated %}
+      {% include 'incl/_user_bar.html' %}
+      {% include 'incl/_side_bar_menu.html' %}
+
+                  <!--NAVBAR-->
+
+        {% include 'incl/_header.html' %}
+
+      {% block menu %}{% endblock %}
+      {% block title2 %}{% endblock %}
+      {% block menu2 %}{% endblock %}
+      {% block menu3 %}{% endblock %}
+      {% block search %}{% endblock %}
+
+
+                    <!-- 1 -->
+        {% block first_section %}{% endblock %}
+
+                 <!-- CARDS -->
+        {% block cards1 %}{% endblock %}
+
+                  <!-- CARDS -->
+        {% block cards2 %}{% endblock %}
+
+      {% block paginator %} {% endblock %}
+      {% else %}
+{% if not my_login %}
+      <h2 class="text-center m-5">Для просмотра требуется вход. Регистрация невозможна <br>
+          <a href="{% url 'in' %}" class="btn btn-primary mt-4 mb-2">Войти</a>
+      </h2>
+
+
+      {% endif %}
+        {% block in %}{% endblock %}
+      {% endif %}
+
+
+
+
+
+  </main>
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+</html>

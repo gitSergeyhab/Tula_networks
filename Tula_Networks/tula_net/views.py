@@ -230,7 +230,7 @@ class SubscriberListView(ListView):
     model = Subscriber
     context_object_name = 'subscribers'
     template_name = 'tula_net/subscribers_all.html'
-    paginate_by = 40
+    paginate_by = 50
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -361,11 +361,17 @@ class SearcherPhonesView(SearchMixin, ListView):
     paginate_by = 20
 
     def get_queryset(self):
-        digits = make_digits(self.request.GET.get('s'))
+        digits = make_digits(self.request.GET.get('f'))
         return Phone.objects.select_related('subscriber', 'substation', 'person').filter(
-            Q(number__icontains=self.request.GET.get('s')) |
+            Q(number__icontains=self.request.GET.get('f')) |
             Q(search_number__icontains=digits)
         )
+        
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['s'] = f"f={self.request.GET.get('f')}&"
+        context['flag_search'] = self.request.GET.get('f')
+        return context
 
 
 class SearcherPhonesToNamesView(SearchMixin, ListView):
@@ -375,7 +381,7 @@ class SearcherPhonesToNamesView(SearchMixin, ListView):
     paginate_by = 20
 
     def get_queryset(self):
-        name = self.request.GET.get('s2')
+        name = self.request.GET.get('s')
         return Phone.objects.select_related('subscriber', 'substation', 'person').filter(
             Q(subscriber__short_name__icontains=name) |
             Q(subscriber__name__icontains=name) |

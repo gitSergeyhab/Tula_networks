@@ -115,7 +115,7 @@
 
             <div class="card-body p-1 text-center"> Телефоны организации:
                 {% for phone in pl.substation.owner.phones.all %}
-                    <a href="{{ phone.get_absolute_url }}" class="btn btn-light px-1 py-0 mx-1 border-secondary" >{{ phone }}</a>,
+                    <a href="{{ phone.get_absolute_url }}" class="btn btn-light px-1 py-0 mx-1 border-secondary" title="{{phone.description}}">{{ phone }}</a>,
                 {% endfor %}
            </div>
 
@@ -215,7 +215,7 @@
             </a>
             <div class="card-body p-1 text-center"> Телефоны организации:
             {% for phone in pl.substation.owner.phones.all %}
-                <a href="{{ phone.get_absolute_url }}" class="btn btn-light px-1 py-0 mx-1 border-secondary" >{{ phone }}</a>,
+                <a href="{{ phone.get_absolute_url }}" class="btn btn-light px-1 py-0 mx-1 border-secondary" title="{{phone.description}}">{{ phone }}</a>,
             {% endfor %}
            </div>
 
@@ -307,3 +307,4 @@
 
 
 {% endblock %}
+

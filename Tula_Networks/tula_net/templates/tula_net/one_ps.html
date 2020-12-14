@@ -101,7 +101,7 @@
           {% for section in ps.sections.all %}
           {% if section.voltage.class_voltage < 10 %}
               {% for feeder in section.feeders.all %}
-                  <a href="{{ feeder.get_absolute_url }}" type="button" class="{{ feeder_6 }}">
+                  <a href="{{ feeder.get_absolute_url }}" type="button" class="{{ feeder_6 }}" title="{{feeder.description}}">
                       {% include 'incl/_feeder_marker.html' %}
                   </a>
               {% endfor %}

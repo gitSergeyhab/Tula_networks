@@ -146,6 +146,7 @@ class Section(models.Model):
         ordering = ['voltage__class_voltage', 'name']
 
 
+
 class Subscriber(models.Model):
     name = models.CharField(max_length=128, verbose_name='Название организации', unique=True)
     short_name = models.CharField(max_length=16, verbose_name='Назв орган сокращ', blank=True, null=True)
@@ -173,6 +174,8 @@ class Person(models.Model):
     position = models.CharField(max_length=64, verbose_name='должность', blank=True, null=True)
     priority = models.PositiveSmallIntegerField(blank=True, verbose_name='приоритет', null=True)
     description = models.TextField(verbose_name='Описение', blank=True)
+
+    # mail = models.EmailField(max_length=32, verbose_name='электронка', blank=True)
 
     def get_absolute_url(self):
         return reverse('person', kwargs={'pk': self.pk})
@@ -342,31 +345,4 @@ class Feeder_characteristic(models.Model):
         unique_together = ('feeder_name', 'substation_name')
         verbose_name = "характеристика фидера"
         verbose_name_plural = "х-ки фидеров"
-
-
-# import pandas as pd
-# from .data_script import only_pst, adder_ps, adder_subsriber, only_subsribers, only_sec, adder_sec, feeds, adder_feed, \
-#     feeder_plus, f5
-
-# adder_subsriber(only_subsribers)
-# adder_ps(only_pst)
-# adder_sec(only_sec)
-# adder_feed(feeds)
-# feeder_plus(f5)
-# c = 1
-# for i in Feeder_characteristic.objects.all():
-#     x = Feeder_characteristic.objects.filter(pk=c)
-#     c += 1
-#
-#     x.update(feeder=Feeder.objects.filter(name=i.feeder_name, substation__name=i.substation_name))
-
-# try:
-#     1
-# except
-
-# Price.objects.filter(pk=price.pk).update(
-#     upper1000="○",
-#     from500to1000="○",
-#     under500="○"
-# )
 
