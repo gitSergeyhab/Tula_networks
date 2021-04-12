@@ -15,12 +15,16 @@ body {
 }
 
 .side_bar_menu {
-
     z-index: 999999;
     position: fixed;
     right: 10px;
     top: 400px;
+}
 
+.right_phone_bar {
+    position: fixed;
+    right: 10px;
+    top: 40px;
 }
 
 @media screen and (max-width: 1400px) {
