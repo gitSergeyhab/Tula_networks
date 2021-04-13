@@ -115,6 +115,10 @@ big-phone-parent {
     background-color: green;
 }
 
+.bg-blue {
+    background-color: blue;
+}
+
 .bg-red {
     background-color: red;
 }
@@ -123,6 +127,17 @@ big-phone-parent {
     color: green;
 }
 
+
+.drag-phone {
+    color: blue;
+}
+
 .pe-none {
     pointer-events: none;
+}
+
+
+.right-tel {
+    padding-bottom: 0;
+    padding-top: 0;
 }

@@ -8,154 +8,149 @@
 
 {% block cards1 %}
 
-    <div class="card">
-        <h5 class="card-header text-center"><span class="px-5"><b>
-            {% if the_section %}
-            Все абоненты {{ the_section.name }} <a class="btn btn-light p-0 py-0 m-0" href="{{ the_section.substation.get_absolute_url }}"><h5><b> {{ the_section.substation }}</b></h5></a>
-            {% elif the_substation %}
-            Все абоненты <a class="btn btn-light p-0 py-0 m-0" href="{{ the_substation.get_absolute_url }}"><h5><b>ПС {{ the_substation }}</b></h5></a>
-            {% endif %}
+<div class="card">
+  <h5 class="card-header text-center"><span class="px-5"><b>
+        {% if the_section %}
+        Все абоненты {{ the_section.name }} <a class="btn btn-light p-0 py-0 m-0" href="{{ the_section.substation.get_absolute_url }}">
+          <h5><b> {{ the_section.substation }}</b></h5>
+        </a>
+        {% elif the_substation %}
+        Все абоненты <a class="btn btn-light p-0 py-0 m-0" href="{{ the_substation.get_absolute_url }}">
+          <h5><b>ПС {{ the_substation }}</b></h5>
+        </a>
+        {% endif %}
 
-        </b></span></h5>
+      </b></span></h5>
 
-        <div class="text-right">
-            {% if the_substation %}
-                <h3><a class="btn btn-outline-dark px-5 py-0 m-1" href="{% url 'substation_f' the_substation.pk %}">Разбить по фидерам </a></h3>
-            {% elif the_section %}
-                <h3><a class="btn btn-outline-primary px-5 py-0 m-1 pointEarth" href="#">Искать землю</a>
-                    <a class="btn btn-outline-dark px-5 py-0 m-1" href="{% url 'section' the_section.pk %}">Подробно</a></h3>
-            {% endif %}
-        </div>
-
-
-    <div class="card-body bg-dark mb-5">
-        {% for subscriber in subscribers.distinct %}
-         <div class="card mb-3 border border-dark">
-
-            <a href="{{ subscriber.get_absolute_url }}" class="btn btn-dark p-1 m-3" >
-                <p class="m-1">{{ subscriber }}</p>
-            </a>
-            <div class="card-body p-1 text-center"> Телефоны организации:
-            {% for phone in subscriber.phones.all %}
-                <a href="{{ phone.get_absolute_url }}" class="color-man btn btn-light px-1 py-0 mx-1 border-secondary" title="{{phone.description}}">{{ phone }}</a>,
-            {% endfor %}
-           </div>
+  <div class="text-right">
+    {% if the_substation %}
+    <h3><a class="btn btn-outline-dark px-5 py-0 m-1" href="{% url 'substation_f' the_substation.pk %}">Разбить по фидерам </a></h3>
+    {% elif the_section %}
+    <h3><a class="btn btn-outline-primary px-5 py-0 m-1 pointEarth" href="#">Искать землю</a>
+      <a class="btn btn-outline-dark px-5 py-0 m-1" href="{% url 'section' the_section.pk %}">Подробно</a></h3>
+    {% endif %}
+  </div>
 
 
-            <div class="container">
-              <div class="panel-group ">
-                <div class="panel panel-default ">
-                  <div class="panel-heading">
-                    <h4 class="panel-title text-center">
-                      <a data-toggle="collapse" class="btn btn-outline-dark btn-lg btn-block py-0"  href="#{{ subscriber.pk }}">
-					{% if subscriber.year_update > 1 %}
-                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-chevron-double-down" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                          <path fill-rule="evenodd" d="M1.646 6.646a.5.5 0 0 1 .708 0L8 12.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
-                          <path fill-rule="evenodd" d="M1.646 2.646a.5.5 0 0 1 .708 0L8 8.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
-                        </svg>
-					{% endif %}
-						{% if subscriber.year_update == 1 %}
-						<span class='text-danger'>списка лиц нет совсем</span>
-						{% else %}
-                          список лиц {% if subscriber.year_update %}
-                          на {{ subscriber.year_update }} год
-                          {% else %}
-                          <span class="text-warning">год не указан</span>
-                          {% endif %}
-                    	{% endif %}
-					{% if subscriber.year_update > 1 %}
-                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-chevron-double-down" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                          <path fill-rule="evenodd" d="M1.646 6.646a.5.5 0 0 1 .708 0L8 12.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
-                          <path fill-rule="evenodd" d="M1.646 2.646a.5.5 0 0 1 .708 0L8 8.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
-                        </svg>
-					{% endif %}
-                      </a>
-                    </h4>
-                  </div>
+  <div class="card-body bg-dark mb-5">
+    {% for subscriber in subscribers.distinct %}
+    <div class="card mb-3 border border-dark">
 
-                  <div id="{{ subscriber.pk }}" class="panel-collapse collapse">
-                    <ul class="list-group">
+      <a href="{{ subscriber.get_absolute_url }}" class="btn btn-dark p-1 m-3">
+        <p class="m-1">{{ subscriber }}</p>
+      </a>
+      <div class="card-body p-1 text-center"> Телефоны организации:
+        {% for phone in subscriber.phones.all %}
+        <a href="{{ phone.get_absolute_url }}" class="color-man btn btn-light px-1 py-0 mx-1 border-secondary phone-number" title="{{phone.description}}" draggable="true"> <span>{{ phone }}</span> </a>,
+        {% endfor %}
+      </div>
 
-                      <li class="list-group-item list-group-item-light">
-                       <div class="row mb-0">
-                          {% for person in subscriber.persons.all %}
-                            {% if person.priority == 1 %}
-                                <div class=" col-6 col-md-6 col-lg-4 px-1 my-2">
-                                    <a href="{{ person.get_absolute_url }}" class="btn btn-light py-0 mx-auto d-block color-man js-persone-name"  draggable="true">
-                                        <b>{{ person }}</b>
-                                        <br>
-                                        {% if person.position %} <span class='text-secondary'> {{person.position}} </span>{% endif %}
-                                    </a> 
-                                        
-                                    <div class="text-center">
-                                    {% for phone in person.phones.all %}
-	                                    <a href="{{ phone.get_absolute_url }}" class="btn btn-light py-0 my-1 mr-1 color-man" >
-	                                    <b>{{ phone }}</b>
-	                                    </a>
-                                    {% endfor %}
-                                    </div>
-                                </div>
-                                {% endif %}
-                            {% endfor %}
-                       </div>
-                      </li>
 
-                       <li class="list-group-item list-group-item-secondary py-0">
-                           <p class="px-1 py-0 my-0">
-                           {% for person in subscriber.persons.all %}
-                              {% if not person.priority or person.priority > 1 %}
-
-                                   <a href="{{ person.get_absolute_url }}" class="btn btn-light py-0 my-1 mx-0 color-man js-persone-name" draggable="true">
-                                        <b>{{ person }}</b></a>
-                                       {% if person.position %} <a href="#" class="btn btn-light py-0 my-1 mx-0 color-man" >
-                                         <span class='text-secondary'> ({{person.position}}) </span>
-									</a>{% endif %}
-									
-                                    {% for phone in person.phones.all %}
-                                    <a href="{{ phone.get_absolute_url }}" class="btn btn-light py-0 my-1 ml-0 color-man" >
-                                    <b>{{ phone }}</b>
-                                    </a> 
-                                    
-                                    {% endfor %}
-                               <span class='mx-2'>|</span>
-                              {% endif %}
-                            {% endfor %}
-
-                           </p>
-                       </li>
-
-                    </ul>
-                  </div>
-                </div>
-              </div>
+      <div class="container">
+        <div class="panel-group ">
+          <div class="panel panel-default ">
+            <div class="panel-heading">
+              <h4 class="panel-title text-center">
+                <a data-toggle="collapse" class="btn btn-outline-dark btn-lg btn-block py-0" href="#{{ subscriber.pk }}">
+                  {% if subscriber.year_update > 1 %}
+                  <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-chevron-double-down" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M1.646 6.646a.5.5 0 0 1 .708 0L8 12.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z" />
+                    <path fill-rule="evenodd" d="M1.646 2.646a.5.5 0 0 1 .708 0L8 8.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z" />
+                  </svg>
+                  {% endif %}
+                  {% if subscriber.year_update == 1 %}
+                  <span class='text-danger'>списка лиц нет совсем</span>
+                  {% else %}
+                  список лиц {% if subscriber.year_update %}
+                  на {{ subscriber.year_update }} год
+                  {% else %}
+                  <span class="text-warning">год не указан</span>
+                  {% endif %}
+                  {% endif %}
+                  {% if subscriber.year_update > 1 %}
+                  <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-chevron-double-down" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M1.646 6.646a.5.5 0 0 1 .708 0L8 12.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z" />
+                    <path fill-rule="evenodd" d="M1.646 2.646a.5.5 0 0 1 .708 0L8 8.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z" />
+                  </svg>
+                  {% endif %}
+                </a>
+              </h4>
             </div>
 
+            <div id="{{ subscriber.pk }}" class="panel-collapse collapse">
+              <ul class="list-group">
+
+                <li class="list-group-item list-group-item-light">
+                  <div class="row mb-0">
+                    {% for person in subscriber.persons.all %}
+                    {% if person.priority == 1 %}
+                    <div class=" col-6 col-md-6 col-lg-4 px-1 my-2">
+                      <a href="{{ person.get_absolute_url }}" class="btn btn-light py-0 mx-auto d-block color-man js-persone-name" draggable="true">
+                        <b data-href="{{ person.get_absolute_url }}" data-company="{{ subscriber }} ">{{ person }}</b>
+                        <br>
+                        {% if person.position %} <span class='text-secondary'> {{person.position}} </span>{% endif %}
+                      </a>
+
+                      <div class="text-center">
+                        {% for phone in person.phones.all %}
+                        <a href="{{ phone.get_absolute_url }}" class="btn btn-light py-0 my-1 mr-1 color-man phone-number" draggable="true">
+                          <b><span>{{ phone }}</span></b>
+                        </a>
+                        {% endfor %}
+                      </div>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                  </div>
+                </li>
+
+                <li class="list-group-item list-group-item-secondary py-0">
+                  <p class="px-1 py-0 my-0">
+                    {% for person in subscriber.persons.all %}
+                    {% if not person.priority or person.priority > 1 %}
+
+                    <a href="{{ person.get_absolute_url }}" class="btn btn-light py-0 my-1 mx-0 color-man js-persone-name" draggable="true">
+                      <b data-href="{{ person.get_absolute_url }}" data-company="{{ subscriber }} ">{{ person }}</b></a>
+                    {% if person.position %} <a href="#" class="btn btn-light py-0 my-1 mx-0 color-man">
+                      <span class='text-secondary'> ({{person.position}}) </span>
+                    </a>{% endif %}
+
+                    {% for phone in person.phones.all %}
+                    <a href="{{ phone.get_absolute_url }}" class="btn btn-light py-0 my-1 ml-0 color-man phone-number" draggable="true">
+                      <b><span>{{ phone }}</span></b>
+                    </a>
+
+                    {% endfor %}
+                    <span class='mx-2'>|</span>
+                    {% endif %}
+                    {% endfor %}
+
+                  </p>
+                </li>
+
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
 
 
-           <div class="card-body p-1 text-center">
-            {% for feeder in subscriber.feeders.all %}
-                {% if feeder.substation == the_substation or feeder.section == the_section and feeder.section %}
-                          <a title="{{feeder.description}}" href="{{ feeder.get_absolute_url }}"
-                             {% if feeder.section.voltage.class_voltage == 6 %}
-                                         class='{{ feeder_6 }} earthFeeder'
-                            {% elif feeder.section.voltage.class_voltage == 10 %}
-                                         class='{{ feeder_10 }} earthFeeder'
-                            {% else %}
-                                         class='{{ feeder_x }} earthFeeder'
-                            {% endif %}
 
-                          >
-                              {% include 'incl/_feeder_marker.html' %}
-                          </a>
-               {% endif %}
-            {% endfor %}
-
-           </div>
-         </div>
+      <div class="card-body p-1 text-center">
+        {% for feeder in subscriber.feeders.all %}
+        {% if feeder.substation == the_substation or feeder.section == the_section and feeder.section %}
+        <a title="{{feeder.description}}" href="{{ feeder.get_absolute_url }}" {% if feeder.section.voltage.class_voltage == 6 %} class='{{ feeder_6 }} earthFeeder' {% elif feeder.section.voltage.class_voltage == 10 %} class='{{ feeder_10 }} earthFeeder' {% else %} class='{{ feeder_x }} earthFeeder' {% endif %}>
+          {% include 'incl/_feeder_marker.html' %}
+        </a>
+        {% endif %}
         {% endfor %}
 
+      </div>
     </div>
-    </div>
+    {% endfor %}
+
+  </div>
+</div>
 {% load static %}
 <script src="{% static 'scripts/earth3.js' %}"></script>
 <script src="{% static 'scripts/drag-n-drop.js' %}"></script>
