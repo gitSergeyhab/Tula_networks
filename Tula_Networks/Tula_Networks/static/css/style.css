@@ -141,3 +141,9 @@ big-phone-parent {
     padding-bottom: 0;
     padding-top: 0;
 }
+
+.my-btn {
+    display: flex;
+    color: black;
+    align-items: center;
+}

@@ -41,7 +41,9 @@
       </a>
       <div class="card-body p-1 text-center"> Телефоны организации:
         {% for phone in subscriber.phones.all %}
-        <a href="{{ phone.get_absolute_url }}" class="color-man btn btn-light px-1 py-0 mx-1 border-secondary phone-number" title="{{phone.description}}" draggable="true"> <span>{{ phone }}</span> </a>,
+        <a href="{{ phone.get_absolute_url }}" class="color-man btn btn-light px-1 py-0 mx-1 border-secondary phone-number" title="{{phone.description}}" draggable="true">
+          <span data-href="{{ phone.get_absolute_url }}" data-owner="{{ person }}">{{ phone }}</span>
+        </a>,
         {% endfor %}
       </div>
 
@@ -94,7 +96,9 @@
                       <div class="text-center">
                         {% for phone in person.phones.all %}
                         <a href="{{ phone.get_absolute_url }}" class="btn btn-light py-0 my-1 mr-1 color-man phone-number" draggable="true">
-                          <b><span>{{ phone }}</span></b>
+                          <b>
+                            <span data-href="{{ phone.get_absolute_url }}" data-owner="{{ person }}">{{ phone }}</span>
+                          </b>
                         </a>
                         {% endfor %}
                       </div>
@@ -117,7 +121,7 @@
 
                     {% for phone in person.phones.all %}
                     <a href="{{ phone.get_absolute_url }}" class="btn btn-light py-0 my-1 ml-0 color-man phone-number" draggable="true">
-                      <b><span>{{ phone }}</span></b>
+                      <b><span data-href="{{ phone.get_absolute_url }}" data-owner="{{ person }}">{{ phone }}</span></b>
                     </a>
 
                     {% endfor %}
