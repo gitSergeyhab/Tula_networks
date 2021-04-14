@@ -147,3 +147,42 @@ big-phone-parent {
     color: black;
     align-items: center;
 }
+
+.marker_color-r,
+.btn_remove-r {
+    border: none;
+    background-color: transparent;
+    border-radius: 50%;
+    cursor: default !important;
+}
+
+.marker_color-r:focus,
+.btn_remove-r:focus {
+    outline: none;
+    border: none;
+}
+
+.btn_color-svg,
+.btn_remove-svg {
+    width: 30px;
+    height: 25px;
+    cursor: pointer;
+    padding: 0;
+    /* padding-top: 2px;
+    padding-bottom: 2px; */
+    padding-right: 6px;
+    padding-left: 6px;
+    /* padding: 5px; */
+}
+
+.btn_color-svg:hover {
+    stroke: green;
+}
+
+.btn_remove-svg:hover {
+    stroke: black;
+}
+
+.colored-by-marker {
+    background-color: cornflowerblue;
+}

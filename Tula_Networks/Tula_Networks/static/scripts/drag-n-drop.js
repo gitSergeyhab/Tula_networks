@@ -1,4 +1,8 @@
-const contactListRight = [];
+let contactListRight = [];
+
+if (localStorage.getItem('phonesRight')) {
+    contactListRight = JSON.parse(localStorage.getItem('phonesRight'))
+}
 
 const templatePhoneRight = document.querySelector('#template-right-phone').content
 
@@ -9,11 +13,13 @@ const plusPhoneR = rightBar.querySelector('.plus-phone-drop');
 const personsR = document.querySelectorAll('.js-persone-name');
 
 const dragStart = function() {
-    this.querySelector('b').classList.add('drag-element')
+    this.querySelector('b').classList.add('drag-element');
+    plusPhoneR.querySelector('svg').style.stroke = 'green';
 }
 
 const dragEnd = function() {
-    this.querySelector('b').classList.remove('drag-element')
+    this.querySelector('b').classList.remove('drag-element');
+    plusPhoneR.querySelector('svg').style.stroke = '';
 }
 
 // откуда
@@ -44,8 +50,7 @@ const drop = function() {
     plusPhoneR.classList.remove('bg-green', 'bg-red');
     const dragElement = document.querySelector('.drag-element');
     dragElement.classList.remove('drag-element');
-    const rightElem = makeRightBlock(dragElement);
-    rightBarContainer.appendChild(rightElem);
+    makeRightBlock(dragElement);
 }
 
 plusPhoneR.addEventListener('dragover', dragOver);
@@ -55,22 +60,16 @@ plusPhoneR.addEventListener('drop', drop);
 
 
 function makeRightBlock(dragElement) {
-    const rightElem = templatePhoneRight.cloneNode(true);
-    const personDiv = rightElem.querySelector('.person_div');
-    const personName = personDiv.querySelector('.person_add');
-    const personLink = personDiv.querySelector('a');
-    personLink.href = dragElement.dataset.href;
-    personLink.title = dragElement.dataset.company;
-    personName.textContent = dragElement.textContent;
-
     const personObject = {
-        personName: personName.textContent,
-        personHref: personLink.href,
-        companyTile: personLink.title
+        personName: dragElement.textContent,
+        personHref: dragElement.dataset.href,
+        companyTile: dragElement.dataset.company
     }
-    contactListRight.push(personObject)
-    console.log(contactListRight)
-    return rightElem;
+
+    contactListRight.push(personObject);
+    localStorage.setItem('phonesRight', JSON.stringify(contactListRight));
+    rightBarContainer.textContent = '';
+    renderFromList(contactListRight);
 }
 
 
@@ -120,48 +119,24 @@ function phoneRightAdder(dragPhone, target) {
     const svg = target.querySelector('svg');
     svg.remove();
     target.classList.remove('bg-blue');
-    target.classList.add('my-btn');
-    target.innerHTML = `<b>${dragPhone.textContent}</b>`;
-    target.href = dragPhone.dataset.href;
+
     const phoneObject = {
         phoneNumber: dragPhone.textContent,
-        phoneHref: target.href,
+        phoneHref: dragPhone.dataset.href,
     }
     const owner = target.parentNode.parentNode.querySelector('.person_add').textContent;
     const personObject = contactListRight.find(el => el.personName == owner);
     const index = contactListRight.indexOf(personObject);
     const unionObject = {...personObject, ...phoneObject};
-    // console.log(unionObject)
-    contactListRight.splice(index, 1, unionObject)
-    
-    console.log(contactListRight)
-}
 
-const list = [
-    {
-        personName: 'alex',
-        personHref: 'http://alex.com',
-        companyTile: 'TTU',
-        phoneNumber: '666-666',
-        phoneHref: 'http://666-666.com'
-    },
-    {
-        personName: 'yulia',
-        personHref: 'http://yulia.com',
-        companyTile: 'te',
-        phoneNumber: '999-666',
-        phoneHref: 'http://999-666.com'
-    },
-    {
-        personName: 'ss',
-        personHref: 'http://ss.com',
-        companyTile: 'com',
-    }
-]
+    contactListRight.splice(index, 1, unionObject);
+    localStorage.setItem('phonesRight', JSON.stringify(contactListRight));
+    rightBarContainer.textContent = '';
+    renderFromList(contactListRight);
+}
 
 function renderFromList(list) {
     list.forEach(person => {
-        console.log(person)
         const rightElem = templatePhoneRight.cloneNode(true);
         const personDiv = rightElem.querySelector('.person_div');
         const personName = personDiv.querySelector('.person_add');
@@ -169,29 +144,59 @@ function renderFromList(list) {
 
         personLink.href = person.personHref;
         personLink.title = person.companyTile;
-        personName.textContent = person.personName;
+        personName.innerHTML = `<b>${person.personName}</b>`;
 
+        const phoneBlock = rightElem.querySelector('.right-tel-drop');
         if (person.phoneNumber) {
-            const phoneBlock = rightElem.querySelector('.right-tel-drop');
             const svg = phoneBlock.querySelector('svg');
             svg.remove();
             phoneBlock.classList.add('my-btn');
-            
+
             phoneBlock.innerHTML = `<b>${person.phoneNumber}</b>`;
             phoneBlock.href = person.phoneHref;
         }
 
-
+        if (person.colored) {
+            phoneBlock.parentNode.classList.add('colored-by-marker');
+        } else {
+            phoneBlock.parentNode.classList.remove('colored-by-marker');
+        }
         rightBarContainer.appendChild(rightElem);
     })
 }
 
-renderFromList(list)
+renderFromList(contactListRight)
 
-// const rightElem = templatePhoneRight.cloneNode(true);
-// const personDiv = rightElem.querySelector('.person_div');
-// const personName = personDiv.querySelector('.person_add');
-// const personLink = personDiv.querySelector('a');
-// personLink.href = dragElement.dataset.href;
-// personLink.title = dragElement.dataset.company;
-// personName.textContent = dragElement.textContent;
+function elementFinder(target) {
+    const element = target.parentNode.parentNode;
+    const persName = element.querySelector('.person_add').textContent; 
+    const needElenent = contactListRight.find(el => el.personName == persName);
+    return needElenent;
+}
+
+rightBarContainer.addEventListener('click', (evt) => {
+    if(evt.target.closest('.btn_remove-r') ) {
+        console.log(evt.target.closest('.btn_remove-r'));
+        const removeObj = elementFinder(evt.target.closest('.btn_remove-r'));
+        const removeObjIndex = contactListRight.indexOf(removeObj);
+
+        contactListRight.splice(removeObjIndex, 1);
+        localStorage.setItem('phonesRight', JSON.stringify(contactListRight));
+        rightBarContainer.textContent = '';
+        renderFromList(contactListRight);
+    }
+
+    if(evt.target.closest('.marker_color-r') ) {
+        const coloreObj = elementFinder(evt.target.closest('.marker_color-r'));
+        if (coloreObj.colored) {
+            coloreObj.colored = false;
+        } else {
+            coloreObj.colored = true;
+        }
+
+        localStorage.setItem('phonesRight', JSON.stringify(contactListRight));
+        rightBarContainer.textContent = '';
+        renderFromList(contactListRight);
+    }
+})
+
