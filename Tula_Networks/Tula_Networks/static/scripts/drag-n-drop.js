@@ -1,18 +1,23 @@
+// проверка страницы
 const subscriberMarker = document.querySelector('.js-subscriber-marker');
-let contactListRight = [];
 
+// список из локалстоража, если тот уже есть
+let contactListRight = [];
 if (localStorage.getItem('phonesRight')) {
     contactListRight = JSON.parse(localStorage.getItem('phonesRight'))
 }
 
 const templatePhoneRight = document.querySelector('#template-right-phone').content
 
+// контейнер "всего" и контейнер телефонов
 const rightBar = document.querySelector('.right_phone_bar');
 const rightBarContainer = rightBar.querySelector('.right-phone-container')
 
+// дроп-поле для имен и телефонов
 const plusPhoneR = rightBar.querySelector('.plus-phone-drop');
 if (subscriberMarker) plusPhoneR.classList.remove('display_none'); 
 
+// очиска контейнера
 const phonesKiller = rightBar.querySelector('.phones-killer');
 phonesKiller.addEventListener('dblclick', (evt) => {
     evt.preventDefault();
@@ -49,7 +54,7 @@ const dragOver = function(evt) {
 const dragEnter = function() {
     const dragElement = document.querySelector('.drag-element');
     const dragPhone = document.querySelector('.drag-phone');
-
+// подкраска поля для дропа
     if (dragElement) {
         this.classList.add('bg-green');
     } else if (dragPhone) {
@@ -68,11 +73,14 @@ const drop = function(evt) {
     plusPhoneR.classList.remove('bg-green', 'bg-red', 'bg-blue');
     const dragElement = document.querySelector('.drag-element');
     const dragPhoneFull = document.querySelector('.drag-phone');
+
+    // удаления временных классов
+    //люди
     if (dragElement) {
         dragElement.classList.remove('drag-element');
         makeRightBlock(dragElement);
     }
-
+    //телефоны
     if (dragPhoneFull) {
         dragPhoneFull.classList.remove('drag-phone');
         phoneRightAdderFull(dragPhoneFull);
@@ -90,15 +98,15 @@ plusPhoneR.addEventListener('drop', drop);
 // люди
 
 function makeRightBlock(dragElement) {
+    // объект добавления из имени в общее дроп-поле
     const personObject = {
         personName: dragElement.textContent,
         personHref: dragElement.dataset.href,
         companyTile: dragElement.dataset.company
     }
 
-    contactListRight.push(personObject);
-    localStorage.setItem('phonesRight', JSON.stringify(contactListRight));
-    renderFromList(contactListRight);
+    const allreadyExist = contactListRight.find(el => el.personName == personObject.personName);
+    existChecker(allreadyExist, personObject);
 }
 
 
@@ -152,6 +160,25 @@ rightBarContainer.addEventListener('drop', dropPhone);
 
 
 
+rightBar.classList.add('.border-red');
+
+// проверяет есть ли уже в листе объект с таким именем
+function existChecker(elem, pushObject) {
+    //поемечает существующий
+    if (elem) {
+        const index = contactListRight.indexOf(elem);
+        const allreadyExistPerson = rightBarContainer.querySelectorAll('.phone_in_bar .person_div')[index];
+        allreadyExistPerson.classList.add('border-orange');
+        setTimeout(() => allreadyExistPerson.classList.remove('border-orange'), 1000)
+        // иначе добавляет и рендерит
+    } else {
+        contactListRight.push(pushObject);
+        localStorage.setItem('phonesRight', JSON.stringify(contactListRight));
+
+        renderFromList(contactListRight);
+    }
+}
+
 function phoneRightAdderFull(dragPhone) {
     dragPhone.classList.remove('drag-phone');
 
@@ -163,10 +190,8 @@ function phoneRightAdderFull(dragPhone) {
         companyTile: dragPhone.dataset.company
     }
 
-    contactListRight.push(fullObject);
-    localStorage.setItem('phonesRight', JSON.stringify(contactListRight));
-
-    renderFromList(contactListRight);
+    const allreadyExist = contactListRight.find(el => el.personName == fullObject.personName);
+    existChecker(allreadyExist, fullObject);
 }
 
 function phoneRightAdder(dragPhone, target) {
@@ -179,6 +204,7 @@ function phoneRightAdder(dragPhone, target) {
         phoneNumber: dragPhone.textContent,
         phoneHref: dragPhone.dataset.href_tel,
     }
+
     const owner = target.parentNode.parentNode.querySelector('.person_add').textContent;
     const personObject = contactListRight.find(el => el.personName == owner);
     const index = contactListRight.indexOf(personObject);

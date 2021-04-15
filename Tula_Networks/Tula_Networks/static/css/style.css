@@ -203,3 +203,7 @@ big-phone-parent {
 .killer-svg:active {
     fill: red;
 }
+
+.border-orange {
+    border: 2px solid orange;
+}
