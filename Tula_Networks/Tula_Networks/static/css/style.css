@@ -24,10 +24,11 @@ body {
 .right_phone_bar {
     position: fixed;
     right: 10px;
-    top: 40px;
+    top: 10px;
 }
 
 @media screen and (max-width: 1400px) {
+    .right_phone_bar,
     .side_bar_menu {
         visibility: hidden;
         display: none;
@@ -185,4 +186,20 @@ big-phone-parent {
 
 .colored-by-marker {
     background-color: cornflowerblue;
+}
+
+.phone_in_bar {
+    max-width: 350px;
+}
+
+.phones-killer {
+    cursor: pointer;
+}
+
+.killer-svg:hover {
+    stroke: red;
+}
+
+.killer-svg:active {
+    fill: red;
 }

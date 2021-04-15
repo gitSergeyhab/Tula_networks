@@ -42,6 +42,8 @@
         {% block cards2 %}{% endblock %}
 
       {% block paginator %} {% endblock %}
+
+
       {% else %}
 {% if not my_login %}
       <h2 class="text-center m-5">Для просмотра требуется вход. Регистрация невозможна <br>
@@ -61,6 +63,7 @@
   </main>
 <!--  скрипт, который выполняется на всех темплейтах кроме phones.html : -->
   <script src="{% static 'scripts/phone_bar_not_in_phones.js' %}"></script>
+  <script src="{% static 'scripts/drag-n-drop.js' %}"></script>
   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>

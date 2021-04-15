@@ -8,7 +8,7 @@
 
 {% block cards1 %}
 
-<div class="card">
+<div class="card js-subscriber-marker">
   <h5 class="card-header text-center"><span class="px-5"><b>
         {% if the_section %}
         Все абоненты {{ the_section.name }} <a class="btn btn-light p-0 py-0 m-0" href="{{ the_section.substation.get_absolute_url }}">
@@ -42,11 +42,10 @@
       <div class="card-body p-1 text-center"> Телефоны организации:
         {% for phone in subscriber.phones.all %}
         <a href="{{ phone.get_absolute_url }}" class="color-man btn btn-light px-1 py-0 mx-1 border-secondary phone-number" title="{{phone.description}}" draggable="true">
-          <span data-href="{{ phone.get_absolute_url }}" data-owner="{{ person }}">{{ phone }}</span>
+          <span data-href_tel="{{ phone.get_absolute_url }}" data-href="{{ subscriber.get_absolute_url }}" data-owner="{{ subscriber }}" data-company="{{ subscriber }}">{{ phone }}</span>
         </a>,
         {% endfor %}
       </div>
-
 
       <div class="container">
         <div class="panel-group ">
@@ -88,16 +87,16 @@
                     {% if person.priority == 1 %}
                     <div class=" col-6 col-md-6 col-lg-4 px-1 my-2">
                       <a href="{{ person.get_absolute_url }}" class="btn btn-light py-0 mx-auto d-block color-man js-persone-name" draggable="true">
-                          <b data-href="{{ person.get_absolute_url }}" data-company="{{ subscriber }} ">{{ person }}</b>
-                          <br>
-                          {% if person.position %} <span class='text-secondary'> {{person.position}} </span>{% endif %}
+                        <b data-href="{{ person.get_absolute_url }}" data-company="{{ subscriber }} ">{{ person }}</b>
+                        <br>
+                        {% if person.position %} <span class='text-secondary'> {{person.position}} </span>{% endif %}
                       </a>
 
                       <div class="text-center">
                         {% for phone in person.phones.all %}
                         <a href="{{ phone.get_absolute_url }}" class="btn btn-light py-0 my-1 mr-1 color-man phone-number" draggable="true">
                           <b>
-                            <span data-href="{{ phone.get_absolute_url }}" data-owner="{{ person }}">{{ phone }}</span>
+                            <span data-href_tel="{{ phone.get_absolute_url }}" data-href="{{ person.get_absolute_url }}" data-owner="{{ person }}" data-company="{{ subscriber }}">{{ phone }}</span>
                           </b>
                         </a>
                         {% endfor %}
@@ -121,7 +120,7 @@
 
                     {% for phone in person.phones.all %}
                     <a href="{{ phone.get_absolute_url }}" class="btn btn-light py-0 my-1 ml-0 color-man phone-number" draggable="true">
-                      <b><span data-href="{{ phone.get_absolute_url }}" data-owner="{{ person }}">{{ phone }}</span></b>
+                      <span data-href_tel="{{ phone.get_absolute_url }}" data-href="{{ person.get_absolute_url }}" data-owner="{{ person }}" data-company="{{ subscriber }}">{{ phone }}</span>
                     </a>
 
                     {% endfor %}
@@ -157,7 +156,6 @@
 </div>
 {% load static %}
 <script src="{% static 'scripts/earth3.js' %}"></script>
-<script src="{% static 'scripts/drag-n-drop.js' %}"></script>
 {% endblock %}
 
 
