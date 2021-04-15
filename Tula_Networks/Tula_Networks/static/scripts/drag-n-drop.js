@@ -13,6 +13,8 @@ const plusPhoneR = rightBar.querySelector('.plus-phone-drop');
 const personsR = document.querySelectorAll('.js-persone-name');
 
 const dragStart = function() {
+    this.setAttribute('href', '#');
+    console.log(this)
     this.querySelector('b').classList.add('drag-element');
     plusPhoneR.querySelector('svg').style.stroke = 'green';
 }
@@ -24,8 +26,12 @@ const dragEnd = function() {
 
 // откуда
 personsR.forEach(personR =>{
-    personR.addEventListener('dragstart', dragStart)
-    personR.addEventListener('dragend', dragEnd)
+    personR.addEventListener('dragstart', dragStart);
+    personR.addEventListener('dragend', dragEnd);
+    // personR.addEventListener('click', e => e.preventDefault());
+    // personR.addEventListener('mousedown', e => e.preventDefault())
+    // personR.addEventListener('mouseup', e => e.preventDefault())
+
 })
 
 // куда
@@ -46,11 +52,13 @@ const dragLeave = function() {
     this.classList.remove('bg-green', 'bg-red');
 }
 
-const drop = function() {
+const drop = function(evt) {
     plusPhoneR.classList.remove('bg-green', 'bg-red');
     const dragElement = document.querySelector('.drag-element');
     dragElement.classList.remove('drag-element');
     makeRightBlock(dragElement);
+    // для долбанного firefox
+    evt.preventDefault();
 }
 
 plusPhoneR.addEventListener('dragover', dragOver);
@@ -107,6 +115,8 @@ const dropPhone = function(evt) {
     if (dragPhone && evt.target.classList.contains('right-tel-drop')) {
         phoneRightAdder(dragPhone, evt.target);
     }
+    // для долбанного firefox
+    evt.preventDefault();
 }
 
 rightBarContainer.addEventListener('dragover', dragOver);
@@ -132,9 +142,10 @@ function phoneRightAdder(dragPhone, target) {
     contactListRight.splice(index, 1, unionObject);
     localStorage.setItem('phonesRight', JSON.stringify(contactListRight));
     rightBarContainer.textContent = '';
-    renderFromList(contactListRight);
+    renderFromList(contactListRight)
 }
 
+// основная ф-ция - рендерит данные из листа
 function renderFromList(list) {
     list.forEach(person => {
         const rightElem = templatePhoneRight.cloneNode(true);
@@ -142,7 +153,7 @@ function renderFromList(list) {
         const personName = personDiv.querySelector('.person_add');
         const personLink = personDiv.querySelector('a');
 
-        personLink.href = person.personHref;
+        personLink.href = `+${person.personHref}`;
         personLink.title = person.companyTile;
         personName.innerHTML = `<b>${person.personName}</b>`;
 
@@ -175,12 +186,26 @@ function elementFinder(target) {
 }
 
 rightBarContainer.addEventListener('click', (evt) => {
+    // событие на кнопку удаления
     if(evt.target.closest('.btn_remove-r') ) {
         console.log(evt.target.closest('.btn_remove-r'));
         const removeObj = elementFinder(evt.target.closest('.btn_remove-r'));
         const removeObjIndex = contactListRight.indexOf(removeObj);
 
         contactListRight.splice(removeObjIndex, 1);
+        localStorage.setItem('phonesRight', JSON.stringify(contactListRight));
+        rightBarContainer.textContent = '';
+        renderFromList(contactListRight);
+    }
+    // событие на кнопку подсветки
+    if(evt.target.closest('.marker_color-r') ) {
+        const coloreObj = elementFinder(evt.target.closest('.marker_color-r'));
+        if (coloreObj.colored) {
+            coloreObj.colored = false;
+        } else {
+            coloreObj.colored = true;
+        }
+
         localStorage.setItem('phonesRight', JSON.stringify(contactListRight));
         rightBarContainer.textContent = '';
         renderFromList(contactListRight);
