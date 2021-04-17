@@ -274,10 +274,8 @@ rightBarContainer.addEventListener('click', (evt) => {
         const colorStyles = ['#98FB98', '#F0E68C', '#66CDAA', '#A52A2A', 'white'];
         if(colorNum == colorStyles.length - 1) {
             colorNum = 0;
-            console.log(colorNum, colorStyles.length, 0)
         } else {
             colorNum++;
-            console.log(colorNum, colorStyles.length, '++')
         }
 
         colorObj.colored = colorStyles[colorNum]
