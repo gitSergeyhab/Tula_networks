@@ -242,12 +242,7 @@ function renderFromList(list) {
             phoneBlock.innerHTML = `<b>${person.phoneNumber}</b>`;
             phoneBlock.href = person.phoneHref;
         }
-
-        if (person.colored) {
-            phoneBlock.parentNode.classList.add('colored-by-marker');
-        } else {
-            phoneBlock.parentNode.classList.remove('colored-by-marker');
-        }
+        phoneBlock.parentNode.style.backgroundColor = person.colored;
         rightBarContainer.appendChild(rightElem);
     })
 }
@@ -261,6 +256,8 @@ function elementFinder(target) {
     return needElenent;
 }
 
+let colorNum = 0;
+
 rightBarContainer.addEventListener('click', (evt) => {
     // событие на кнопку удаления
     if(evt.target.closest('.btn_remove-r') ) {
@@ -273,13 +270,17 @@ rightBarContainer.addEventListener('click', (evt) => {
     }
     // событие на кнопку подсветки
     if(evt.target.closest('.marker_color-r') ) {
-        const coloreObj = elementFinder(evt.target.closest('.marker_color-r'));
-        if (coloreObj.colored) {
-            coloreObj.colored = false;
+        const colorObj = elementFinder(evt.target.closest('.marker_color-r'));
+        const colorStyles = ['#98FB98', '#F0E68C', '#66CDAA', '#A52A2A', 'white'];
+        if(colorNum == colorStyles.length - 1) {
+            colorNum = 0;
+            console.log(colorNum, colorStyles.length, 0)
         } else {
-            coloreObj.colored = true;
+            colorNum++;
+            console.log(colorNum, colorStyles.length, '++')
         }
 
+        colorObj.colored = colorStyles[colorNum]
         localStorage.setItem('phonesRight', JSON.stringify(contactListRight));
         renderFromList(contactListRight);
     }
