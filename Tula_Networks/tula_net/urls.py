@@ -13,9 +13,11 @@ from tula_net.views import MainView, PsListView, GroupPSView, VoltPSView, OnePSV
     AddSubstationView, LinesGroupView, LinesVoltageView, LinesRegionView, \
     UpdLineView, LineDeleteView, SectionDeleteView, SearcherLinesView, Lines1View, OneLine1View, AddLine1View, \
     Section1View, SearcherFeedersView, FeedersView, MyLogin, AddCharacterFeederView, UpdCharacterFeederView, CharsView,\
-    OneCharsView, UpdCharacterNoFeederView, SearcherPhonesToNamesView
+    OneCharsView, UpdCharacterNoFeederView, SearcherPhonesToNamesView, Map
 
 urlpatterns = [
+    path('map', Map.as_view(), name='map'),
+
     path('in', MyLogin.as_view(), name='in'),
     path('out', LogoutView.as_view(), name='out'),
     path('', MainView.as_view(), name='main'),

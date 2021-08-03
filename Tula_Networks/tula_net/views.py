@@ -29,6 +29,16 @@ class MainView(View):
     def get(self, request, *args, **kwargs):
         return render(request, 'tula_net/index.html')
 
+class Map(ListView):
+
+    context_object_name = 'substations'
+    template_name = 'tula_net/map.html'
+
+    def get_queryset(self):
+        return Substation.objects.select_related('group', 'voltage_h', 'voltage_m', 'voltage_l').exclude(group__pk=4)
+
+
+
 
 class PsListView(SubstationsViewMixin, ListView):
     """ вьюха для всех ПС """
