@@ -65,6 +65,7 @@ def signs(request):
             'subscribers': 'Организации',
             'persons': ' Ответственные лица',
             'phones': 'Телефоны',
+            'map': 'Карта',
         }
     }
 

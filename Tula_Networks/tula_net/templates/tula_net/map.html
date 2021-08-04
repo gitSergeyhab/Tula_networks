@@ -7,89 +7,113 @@
 {% load static %}
 
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
-   integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
-   crossorigin=""/>
-    <title>MAP</title>
-</head>
-<div>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+       integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+       crossorigin=""/>
+        <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.css" />
+        <title>MAP</title>
+    </head>
+    <body>
 
-<header class="bg-dark mb-1">
-    <div class="container">
-        {% include 'incl/_header.html' %}
-    </div>
-</header>
-
-
-
-    <section class="my-5 py-3" style="display: none">
-<!--        собираю JSON-->
-        <div class="row mb-0 js-ps-info-dict">{% for ps in substations %}"{{ps.number}}": {"number": {{ps.number}}, "name": "{{ps.name}}", "voltage": {{ps.voltage_h.class_voltage}}, "url": "{{ ps.get_absolute_url }}"}, {% endfor %}</div>
-    </section>
-<div class="d-flex justify-content-center">
-    <div class="d-flex" id='map' style="width: 95%; height: 700px; background-color: gray;"></div>
-</div>
+        <header class="bg-dark mb-1">
+            <div class="container">
+                {% include 'incl/_header.html' %}
+            </div>
+        </header>
 
 
-<div class="checkboxes-wrapper d-flex justify-content-center">
-    <div class="checkboxes-block" style="width: 85%;">
-<fieldset class="map_substations_checkbox--all justify-content-center my-1">
-    <div class="btn-group-toggle d-flex justify-content-between flex-wrap" style="min-width: 600px;" data-toggle="buttons">
-        <label for="all" class="btn btn-outline-dark px-2 py-0     flex-grow-1">
-            <input type="checkbox" name="map_all" id="all" value="all" autocomplete="off">ВСЕ ПС
-        </label>
-    </div>
-</fieldset>
+        <main>
+            <section class="js-hidden-json-collector my-5 py-3" style="display: none">
+        <!--        собираю JSON-->
+                <div class="row mb-0 js-ps-info-dict">{% for ps in substations %}"{{ps.number}}": {"number": {{ps.number}}, "name": "{{ps.name}}", "voltage": {{ps.voltage_h.class_voltage}}, "url": "{{ ps.get_absolute_url }}"}, {% endfor %}</div>
+            </section>
 
-<fieldset class="map_substations_checkbox--voltage justify-content-center mt-1 mb-3">
-    <div class="btn-group-toggle d-flex justify-content-between flex-wrap" style="min-width: 600px;" data-toggle="buttons">
-        <label for="35" class="btn btn-outline-danger px-2 py-0     flex-grow-1">
-            <input type="checkbox" name="map_voltage" id="35" value="35" autocomplete="off">35 кВ
-        </label>
-        <label for="110" class="btn btn-outline-warning px-2 py-0     flex-grow-1">
-            <input type="checkbox" name="map_voltage" id="110" value="110" autocomplete="off">110 кВ
-        </label>
-        <label for="220" class="btn btn-outline-primary px-2 py-0     flex-grow-1">
-            <input type="checkbox" name="map_voltage" id="220" value="220" autocomplete="off">220 кВ
-        </label>
-    </div>
-</fieldset>
+            <section class="rout-inputs d-flex justify-content-center">
+                <form class="d-flex flex-wrap justify-content-center">
 
-<fieldset class="map_substations_checkbox justify-content-center mt-y">
-    <div class="btn-group-toggle d-flex justify-content-between flex-wrap"  style="min-width: 600px;" data-toggle="buttons">
-        {% for ps in substations %}
-          <label for="{{ps.number}}"
-            {% if ps.voltage_h.class_voltage < 40 %}
-                class="btn btn-outline-danger px-2 py-0     flex-grow-1"
-            {% elif ps.voltage_h.class_voltage < 120 %}
-                 class="btn btn-outline-warning px-2 py-0      flex-grow-1"
-            {% else %}
-                class="btn btn-outline-primary px-2 py-0       flex-grow-1"
-            {% endif %}
-          >
-            <input type="checkbox" name="map_substations" id="{{ps.number}}" value="{{ps.number}}" data-volt="{{ps.voltage_h.class_voltage}}" autocomplete="off"> {{ps.number}} {{ps.name}}
-          </label>
-        {% endfor %}
-    </div>
-</fieldset>
-    </div>
-    </div>
-        <button type="button" id="click" class="btn btn-primary btn-lg btn-block"> CLICK
-        </button>
+                  <div class="form-group mx-sm-3 mb-2">
+                    <label for="from" class="sr-only">Номер ПС ОТКУДА</label>
+                    <input type="number" class="form-control" id="from" placeholder="Номер ПС ОТКУДА">
+                  </div>
 
-     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
-       integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
-       crossorigin="">
-     </script>
-    <script src="{% static 'scripts/coordinates.js' %}"></script>
-    <script src="{% static 'scripts/map.js' %}"></script>
+                  <div class="form-group mx-sm-3 mb-2">
+                    <label for="to" class="sr-only">Номер ПС КУДА</label>
+                    <input type="number" class="form-control" id="to" placeholder="Номер ПС КУДА">
+                  </div>
 
-</body>
+                  <button type="button" id="find-rout" class="btn btn-primary mb-2 mr-2">Построить маршрут</button>
+
+                  <button type="button" id="reset-rout" class="btn btn-danger mb-2">Сбросить маршрут</button>
+
+                </form>
+            </section>
+
+            <section class="map-container d-flex justify-content-center">
+                <div class="d-flex" id='map' style="width: 95%; height: 700px; background-color: gray;"></div>
+            </section>
+
+
+            <section class="checkboxes-wrapper d-flex justify-content-center">
+                <div class="checkboxes-block" style="width: 93%;">
+
+                    <fieldset class="map_substations_checkbox--all justify-content-center my-1">
+                        <div class="btn-group-toggle d-flex justify-content-between flex-wrap" style="min-width: 600px;" data-toggle="buttons">
+                            <label for="all" class="btn btn-outline-dark px-2 py-0 font-weight-bold    flex-grow-1">
+                                <input type="checkbox" name="map_all" id="all" value="all" autocomplete="off">ВСЕ ПС
+                            </label>
+                        </div>
+                    </fieldset>
+
+                    <fieldset class="map_substations_checkbox--voltage justify-content-center mt-1 mb-3">
+                        <div class="btn-group-toggle d-flex justify-content-between flex-wrap" style="min-width: 600px;" data-toggle="buttons">
+                            <label for="35" class="btn btn-outline-danger px-2 py-0 font-weight-bold    flex-grow-1">
+                                <input type="checkbox" name="map_voltage" id="35" value="35" class="each-volt" autocomplete="off">35 кВ
+                            </label>
+                            <label for="110" class="btn btn-outline-warning px-2 py-0 font-weight-bold    flex-grow-1">
+                                <input type="checkbox" name="map_voltage" id="110" value="110" class="each-volt" autocomplete="off">110 кВ
+                            </label>
+                            <label for="220" class="btn btn-outline-primary px-2 py-0 font-weight-bold    flex-grow-1">
+                                <input type="checkbox" name="map_voltage" id="220" value="220" class="each-volt" autocomplete="off">220 кВ
+                            </label>
+                        </div>
+                    </fieldset>
+
+                    <fieldset class="map_substations_checkbox justify-content-center mt-y">
+                        <div class="btn-group-toggle d-flex justify-content-between flex-wrap"  style="min-width: 600px;" data-toggle="buttons">
+                            {% for ps in substations %}
+                              <label for="{{ps.number}}"
+                                {% if ps.voltage_h.class_voltage < 40 %}
+                                    class="btn btn-outline-danger px-2 py-0 font-weight-bold text-dark   flex-grow-1"
+                                {% elif ps.voltage_h.class_voltage < 120 %}
+                                     class="btn btn-outline-warning px-2 py-0 font-weight-bold text-dark    flex-grow-1"
+                                {% else %}
+                                    class="btn btn-outline-primary px-2 py-0 font-weight-bold text-dark     flex-grow-1"
+                                {% endif %}
+                              >
+                                <input type="checkbox" name="map_substations" id="{{ps.number}}" value="{{ps.number}}" data-volt="{{ps.voltage_h.class_voltage}}" class="each-ps" autocomplete="off"> {{ps.number}} {{ps.name}}
+                              </label>
+                            {% endfor %}
+                        </div>
+                    </fieldset>
+
+                </div>
+            </section>
+        </main>
+
+        <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+            integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+            crossorigin="">
+        </script>
+        <script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.js"></script>
+        <script src="{% static 'scripts/coordinates.js' %}"></script>
+        <script src="{% static 'scripts/map.js' %}"></script>
+
+    </body>
 
 </html>
 
