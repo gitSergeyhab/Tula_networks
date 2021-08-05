@@ -37,6 +37,13 @@ class Map(ListView):
     def get_queryset(self):
         return Substation.objects.select_related('group', 'voltage_h', 'voltage_m', 'voltage_l').exclude(group__pk=4)
 
+class YMap(ListView):
+
+    context_object_name = 'substations'
+    template_name = 'tula_net/y-map.html'
+
+    def get_queryset(self):
+        return Substation.objects.select_related('group', 'voltage_h', 'voltage_m', 'voltage_l').exclude(group__pk=4)
 
 
 
