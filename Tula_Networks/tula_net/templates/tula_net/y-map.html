@@ -30,8 +30,9 @@
                 <div class="row mb-0 js-ps-info-dict">{% for ps in substations %}"{{ps.number}}": {"number": {{ps.number}}, "name": "{{ps.name}}", "voltage": {{ps.voltage_h.class_voltage}}, "url": "{{ ps.get_absolute_url }}"}, {% endfor %}</div>
             </section>
 
-            <section class="rout-inputs d-flex justify-content-center">
-                <form class="d-flex flex-wrap justify-content-center">
+<!--            <section class="rout-inputs d-flex justify-content-center" >-->
+            <section class="rout-inputs d-none">
+                <form class="d-flex flex-wrap justify-content-center" id="rout-form">
 
                   <div class="form-group mx-sm-3 mb-2">
                     <label for="from" class="sr-only">Номер ПС ОТКУДА</label>
@@ -42,10 +43,11 @@
                     <label for="to" class="sr-only">Номер ПС КУДА</label>
                     <input type="number" class="form-control" id="to" placeholder="Номер ПС КУДА">
                   </div>
+                  <button type="submit" id="find-rout" class="btn btn-primary mb-2 mr-2">Построить маршрут</button>
 
-                  <button type="button" id="find-rout" class="btn btn-primary mb-2 mr-2">Построить маршрут</button>
+<!--                  <button type="button" id="find-rout" class="btn btn-primary mb-2 mr-2">Построить маршрут</button>-->
 
-                  <button type="button" id="reset-rout" class="btn btn-danger mb-2">Сбросить маршрут</button>
+<!--                  <button type="button" id="reset-rout" class="btn btn-danger mb-2">Сбросить маршрут</button>-->
 
                 </form>
             </section>
@@ -55,7 +57,9 @@
             </section>
 
 
-            <section class="checkboxes-wrapper d-flex justify-content-center">
+            <section class="checkboxes-wrapper d-none">
+<!--            <section class="checkboxes-wrapper d-flex justify-content-center">-->
+
                 <div class="checkboxes-block" style="width: 93%;">
 
                     <fieldset class="map_substations_checkbox--all justify-content-center my-1">
@@ -104,10 +108,10 @@
 
         <script src="https://api-maps.yandex.ru/2.1/?apikey=e1f3696f-8a32-49af-b287-06e90086e936&lang=ru_RU" type="text/javascript">
         </script>
-        <script src="{% static 'scripts/coordinates.js' %}"></script>
-        <script src="{% static 'scripts/read-data.js' %}"></script>
-        <script src="{% static 'scripts/map-ps-panel.js' %}"></script>
-        <script src="{% static 'scripts/y-map.js' %}"></script>
+        <script src="{% static 'scripts/maps/coordinates.js' %}"></script>
+        <script src="{% static 'scripts/maps/read-data.js' %}"></script>
+        <script src="{% static 'scripts/maps/map-ps-panel.js' %}"></script>
+        <script src="{% static 'scripts/maps/y-map.js' %}"></script>
     </body>
 
 </html>

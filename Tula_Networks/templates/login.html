@@ -14,11 +14,11 @@
       <form method="post">
         <div class="text-center mt-5 b-1">
           <h1 class="h3 mb-3 font-weight-normal">{{ title }}</h1>
-          <p class="h5 font-weight-light">Для просмотра требуется вход. Регистрация невозможна</p>
+          <p class="h5 font-weight-light">Для просмотра требуется вход.</p>
         </div>
         {% csrf_token %}
         {{ form.as_p }}
-          <input type="submit" class="btn btn-primary btn-block mt-4 mb-2" value="Войти">
+          <input type="submit" class="btn btn-primary btn-block mt-4 mb-2" value="Вход / Регистрация">
       </form>
 
   </div>
