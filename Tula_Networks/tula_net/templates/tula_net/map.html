@@ -62,7 +62,7 @@
                 <div class="checkboxes-block" style="width: 88vw;">
 
                     <fieldset class="map_substations_checkbox--all justify-content-center my-1">
-                        <div class="btn-group-toggle d-flex justify-content-between flex-wrap" style="min-width: 600px;" data-toggle="buttons">
+                        <div class="btn-group-toggle d-flex justify-content-between flex-wrap" data-toggle="buttons">
                             <label for="all" class="btn btn-outline-dark px-2 py-0 font-weight-bold    flex-grow-1">
                                 <input type="checkbox" name="map_all" id="all" value="all" autocomplete="off">ВСЕ ПС
                             </label>
@@ -70,7 +70,7 @@
                     </fieldset>
 
                     <fieldset class="map_substations_checkbox--voltage justify-content-center mt-1 mb-3">
-                        <div class="btn-group-toggle d-flex justify-content-between flex-wrap" style="min-width: 600px;" data-toggle="buttons">
+                        <div class="btn-group-toggle d-flex justify-content-between flex-wrap" data-toggle="buttons">
                             <label for="35" class="btn btn-outline-danger px-2 py-0 font-weight-bold    flex-grow-1">
                                 <input type="checkbox" name="map_voltage" id="35" value="35" class="each-volt" autocomplete="off">35 кВ
                             </label>
@@ -84,7 +84,7 @@
                     </fieldset>
 
                     <fieldset class="map_substations_checkbox justify-content-center mt-y">
-                        <div class="btn-group-toggle d-flex justify-content-between flex-wrap"  style="min-width: 600px;" data-toggle="buttons">
+                        <div class="btn-group-toggle d-flex justify-content-between flex-wrap" data-toggle="buttons">
                             {% for ps in substations %}
                               <label for="{{ps.number}}"
                                 {% if ps.voltage_h.class_voltage < 40 %}
